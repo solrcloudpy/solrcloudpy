@@ -16,7 +16,7 @@ Solr uses Zookeeper for distributed capabilities, so we will take advantage of t
 * remove failing nodes
 * find cluster health
 
-::
+
      >>> zk = ZConnection("localhost:9983")
      >>> solr = SolrRequest(zk,"collection1")
      >>> print solr.search(q="*:*")
