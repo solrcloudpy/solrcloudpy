@@ -17,9 +17,9 @@ Solr uses Zookeeper for distributed capabilities, so we will take advantage of t
 * find cluster health
 
 ::
-    >>> zk = ZConnection("localhost:9983")
-    >>> solr = SolrRequest(zk,"collection1")
-    >>> print solr.search(q="*:*")
-    ...
+     >>> zk = ZConnection("localhost:9983")
+     >>> solr = SolrRequest(zk,"collection1")
+     >>> print solr.search(q="*:*")
+     ...
 
  
