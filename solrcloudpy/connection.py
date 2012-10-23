@@ -30,17 +30,18 @@ class ZConnection(object):
                 replicas_dicts = shard_dicts['replicas']
                 addresses = replicas_dicts.values()
                 if addresses:
-                    node_name = addresses[0].get('node_name')
-                    if node_name in self.live_nodes: 
-                        addr = addresses[0].get('base_url')
-                        nodes.add(addr)
+                    for address in addresses:
+                        node_name = address.get('node_name')
+                        if node_name in self.live_nodes: 
+                            addr = address.get('base_url')
+                            nodes.add(addr)
         
         self.servers = nodes
         return nodes
 
-# c = ZConnection("localhost:9983")
-# #c.get_server_addresses()
-# print c.servers
+#c = ZConnection("localhost:9983")
+#c.get_server_addresses()
+#print c.servers
 
 # import time; time.sleep(5)
 # print c.get_live_nodes()
