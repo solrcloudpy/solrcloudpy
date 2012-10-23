@@ -1,7 +1,28 @@
 from connection import ZConnection
-import requests
 from requests.exceptions import *
+from requests.models import Response
 
+import requests
+import json
+
+dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime) else None
+
+class SolrResponse(object):
+    def __init__(self,_dict):
+        self.dict = _dict
+        if not self.dict:
+            return
+
+        response = self.dict['response']
+        self.hits = int(response['numFound'])
+        self.docs = response['docs']
+
+    def __repr__(self):
+        if not self.dict:
+            return "Empty SolrResponse"
+        
+        return "SolrResponse(hits=%i)" % (self.hits)
+    
 class SolrRequest(object):
     def __init__(self,zconnection,collection):
         self.zconnection = zconnection
@@ -18,10 +39,11 @@ class SolrRequest(object):
         def make_request(host,path):
             fullpath = "%s/%s" % (host,path)
             try:
-                r = self.client.get(fullpath,params=params)
-                response = r.json
-                if not response:
-                    print 'exception:', r, path
+                r = self.client.request(method,fullpath,
+                                        params=params,
+                                        headers=headers)
+                                    
+                response = SolrResponse(r.json)
                 return response
             except ConnectionError:
                 host = servers.pop(0)
@@ -29,19 +51,44 @@ class SolrRequest(object):
        
         result = make_request(host,path)
         return result
-                    
-    def search(self,params):
+
+    def _update(self,body):
+        path = '%s/update/json' % self.collection
+        return self._send(path,method='POST',params={},body=body)
+
+    def search(self,q,params={}):
         path = "%s/select" % self.collection
+        params['q'] = q
         return self._send(path,params)
 
-    def add(self,params):
-        pass
+    def add(self,docs):
+        message = json.dumps(docs,default=dthandler)
+        response = self._update(message)
+        return response
 
-    def delete(self,params):
-        pass
+    def delete(self,id=None,q=None):
+        if id is None and q is None:
+            raise ValueError('You must specify "id" or "q".')
+        elif id is not None and q is not None:
+            raise ValueError('You many only specify "id" OR "q", not both.')
+        elif id is not None:
+            m = json.dumps({"delete":{"id":"%s" % id }})
+        elif q is not None:
+            m = json.dumps({"delete":{"query":"%s" % q }})
+            
+        response = self._update(m)
+        if commit:
+            self.commit()
+            
+    def optimize(self,waitsearcher=True,softcommit=False):
+        waitsearcher = str(waitsearcher).lower()
+        softcommit = str(softcommit).lower()
+        params = {'softCommit': softcommit,
+                  'waitSearcher': waitsearcher,
+                  'optimize': 'true'
+                  }
+        path = '%s/update' % self.collection
+        response = self._send(path,params)
 
-    def optimize(self,params):
-        pass
-
-    def commit(self,params):
-        pass
+    def commit(self):
+        response = self._update('{"commit":{}}')
