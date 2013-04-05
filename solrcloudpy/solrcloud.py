@@ -1,8 +1,9 @@
-from connection import ZConnection
+from connection import ZConnection, HTTPConnection
 from requests.exceptions import *
 from requests.models import Response
 
 import requests
+import urlparse
 import json
 
 dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime) else None
@@ -24,25 +25,30 @@ class SolrResponse(object):
         return "SolrResponse(hits=%i)" % (self.hits)
     
 class SolrRequest(object):
-    def __init__(self,zconnection,collection):
-        self.zconnection = zconnection
+    def __init__(self,connection_string,collection):
+        if "http" in connection_string:
+            self.connection = HTTPConnection(connection_string)
+        else:
+            self.connection = ZConnection(connection_string)
+            
         self.collection = collection
-        self.client = requests.session()
-
+        self.client = requests.Session()
+        
     def _send(self,path,params,method='GET',body=None):
         headers = {'content-type': 'application/json'}
         params['wt'] = 'json'
 
-        servers = list(self.zconnection.servers)
+        servers = list(self.connection.servers)
         host = servers.pop(0)
 
         def make_request(host,path):
-            fullpath = "%s/%s" % (host,path)
+            fullpath = urlparse.urljoin(host,path)
+            print fullpath
             try:
                 r = self.client.request(method,fullpath,
                                         params=params,
                                         headers=headers)
-                                    
+                
                 response = SolrResponse(r.json)
                 return response
             except ConnectionError:

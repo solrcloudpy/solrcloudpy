@@ -39,6 +39,15 @@ class ZConnection(object):
         self.servers = nodes
         return nodes
 
+class HTTPConnection(object):
+    """
+    Connection to a single solr server not running in cloud mode
+    """
+    def __init__(self,url="http://localhost:8983/solr"):
+        self.url = url
+        self.servers = [url]
+
+        
 #c = ZConnection("localhost:9983")
 #c.get_server_addresses()
 #print c.servers
