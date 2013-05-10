@@ -59,9 +59,10 @@ class Collection(object):
         self.client.get('admin/collections',params)
 
     def __getattr__(self, name):
-        import solrcloud
-        return solrcloud.SolrRequest(self.connection,name)
+        import index
+        return index.SolrIndex(self.connection,name)
 
     def __getitem__(self, name):
-        import solrcloud
-        return solrcloud.SolrRequest(self.connection,name)
+        import index
+        return index.SolrIndex(self.connection,name)
+
