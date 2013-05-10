@@ -24,7 +24,7 @@ class SolrResponse(object):
         
         return "SolrResponse(hits=%i)" % (self.hits)
     
-class SolrRequest(object):
+class SolrIndex(object):
     def __init__(self,connection,collection):
         self.connection = connection
         self.collection = collection
