@@ -6,6 +6,9 @@ import urlparse
 import json
 
 class _Request(object):
+    """
+    Issues requests to the collections API
+    """
     def __init__(self,zkconnection):
         self.connection = zkconnection
         self.client = requests.Session()
@@ -18,7 +21,6 @@ class _Request(object):
         host = servers.pop(0)
         def make_request(host,path):
             fullpath = urlparse.urljoin(host,path)
-            print fullpath
             try:
                 r = self.client.request(method,fullpath,
                                         params=params,

@@ -21,7 +21,7 @@ Solr uses Zookeeper for distributed capabilities, so we will take advantage of t
 Example usage:
 
      >>> zk = ZConnection("localhost:9983")
-     >>> collection = collection.Collection
+     >>> collection = collection.Collection(zk)
      >>> collection.create('test1')
      >>> print collection.test1.search(q='')
      ...
