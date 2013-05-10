@@ -25,12 +25,8 @@ class SolrResponse(object):
         return "SolrResponse(hits=%i)" % (self.hits)
     
 class SolrRequest(object):
-    def __init__(self,connection_string,collection):
-        if "http" in connection_string:
-            self.connection = HTTPConnection(connection_string)
-        else:
-            self.connection = ZConnection(connection_string)
-            
+    def __init__(self,connection,collection):
+        self.connection = connection
         self.collection = collection
         self.client = requests.Session()
         

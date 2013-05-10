@@ -18,7 +18,7 @@ class ZConnection(object):
         
     def get_live_nodes(self,*args):
         self.live_nodes = self.zk.get_children('/live_nodes')
-        print 'live nodes changed: ', self.live_nodes
+        #print 'live nodes changed: ', self.live_nodes
         return self.live_nodes
         
     def get_server_addresses(self,*args):
@@ -27,16 +27,26 @@ class ZConnection(object):
         nodes = set()
         for config_dict in res.values():
             for shard_dicts in config_dict.values():
-                replicas_dicts = shard_dicts['replicas']
-                addresses = replicas_dicts.values()
-                if addresses:
-                    for address in addresses:
-                        node_name = address.get('node_name')
-                        if node_name in self.live_nodes: 
-                            addr = address.get('base_url')
-                            nodes.add(addr)
+                if type(shard_dicts) != type({}):
+                    continue
+                
+                for key,value in shard_dicts.items():
+                    #print key
+                    if type(value) != type({}):
+                        continue
+                    replicas_dicts = value.get('replicas')
+                    #print replicas_dicts
+                    addresses = replicas_dicts.values()
+                    #print addresses
+                    if addresses:
+                        for address in addresses:
+                            node_name = address.get('node_name')
+                            if node_name in self.live_nodes: 
+                                addr = address.get('base_url')+'/'
+                                nodes.add(addr)
         
         self.servers = nodes
+        self.zk.stop()
         return nodes
 
 class HTTPConnection(object):
@@ -48,9 +58,9 @@ class HTTPConnection(object):
         self.servers = [url]
 
         
-#c = ZConnection("localhost:9983")
-#c.get_server_addresses()
-#print c.servers
+# c = ZConnection("localhost:9983")
+# c.get_server_addresses()
+# print c.servers
 
 # import time; time.sleep(5)
 # print c.get_live_nodes()
