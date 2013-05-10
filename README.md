@@ -8,6 +8,7 @@ solrcloudpy is a python library for interacting with Solr 4. This library aims t
 * Centralized index management
 * Near-realtime search
 
+The API is mean to be close to pymongo's API, wher eone cann access collections and databases as attributes 
 Usage
 -------
 Solr uses Zookeeper for distributed capabilities, so we will take advantage of that to:
@@ -19,8 +20,9 @@ Solr uses Zookeeper for distributed capabilities, so we will take advantage of t
 Example usage:
 
      >>> zk = ZConnection("localhost:9983")
-     >>> solr = SolrRequest(zk,"collection1")
-     >>> print solr.search(q="*:*")
+     >>> collection = collection.Collection
+     >>> collection.create('test1')
+     >>> print collection.test1.search(q='')
      ...
 
  
