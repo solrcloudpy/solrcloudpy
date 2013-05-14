@@ -2,11 +2,12 @@ from connection import ZConnection, HTTPConnection
 from requests.exceptions import *
 from requests.models import Response
 
+import datetime as dt
 import requests
 import urlparse
 import json
 
-dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime) else None
+dthandler = lambda obj: obj.isoformat() if isinstance(obj, dt.datetime) else None
 
 class SolrResponse(object):
     def __init__(self,_dict):
@@ -29,23 +30,29 @@ class SolrIndex(object):
         self.connection = connection
         self.collection = collection
         self.client = requests.Session()
-        
+
+    def __repr__(self):
+        return "SolrIndex<%s>" % self.collection
+    
     def _send(self,path,params,method='GET',body=None):
         headers = {'content-type': 'application/json'}
         params['wt'] = 'json'
-
+        params['omitHeader'] = 'true'
+        
         servers = list(self.connection.servers)
         host = servers.pop(0)
 
         def make_request(host,path):
             fullpath = urlparse.urljoin(host,path)
-            print fullpath
             try:
                 r = self.client.request(method,fullpath,
                                         params=params,
-                                        headers=headers)
+                                        headers=headers,data=body)
                 
-                response = SolrResponse(r.json)
+                if r.status_code == requests.codes.ok:
+                    response = r.json()
+                else:
+                    response = r.text
                 return response
             except ConnectionError:
                 host = servers.pop(0)
@@ -94,3 +101,4 @@ class SolrIndex(object):
 
     def commit(self):
         response = self._update('{"commit":{}}')
+        return response
