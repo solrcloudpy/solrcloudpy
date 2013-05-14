@@ -47,6 +47,11 @@ class Collection(object):
     def __init__(self,connection):
         self.connection = connection
         self.client = _Request(connection)
+
+    def list(self):
+        params.update({'action':'STATUS',})
+        data = self.client.get('admin/cores',params)
+        return data['status'].keys()
         
     def create(self,name,num_shards,params={}):
         params.update({'action':'CREATE','name':name,'numShards':num_shards})
