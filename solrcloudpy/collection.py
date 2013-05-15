@@ -24,9 +24,14 @@ class _Request(object):
             try:
                 r = self.client.request(method,fullpath,
                                         params=params,
-                                        headers=headers)
-                
-                return r.json
+                                        headers=headers,data=body)
+                                
+                if r.status_code == requests.codes.ok:
+                    response = r.json()
+                else:
+                    response = r.text
+                return response
+
             except ConnectionError:
                 host = servers.pop(0)
                 return make_request(host,path)
@@ -49,9 +54,11 @@ class Collection(object):
         self.client = _Request(connection)
 
     def list(self):
-        params.update({'action':'STATUS',})
-        data = self.client.get('admin/cores',params)
-        return data['status'].keys()
+        self.connection.zk.start()
+        res,node = self.connection.zk.get('/clusterstate.json')
+        res = json.loads(res)
+        self.connection.zk.stop()
+        return res.keys()
         
     def create(self,name,num_shards,params={}):
         params.update({'action':'CREATE','name':name,'numShards':num_shards})

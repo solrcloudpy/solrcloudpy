@@ -35,9 +35,7 @@ class ZConnection(object):
                     if type(value) != type({}):
                         continue
                     replicas_dicts = value.get('replicas')
-                    #print replicas_dicts
                     addresses = replicas_dicts.values()
-                    #print addresses
                     if addresses:
                         for address in addresses:
                             node_name = address.get('node_name')

@@ -68,7 +68,8 @@ class SolrIndex(object):
     def search(self,q,params={}):
         path = "%s/select" % self.collection
         params['q'] = q
-        return self._send(path,params)
+        data = SolrResponse(self._send(path,params))
+        return data
 
     def add(self,docs):
         message = json.dumps(docs,default=dthandler)
