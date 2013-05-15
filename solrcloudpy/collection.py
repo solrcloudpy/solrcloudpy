@@ -1,6 +1,8 @@
 from requests.exceptions import *
 from requests.models import Response
 
+from time import time
+
 import requests
 import urlparse
 import json
@@ -52,17 +54,33 @@ class Collection(object):
     def __init__(self,connection):
         self.connection = connection
         self.client = _Request(connection)
-
-    def list(self):
-        self.connection.zk.start()
-        res,node = self.connection.zk.get('/clusterstate.json')
-        res = json.loads(res)
-        self.connection.zk.stop()
-        return res.keys()
+        self.collectionscache = {}
         
+        self.collectionscache['ts'] = time()
+        
+    def list(self):
+        current = time()
+        start = self.collectionscache['ts']
+        
+        if current - start > 5*60 or self.collectionscache.get('collections') is None:
+            # cache has expired, query zk
+            self.connection.zk.start()
+            res,node = self.connection.zk.get('/clusterstate.json')
+            res = json.loads(res)
+            self.connection.zk.stop()
+            self.collectionscache['collections'] = res.keys()
+            self.collectionscache['ts'] = time()
+            return res.keys()
+
+        return self.collectionscache['collections']
+        
+    def exists(self,collection):
+        return collection in self.list()
+    
     def create(self,name,num_shards,params={}):
-        params.update({'action':'CREATE','name':name,'numShards':num_shards})
-        self.client.get('admin/collections',params)
+        if not self.exists(name):
+            params.update({'action':'CREATE','name':name,'numShards':num_shards})
+            self.client.get('admin/collections',params)
                              
     def delete(self,name,params={}):
         params.update({'action':'DELETE','name':name})
