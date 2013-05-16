@@ -1,14 +1,14 @@
 solrcloudpy
 ===========
 
-solrcloudpy is a python library for interacting with Solr 4. This library aims to take advantage of the following features of Solr:
+solrcloudpy is a python library for interacting with SolrCloud. This library aims to take advantage of the following features of Solr:
 
 * Distributed indexing and searching and transparent failover
 * Full JSON api
 * Centralized index management
 * Near-realtime search
 
-The API is mean to be close to pymongo's API, where one cann access collections and databases as simple attributes 
+The API is mean to be close to pymongo's API, where one can access collections and databases as simple attributes 
 
 Usage
 -------
