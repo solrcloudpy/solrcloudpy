@@ -7,6 +7,8 @@ import requests
 import urlparse
 import json
 
+import index
+
 class _Request(object):
     """
     Issues requests to the collections API
@@ -54,15 +56,15 @@ class Collection(object):
     def __init__(self,connection):
         self.connection = connection
         self.client = _Request(connection)
+
         self.collectionscache = {}
-        
         self.collectionscache['ts'] = time()
         
     def list(self):
         current = time()
         start = self.collectionscache['ts']
-        
-        if current - start > 5*60 or self.collectionscache.get('collections') is None:
+
+        if current - start > 10 or self.collectionscache.get('collections') is None:
             # cache has expired, query zk
             self.connection.zk.start()
             res,node = self.connection.zk.get('/clusterstate.json')
@@ -81,7 +83,8 @@ class Collection(object):
         if not self.exists(name):
             params.update({'action':'CREATE','name':name,'numShards':num_shards})
             self.client.get('admin/collections',params)
-                             
+        return index.SolrIndex(self.connection,name)
+
     def delete(self,name,params={}):
         params.update({'action':'DELETE','name':name})
         self.client.get('admin/collections',params)
@@ -91,10 +94,7 @@ class Collection(object):
         self.client.get('admin/collections',params)
 
     def __getattr__(self, name):
-        import index
         return index.SolrIndex(self.connection,name)
 
     def __getitem__(self, name):
-        import index
         return index.SolrIndex(self.connection,name)
-
