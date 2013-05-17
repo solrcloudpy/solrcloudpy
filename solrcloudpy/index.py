@@ -13,22 +13,31 @@ import logging
 log = logging.getLogger('solr')
 dthandler = lambda obj: obj.isoformat() if isinstance(obj, dt.datetime) else None
 
-class SolrResponse(object):
-    def __init__(self,_dict):
-        self.dict = _dict
-        if not self.dict:
-            return
-
-        response = self.dict['response']
-        self.hits = int(response['numFound'])
-        self.docs = response['docs']
-
-    def __repr__(self):
-        if not self.dict:
-            return "Empty SolrResponse"
-        
-        return "SolrResponse(hits=%i)" % (self.hits)
+class DictObject(object):
+  '''The recursive class for building and representing objects with'''
+  def __init__(self, obj):
+    if not obj:
+      return
     
+    for k, v in obj.iteritems():
+      if isinstance(v, dict):
+        setattr(self, k, DictObject(v))
+      else:
+        setattr(self, k, v)
+
+  def __getitem__(self, val):
+    return self.__dict__[val]
+  
+  def __repr__(self):
+    return 'DictObject{%s}' % str(', '.join('%s : %s' % (k, repr(v)) for
+      (k, v) in self.__dict__.iteritems()))
+    
+class SolrResponse(DictObject):
+    def __repr__(self):
+        if not self.response:
+            return "Empty SolrResponse" 
+        return super(SolrResponse,self).__repr__()
+        
 class SolrIndex(object):
     def __init__(self,connection,collection):
         self.connection = connection
@@ -40,9 +49,9 @@ class SolrIndex(object):
     
     def _send(self,path,params,method='GET',body=None):
         headers = {'content-type': 'application/json'}
-        params['wt'] = 'json'
-        params['omitHeader'] = 'true'
-        
+        extraparams = {'wt':'json', 'omitHeader':'true','json.nl':'map'}
+        params.update(extraparams)
+                
         servers = list(self.connection.servers)
         host = servers.pop(0)
 
