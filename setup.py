@@ -21,5 +21,5 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Indexing/Search'
         ],
         
-    install_requires = ['requests','kazoo']
+    install_requires = ['requests','kazoo>=1.1']
         )

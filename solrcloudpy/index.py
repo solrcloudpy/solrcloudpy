@@ -53,6 +53,9 @@ class SolrIndex(object):
         params.update(extraparams)
                 
         servers = list(self.connection.servers)
+        if not servers:
+            raise Exception("not live servers found!")
+        
         host = servers.pop(0)
 
         def make_request(host,path):
@@ -68,8 +71,9 @@ class SolrIndex(object):
                     response = r.text
                 return response
             except ConnectionError:
-                host = servers.pop(0)
-                return make_request(host,path)
+                if servers:
+                    host = servers.pop(0)
+                    return make_request(host,path)
        
         result = make_request(host,path)
         return result
@@ -190,9 +194,10 @@ class SolrBatchAdder(object):
             batch_len=batch_len, auto_commit=auto_commit))
         try:
             self.solr.add(self.batch)
-        except:
+        except Exception as e:
             log.exception("Exception encountered when committing batch, falling back on one-by-one commit")
             print "Exception encountered when committing batch, falling back on one-by-one commit"
+            print e
             # one by one fall-back
             for item in self.batch:
                 try:

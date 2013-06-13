@@ -10,20 +10,19 @@ class ZConnection(object):
         self.zk = KazooClient(zookeper_address)
         self.zk.start()
 
-        Watch1 = DataWatch(self.zk, '/live_nodes')
+        Watch1 = self.zk.DataWatch('/live_nodes')
         Watch1(self.get_live_nodes)
         
-        Watch2 = DataWatch(self.zk, '/clusterstate.json')
+        Watch2 = self.zk.DataWatch('/clusterstate.json')
         Watch2(self.get_server_addresses)
         
-    def get_live_nodes(self,*args):
+    def get_live_nodes(self,data,stat):
         self.live_nodes = self.zk.get_children('/live_nodes')
         #print 'live nodes changed: ', self.live_nodes
         return self.live_nodes
-        
-    def get_server_addresses(self,*args):
-        res,node = self.zk.get('/clusterstate.json')
-        res = json.loads(res)
+
+    def get_server_addresses(self,data,stat):
+        res = json.loads(data)
         nodes = set()
         for config_dict in res.values():
             for shard_dicts in config_dict.values():
@@ -44,7 +43,11 @@ class ZConnection(object):
                                 nodes.add(addr)
         
         self.servers = nodes
-        self.zk.stop()
+        try:
+            self.zk.stop()
+        except Exception as e:
+            pass    
+
         return nodes
 
 class HTTPConnection(object):
@@ -54,12 +57,3 @@ class HTTPConnection(object):
     def __init__(self,url="http://localhost:8983/solr"):
         self.url = url
         self.servers = [url]
-
-        
-# c = ZConnection("localhost:9983")
-# c.get_server_addresses()
-# print c.servers
-
-# import time; time.sleep(5)
-# print c.get_live_nodes()
-# #print c.live_nodes
