@@ -79,9 +79,22 @@ class Collection(object):
     def exists(self,collection):
         return collection in self.list()
     
-    def create(self,name,num_shards,params={}):
+    def create(self,name,num_shards,replication_factor=None,params={}):
+        """
+        Create a collection. `replication_factor` is assumed to be as big 
+        as the current cluster size
+        """
         if not self.exists(name):
-            params.update({'action':'CREATE','name':name,'numShards':num_shards})
+            if not replication_factor:
+                replication_factor = len(self.connection.severs)
+            params.update(
+                {
+                    'action':'CREATE','name':name,
+                    'numShards':num_shards,
+                    'replicationFactor': replication_factor,
+                }
+                    
+                )
             self.client.get('admin/collections',params)
         return index.SolrIndex(self.connection,name)
 
