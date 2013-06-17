@@ -86,10 +86,11 @@ class Collection(object):
         """
         if not self.exists(name):
             if not replication_factor:
-                replication_factor = len(self.connection.severs)
+                replication_factor = len(self.connection.servers)
             params.update(
                 {
-                    'action':'CREATE','name':name,
+                    'action':'CREATE',
+                    'name':name,
                     'numShards':num_shards,
                     'replicationFactor': replication_factor,
                 }
