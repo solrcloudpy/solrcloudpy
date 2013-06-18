@@ -57,24 +57,10 @@ class Collection(object):
         self.connection = connection
         self.client = _Request(connection)
 
-        self.collectionscache = {}
-        self.collectionscache['ts'] = time()
         
-    def list(self):
-        current = time()
-        start = self.collectionscache['ts']
-
-        if current - start > 10 or self.collectionscache.get('collections') is None:
-            # cache has expired, query zk
-            self.connection.zk.start()
-            res,node = self.connection.zk.get('/clusterstate.json')
-            res = json.loads(res)
-            self.connection.zk.stop()
-            self.collectionscache['collections'] = res.keys()
-            self.collectionscache['ts'] = time()
-            return res.keys()
-
-        return self.collectionscache['collections']
+    def list(self,*args):
+        res = self.connection.collection_list
+        return res
         
     def exists(self,collection):
         return collection in self.list()
