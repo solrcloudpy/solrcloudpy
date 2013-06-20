@@ -57,7 +57,6 @@ class Collection(object):
         self.connection = connection
         self.client = _Request(connection)
 
-        
     def list(self,*args):
         res = self.connection.collection_list
         return res
@@ -67,8 +66,12 @@ class Collection(object):
     
     def create(self,name,num_shards,replication_factor=None,params={}):
         """
-        Create a collection. `replication_factor` is assumed to be as big 
-        as the current cluster size
+        Create a collection. Notes: 
+        * `replication_factor` is assumed to be as big 
+           as the current cluster size
+
+        * The cores json api is used for this operation for finer control
+        
         """
         if not self.exists(name):
             if not replication_factor:
@@ -79,10 +82,12 @@ class Collection(object):
                     'name':name,
                     'numShards':num_shards,
                     'replicationFactor': replication_factor,
+                    'collection': name,
+                    'loadOnStartup':'false'
                 }
                     
                 )
-            self.client.get('admin/collections',params)
+            self.client.get('admin/cores',params)
         return index.SolrIndex(self.connection,name)
 
     def delete(self,name,params={}):
