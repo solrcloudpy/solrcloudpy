@@ -61,6 +61,4 @@ class HTTPConnection(object):
             self.servers = [self.url,self.url]
         if type(address) == type([]):
             self.servers = ["http://%s/solr/" % a for a in address]
-            
-        print self.servers    
-            
+        
