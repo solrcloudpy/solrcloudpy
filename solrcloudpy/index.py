@@ -54,7 +54,7 @@ class SolrIndex(object):
                 
         servers = list(self.connection.servers)
         if not servers:
-            raise Exception("not live servers found!")
+            raise Exception("no live servers found!")
         
         host = servers.pop(0)
 
@@ -63,14 +63,15 @@ class SolrIndex(object):
             try:
                 r = self.client.request(method,fullpath,
                                         params=params,
-                                        headers=headers,data=body)
+                                        headers=headers,data=body,timeout=10.0)
         
                 if r.status_code == requests.codes.ok:
                     response = r.json()
                 else:
                     response = r.text
                 return response
-            except ConnectionError:
+            except (ConnectionError,Timeout) as e:
+                print 'exception: ', e
                 if servers:
                     host = servers.pop(0)
                     return make_request(host,path)
