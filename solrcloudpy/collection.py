@@ -13,8 +13,8 @@ class _Request(object):
     """
     Issues requests to the collections API
     """
-    def __init__(self,zkconnection):
-        self.connection = zkconnection
+    def __init__(self,connection):
+        self.connection = connection
         self.client = requests.Session()
         
     def request(self,path,params,method='GET',body=None):
@@ -23,6 +23,7 @@ class _Request(object):
 
         servers = list(self.connection.servers)
         host = servers.pop(0)
+        
         def make_request(host,path):
             fullpath = urlparse.urljoin(host,path)
             try:
