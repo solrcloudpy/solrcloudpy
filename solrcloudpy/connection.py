@@ -56,7 +56,7 @@ class HTTPConnection(object):
     """
     Connection to a single solr server not running in cloud mode
     """
-    def __init__(self,url="http://localhost:8983/solr"):
-        self.url = url
-        self.servers = [url]
+    def __init__(self,address="http://localhost:8983/solr"):
+        self.url = "http://%s/solr/" % address
+        self.servers = [self.url]
         self.live_nodes = []
