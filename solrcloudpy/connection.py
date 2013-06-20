@@ -17,7 +17,6 @@ class ZConnection(object):
         Watch2(self.get_server_addresses)
 
         self.servers = []
-        self.live_nodes = []
         
     def get_live_nodes(self,data,stat):
         self.live_nodes = self.zk.get_children('/live_nodes')
@@ -57,6 +56,11 @@ class HTTPConnection(object):
     Connection to a single solr server not running in cloud mode
     """
     def __init__(self,address="http://localhost:8983/solr"):
-        self.url = "http://%s/solr/" % address
-        self.servers = [self.url]
-        self.live_nodes = []
+        if type(address) == type(''):
+            self.url = "http://%s/solr/" % address
+            self.servers = [self.url,self.url]
+        if type(address) == type([]):
+            self.servers = ["http://%s/solr/" % a for a in address]
+            
+        print self.servers    
+            
