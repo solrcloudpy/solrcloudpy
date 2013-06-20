@@ -23,7 +23,7 @@ class DictObject(object):
       if isinstance(v, dict):
         setattr(self, k, DictObject(v))
       else:
-        setattr(self, k, v)
+        setattr(self, k.encode('utf8','ignore'), v)
 
   def __getitem__(self, val):
     return self.__dict__[val]

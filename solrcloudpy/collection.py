@@ -58,8 +58,11 @@ class Collection(object):
         self.client = _Request(connection)
 
     def list(self,*args):
-        res = self.connection.collection_list
-        return res
+        params = {'wt':'json','detail':'false','path':'/collections'}
+        response = self.client.get('/solr/zookeeper',params)
+        data = response['tree'][0]['children']
+        colls = [node['data']['title'] for node in data]
+        return colls
         
     def exists(self,collection):
         return collection in self.list()

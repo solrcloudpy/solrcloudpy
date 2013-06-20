@@ -16,20 +16,11 @@ class ZConnection(object):
         Watch2 = self.zk.DataWatch('/clusterstate.json')
         Watch2(self.get_server_addresses)
 
-        CollectionListWatch = self.zk.DataWatch('/clusterstate.json')
-        CollectionListWatch(self.list_collections)
-        self.collection_list = []
         self.servers = []
+        self.live_nodes = []
         
-    def list_collections(self,data,stat):
-        res,node = self.connection.zk.get('/clusterstate.json')
-        res = json.loads(res)
-        self.collection_list = res.keys()
-        return self.collection_list
-
     def get_live_nodes(self,data,stat):
         self.live_nodes = self.zk.get_children('/live_nodes')
-        #print 'live nodes changed: ', self.live_nodes
         return self.live_nodes
 
     def get_server_addresses(self,data,stat):
@@ -68,4 +59,4 @@ class HTTPConnection(object):
     def __init__(self,url="http://localhost:8983/solr"):
         self.url = url
         self.servers = [url]
-        self.collection_list = []
+        self.live_nodes = []
