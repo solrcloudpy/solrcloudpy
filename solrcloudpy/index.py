@@ -10,7 +10,7 @@ import json
 
 import logging
 
-log = logging.getLogger('solr')
+log = logging.getLogger('solrcloud')
 dthandler = lambda obj: obj.isoformat() if isinstance(obj, dt.datetime) else None
 
 class DictObject(object):
