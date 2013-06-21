@@ -203,9 +203,9 @@ class SolrBatchAdder(object):
             for item in self.batch:
                 try:
                     self.solr.add([item])
-                except:
+                except Exception as e:
                     log.error(u"Could not add item to solr index")
-                    log.exception(u"Exception stack trace for adding item")
+                    log.exception(str(e))
             if auto_commit:
                 self.commit()
 
