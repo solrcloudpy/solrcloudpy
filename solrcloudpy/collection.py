@@ -16,7 +16,7 @@ class _Request(object):
     def __init__(self,connection):
         self.connection = connection
         self.client = requests.Session()
-        
+                
     def request(self,path,params,method='GET',body=None):
         headers = {'content-type': 'application/json'}
         params['wt'] = 'json'

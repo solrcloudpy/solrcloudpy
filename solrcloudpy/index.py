@@ -1,4 +1,3 @@
-from connection import ZConnection, HTTPConnection
 from requests.exceptions import *
 from requests.models import Response
 from contextlib import contextmanager
@@ -43,7 +42,7 @@ class SolrIndex(object):
         self.connection = connection
         self.collection = collection
         self.client = requests.Session()
-
+        
     def __repr__(self):
         return "SolrIndex<%s>" % self.collection
     
