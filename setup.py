@@ -8,7 +8,7 @@ except ImportError:
 setup(
     name = "solrcloudpy",
     version = "1.0",
-    description = "Solr4.0 client",
+    description = "SolrCloud client",
     author = 'Didier Deshommes',
     author_email = 'dfdeshom@gmail.com',
     packages=find_packages(exclude=['ez_setup']),
@@ -21,5 +21,5 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Indexing/Search'
         ],
         
-    install_requires = ['requests','kazoo>=1.1']
+    install_requires = ['requests',]
         )
