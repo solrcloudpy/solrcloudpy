@@ -58,17 +58,23 @@ class Collection(object):
         self.connection = connection
         self.client = _Request(connection)
 
-    def list(self,*args):
+    def list(self):
         params = {'wt':'json','detail':'false','path':'/collections'}
         response = self.client.get('/solr/zookeeper',params)
         data = response['tree'][0]['children']
         colls = [node['data']['title'] for node in data]
         return colls
-        
+
+    def _list_cores(self):
+        params = {'wt':'json',}
+        response = self.client.get('admin/cores',params)
+        cores = response.get('status',{}).keys()
+        return cores
+    
     def exists(self,collection):
         return collection in self.list()
     
-    def create(self,name,num_shards,replication_factor=None,params={}):
+    def create(self,name,num_shards,replication_factor,force=False,params={}):
         """
         Create a collection. Notes: 
         * `replication_factor` is assumed to be as big 
@@ -77,9 +83,7 @@ class Collection(object):
         * The cores json api is used for this operation for finer control
         
         """
-        if not self.exists(name):
-            if not replication_factor:
-                replication_factor = len(self.connection.servers)
+        if not self.exists(name) or force == True:
             params.update(
                 {
                     'action':'CREATE',
@@ -88,15 +92,14 @@ class Collection(object):
                     'replicationFactor': replication_factor,
                     'collection': name,
                     'loadOnStartup':'false'
-                }
-                    
-                )
+                })
+            
             self.client.get('admin/cores',params)
         return index.SolrIndex(self.connection,name)
 
     def delete(self,name,params={}):
         params.update({'action':'DELETE','name':name})
-        self.client.get('admin/collections',params)
+        return self.client.get('admin/collections',params)
         
     def reload(self,name,params={}):
         params.update({'action':'RELOAD','name':name})
