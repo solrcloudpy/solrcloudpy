@@ -13,12 +13,15 @@ The API is mean to be close to pymongo's API, where one can access collections a
 Usage
 -------
 
-Example usage:
+   
+     conn = HTTPConnection(["localhost:9983","localhost:8984"])
+     collection = collection.Collection(conn)
+     collection.create('test1',num_shards=1,replication_factor=2)
+          
+     # Indexing documents
+     docs = [{"id":"1", "name":"a"},{"id":"2","name":"b"}]
+     collection.test1.add(docs)
 
-     >>> conn = HTTPConnection(["localhost:9983","localhost:8984"])
-     >>> collection = collection.Collection(conn)
-     >>> collection.create('test1')
-     >>> print collection.test1.search(q='')
-     ...
-
+     # Searching documents
+     print collection.test1.search(q='*:*')
  
