@@ -33,11 +33,14 @@ class DictObject(object):
     
 class SolrResponse(DictObject):
   """ A generic representation of a solr response """
-    def __repr__(self):
-        if not self.response:
-            return "Empty SolrResponse" 
-        return super(SolrResponse,self).__repr__()
-        
+  def __repr__(self):
+    if not self.response:
+      return "Empty SolrResponse" 
+    return super(SolrResponse,self).__repr__()
+
+class SolrException(Exception):
+    pass
+
 class SolrIndex(object):
     """ """
     def __init__(self,connection,collection):
@@ -91,7 +94,7 @@ class SolrIndex(object):
         path = '%s/update/json' % self.collection
         resp = self._send(path,method='POST',params={},body=body)
         if type(resp) != type({}):
-            raise Exception(resp)
+            raise SolrException(resp)
         return resp
 
     def search(self,q,params={}):
@@ -106,7 +109,7 @@ class SolrIndex(object):
         params['q'] = q
         data = self._send(path,params)
         if type(data) != type({}):
-            raise Exception(data)
+            raise SolrException(data)
         
         return SolrResponse(data)
 
@@ -122,7 +125,7 @@ class SolrIndex(object):
         params['q'] = q
         data = self._send(path,params)
         if type(data) != type({}):
-            raise Exception(data)
+            raise SolrException(data)
         
         return SolrResponse(data)
 

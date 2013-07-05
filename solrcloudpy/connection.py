@@ -6,9 +6,9 @@ class HTTPConnection(object):
                     Example: `localhost:8983` or ``[localhost,solr1.domain.com:8983]``
     """
     def __init__(self,server="localhost:8983"):
-        if type(address) == type(''):
-            self.url = "http://%s/solr/" % address
+        if type(server) == type(''):
+            self.url = "http://%s/solr/" % server
             self.servers = [self.url,self.url]
-        if type(address) == type([]):
-            self.servers = ["http://%s/solr/" % a for a in address]
+        if type(server) == type([]):
+            self.servers = ["http://%s/solr/" % a for a in server]
         
