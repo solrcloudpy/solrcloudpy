@@ -12,16 +12,11 @@ The API is mean to be close to pymongo's API, where one can access collections a
 
 Usage
 -------
-Solr uses Zookeeper for distributed capabilities, so we will take advantage of that to:
-
-* detect live nodes, 
-* remove failing nodes
-* find cluster health
 
 Example usage:
 
-     >>> zk = ZConnection("localhost:9983")
-     >>> collection = collection.Collection(zk)
+     >>> conn = HTTPConnection(["localhost:9983","localhost:8984"])
+     >>> collection = collection.Collection(conn)
      >>> collection.create('test1')
      >>> print collection.test1.search(q='')
      ...
