@@ -183,6 +183,15 @@ class SolrIndex(object):
 
 @contextmanager
 def solr_batch_adder(solr, batch_size=2000, auto_commit=False):
+    """
+    A context manager for adding documents in solr
+
+    :param solr       : a `SolrIndex` object representing the solr index to use
+
+    :param batch_size : the number of documents to commit at a time. The default is 100
+
+    :param auto_commit: whether to commit after adding each batch of documents
+    """
     batcher = SolrBatchAdder(solr, batch_size, auto_commit)
     try:
         yield batcher
