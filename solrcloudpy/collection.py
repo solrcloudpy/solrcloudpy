@@ -59,6 +59,9 @@ class Collection(object):
         self.client = _Request(connection)
 
     def list(self):
+        """
+        Lists out the current collections in the cluster
+        """
         params = {'wt':'json','detail':'false','path':'/collections'}
         response = self.client.get('/solr/zookeeper',params)
         data = response['tree'][0]['children']
@@ -72,12 +75,27 @@ class Collection(object):
         return cores
     
     def exists(self,collection):
+        """
+        Finds if a collection exists in the cluster
+        
+        :param collection : the collection to find 
+        """
         return collection in self.list()
     
     def create(self,name,num_shards,replication_factor,force=False,params={}):
         """
         Create a collection
-        
+
+        :param name               : a string indicating the name of the collection
+
+        :param num_shards         : an integer indicating the number of shards for this collection
+
+        :param replication_factor : an integer indicating the number of replcas for this collection
+
+        :param force              : a boolean value indicating whether to force the operation or not
+                                    The default is `False`
+
+        :param params             : additional parameters to be passed to this operation
         """
         if not self.exists(name) or force == True:
             params.update(
@@ -92,10 +110,25 @@ class Collection(object):
         return index.SolrIndex(self.connection,name)
 
     def delete(self,name,params={}):
+        """
+        Delete a collection
+
+        :param name   : a string indicating the name of the collection
+
+        :param params : additional parameters to be passed to this operation
+        """
         params.update({'action':'DELETE','name':name})
         return self.client.get('admin/collections',params)
         
     def reload(self,name,params={}):
+        """
+        Reload a collection
+
+        :param name   : a string indicating the name of the collection
+
+        :param params : additional parameters to be passed to this operation
+        """
+
         params.update({'action':'RELOAD','name':name})
         self.client.get('admin/collections',params)
 

@@ -32,13 +32,22 @@ class DictObject(object):
       (k, v) in self.__dict__.iteritems()))
     
 class SolrResponse(DictObject):
+  """ A generic representation of a solr response """
     def __repr__(self):
         if not self.response:
             return "Empty SolrResponse" 
         return super(SolrResponse,self).__repr__()
         
 class SolrIndex(object):
+    """ """
     def __init__(self,connection,collection):
+        """
+        Search for documents inside a collection
+
+        :param connection : a ``Connection`` to the solr server
+
+        :param collection : the ``Collection`` object that will be searched
+        """
         self.connection = connection
         self.collection = collection
         self.client = requests.Session()
@@ -86,6 +95,13 @@ class SolrIndex(object):
         return resp
 
     def search(self,q,params={}):
+        """
+        Search the collection
+
+        :param q     : a string representing the query 
+
+        :param params: additional parameters passed in a dictionary
+        """
         path = "%s/select" % self.collection
         params['q'] = q
         data = self._send(path,params)
@@ -95,6 +111,13 @@ class SolrIndex(object):
         return SolrResponse(data)
 
     def mlt(self,q,params={}):
+        """
+        Perform a MoreLikeThis search the collection
+
+        :param q     : a string representing the query 
+
+        :param params: additional parameters passed in a dictionary
+        """
         path = "%s/mlt" % self.collection
         params['q'] = q
         data = self._send(path,params)
@@ -104,11 +127,23 @@ class SolrIndex(object):
         return SolrResponse(data)
 
     def add(self,docs):
+        """
+        Add a list of document to the collection
+
+        :param docs : a list of documents to add
+        """
         message = json.dumps(docs,default=dthandler)
         response = self._update(message)
         return response
 
     def delete(self,id=None,q=None):
+        """
+        Delete documents in a collection. Deletes occur either by id or by query
+
+        :param id : the id of the document to pass. 
+
+        :param q  : the query matching the set of documents to delete
+        """
         if id is None and q is None:
             raise ValueError('You must specify "id" or "q".')
         elif id is not None and q is not None:
@@ -123,6 +158,14 @@ class SolrIndex(object):
             self.commit()
             
     def optimize(self,waitsearcher=True,softcommit=False):
+        """
+        Optimize a collection for searching
+
+        :param waitsearcher : whether to make the changes to the collection visible or not
+                              by opening a new searcher
+
+        :param softcommit   : whether to perform a soft commit when optimizing
+        """
         waitsearcher = str(waitsearcher).lower()
         softcommit = str(softcommit).lower()
         params = {'softCommit': softcommit,
@@ -133,6 +176,7 @@ class SolrIndex(object):
         response = self._send(path,params)
 
     def commit(self):
+        """ Commit changes to a collection """
         response = self._update('{"commit":{}}')
         return response
 
@@ -152,20 +196,22 @@ def solr_batch_adder(solr, batch_size=2000, auto_commit=False):
 class SolrBatchAdder(object):
     def __init__(self, solr, batch_size=100, auto_commit=True):
         """Provides an abstraction for batching commits to the Solr
-    index when processing
-        documents with pysolr.  `SolrBatchAdder` maintains an internal
-    "batch" list, and
-        when it reaches `batch_size`, it will commit the batch to
-    Solr.  This allows for
-        overall better performance when committing large numbers of
-    documents.
+        index when processing documents with pysolr.  `SolrBatchAdder` maintains an internal
+        "batch" list, and  when it reaches `batch_size`, it will commit the batch to
+        Solr.  This allows for overall better performance when committing large numbers of
+        documents.
 
         `batch_size` is 100 by default; different values may yield
-        different performance 
-        characteristics, and this of course depends upon your average
-        document size and 
-        Solr schema.  But 100 seems to improve performance
-        significantly over single commits."""
+        different performance characteristics, and this of course depends upon your average
+        document size and Solr schema.  But 100 seems to improve performance
+        significantly over single commits.
+        
+        :param solr       : a `SolrIndex` object representing the solr index to use
+
+        :param batch_size : the number of documents to commit at a time. The default is 100
+
+        :param auto_commit: whether to commit after adding each batch of documents
+        """
         self.solr = solr
         self.batch = list()
         self.batch_len = 0
@@ -173,21 +219,31 @@ class SolrBatchAdder(object):
         self.auto_commit = auto_commit
 
     def add_one(self, doc):
-        """Adds a single document to the batch adder, committing only
-        if we've reached batch_size."""
+        """
+        Add a single document to the batch adder, committing only
+        if we've reached batch_size.
+
+        :param doc : the document
+        """
         self._append_commit(doc)
 
     def add_multi(self, docs_iter):
-        """Iterates through `docs_iter`, appending each document to
+        """
+        Iterate through `docs_iter`, appending each document to
         the batch adder, committing mid-way
-        if batch_size is reached."""
+        if batch_size is reached.
+
+        :param docs_iter: the list of documents to go through
+        """
         assert hasattr(docs_iter, "__iter__"), "docs_iter must be iterable"
         for doc in docs_iter:
             self._append_commit(doc)
 
     def flush(self):
-        """Flushes the batch queue of the batch adder; necessary after 
-        successive calls to `add_one` or `add_multi`."""
+        """
+        Flush the batch queue of the batch adder; necessary after 
+        successive calls to `add_one` or `add_multi`.
+        """
         batch_len = len(self.batch)
         auto_commit = self.auto_commit
         log.debug("SolrBatchAdder: flushing {batch_len} articles to Solr (auto_commit={auto_commit})".format(
@@ -212,6 +268,7 @@ class SolrBatchAdder(object):
         self.batch_len = 0
 
     def commit(self):
+        """Commit the current batch of documents """
         try:
             self.solr.commit()
         except :
