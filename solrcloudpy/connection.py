@@ -19,12 +19,15 @@ class HTTPConnection(object):
             if detect_live_nodes:
                 url = servers[0]
                 self.servers = self.detect_nodes(url)
-
+            else:
+                self.servers = servers
         if type(server) == type([]):
             servers = ["http://%s/solr/" % a for a in server]
             if detect_live_nodes:
                 url = servers[0]
                 self.servers = self.detect_nodes(url)
+            else:
+                self.servers = servers
                 
     def detect_nodes(self,url):
         url = url+'zookeeper?path=/live_nodes'
