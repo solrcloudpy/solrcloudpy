@@ -9,6 +9,7 @@ solrcloudpy is a python library for interacting with SolrCloud. This library aim
 * Near-realtime search
 
 The API is mean to be close to pymongo's API, where one can access collections and databases as simple attributes 
+or dictionary keys.  
 
 Usage
 -------
