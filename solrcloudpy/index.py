@@ -139,7 +139,7 @@ class SolrIndex(object):
         response = self._update(message)
         return response
 
-    def delete(self,id=None,q=None):
+    def delete(self,id=None,q=None,commit=True):
         """
         Delete documents in a collection. Deletes occur either by id or by query
 
