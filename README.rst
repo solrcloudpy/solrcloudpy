@@ -14,9 +14,12 @@ or dictionary keys.
 Usage
 -------
 .. code-block:: python
+
+     from solrcloudpy.connection import HTTPConnection
+     from solrcloudpy.collection import Collection 
    
      conn = HTTPConnection(["localhost:9983","localhost:8984"])
-     collection = collection.Collection(conn)
+     collection = Collection(conn)
      collection.create('test1',num_shards=1,replication_factor=2)
           
      # Indexing documents
