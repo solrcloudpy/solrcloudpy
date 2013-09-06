@@ -13,7 +13,7 @@ or dictionary keys.
 
 Usage
 -------
-
+.. code-block:: python
    
      conn = HTTPConnection(["localhost:9983","localhost:8984"])
      collection = collection.Collection(conn)

@@ -4,16 +4,24 @@ except ImportError:
     import ez_setup
     ez_setup.use_setuptools()
     from setuptools import setup, find_packages
+
+with open('README.rst', 'r') as f:
+    long_description = f.read()
     
 setup(
     name = "solrcloudpy",
     version = "1.0",
-    description = "SolrCloud client",
     author = 'Didier Deshommes',
     author_email = 'dfdeshom@gmail.com',
     packages=find_packages(exclude=['ez_setup']),
+    url='https://github.com/dfdeshom/solrcloudpy',
+    license='LICENSE.txt',
+    keywords='solr solrcloud',
+    description='python library for interacting with SolrCloud ',
+    long_description=long_description,
+    include_package_data=True,
     classifiers = [
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
