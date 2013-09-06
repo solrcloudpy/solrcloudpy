@@ -20,6 +20,7 @@ setup(
     description='python library for interacting with SolrCloud ',
     long_description=long_description,
     include_package_data=True,
+    platforms='any',
     classifiers = [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
