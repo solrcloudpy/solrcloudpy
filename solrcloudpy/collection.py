@@ -82,7 +82,7 @@ class Collection(object):
         """
         return collection in self.list()
     
-    def create(self,name,num_shards,replication_factor,force=False,params={}):
+    def create(self,name,num_shards,replication_factor,max_shards_per_node=1,force=False,params={}):
         """
         Create a collection
 
@@ -104,6 +104,7 @@ class Collection(object):
                     'name':name,
                     'numShards':num_shards,
                     'replicationFactor': replication_factor,
+                    'maxShardsPerNode':max_shards_per_node,
                 })
             
             self.client.get('admin/collections',params)
