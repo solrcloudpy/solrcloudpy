@@ -17,7 +17,7 @@ class DictObject(object):
   def __init__(self, obj):
     if not obj:
       return
-    
+
     for k, v in obj.iteritems():
       if isinstance(v, dict):
         setattr(self, k, DictObject(v))
@@ -26,16 +26,16 @@ class DictObject(object):
 
   def __getitem__(self, val):
     return self.__dict__[val]
-  
+
   def __repr__(self):
     return 'DictObject{%s}' % str(', '.join('%s : %s' % (k, repr(v)) for
       (k, v) in self.__dict__.iteritems()))
-    
+
 class SolrResponse(DictObject):
   """ A generic representation of a solr response """
   def __repr__(self):
     if not self.response:
-      return "Empty SolrResponse" 
+      return "Empty SolrResponse"
     return super(SolrResponse,self).__repr__()
 
 class SolrException(Exception):
@@ -54,19 +54,19 @@ class SolrIndex(object):
         self.connection = connection
         self.collection = collection
         self.client = requests.Session()
-        
+
     def __repr__(self):
         return "SolrIndex<%s>" % self.collection
-    
+
     def _send(self,path,params,method='GET',body=None):
         headers = {'content-type': 'application/json'}
         extraparams = {'wt':'json', 'omitHeader':'true','json.nl':'map'}
         params.update(extraparams)
-                
+
         servers = list(self.connection.servers)
         if not servers:
             raise Exception("no live servers found!")
-        
+
         host = servers.pop(0)
 
         def make_request(host,path):
@@ -75,7 +75,7 @@ class SolrIndex(object):
                 r = self.client.request(method,fullpath,
                                         params=params,
                                         headers=headers,data=body,timeout=10.0)
-        
+
                 if r.status_code == requests.codes.ok:
                     response = r.json()
                 else:
@@ -86,7 +86,7 @@ class SolrIndex(object):
                 if servers:
                     host = servers.pop(0)
                     return make_request(host,path)
-       
+
         result = make_request(host,path)
         return result
 
@@ -101,7 +101,7 @@ class SolrIndex(object):
         """
         Search the collection
 
-        :param q     : a string representing the query 
+        :param q     : a string representing the query
 
         :param params: additional parameters passed in a dictionary
         """
@@ -110,14 +110,14 @@ class SolrIndex(object):
         data = self._send(path,params)
         if type(data) != type({}):
             raise SolrException(data)
-        
+
         return SolrResponse(data)
 
     def mlt(self,q,params={}):
         """
         Perform a MoreLikeThis search the collection
 
-        :param q     : a string representing the query 
+        :param q     : a string representing the query
 
         :param params: additional parameters passed in a dictionary
         """
@@ -126,7 +126,7 @@ class SolrIndex(object):
         data = self._send(path,params)
         if type(data) != type({}):
             raise SolrException(data)
-        
+
         return SolrResponse(data)
 
     def add(self,docs):
@@ -143,7 +143,7 @@ class SolrIndex(object):
         """
         Delete documents in a collection. Deletes occur either by id or by query
 
-        :param id : the id of the document to pass. 
+        :param id : the id of the document to pass.
 
         :param q  : the query matching the set of documents to delete
         """
@@ -155,12 +155,12 @@ class SolrIndex(object):
             m = json.dumps({"delete":{"id":"%s" % id }})
         elif q is not None:
             m = json.dumps({"delete":{"query":"%s" % q }})
-            
+
         response = self._update(m)
         if commit:
             self.commit()
-            
-    def optimize(self,waitsearcher=True,softcommit=False):
+
+    def optimize(self,waitsearcher=False,softcommit=False):
         """
         Optimize a collection for searching
 
@@ -176,7 +176,15 @@ class SolrIndex(object):
                   'optimize': 'true'
                   }
         path = '%s/update' % self.collection
-        response = self._send(path,params)
+        try:
+            servers = list(self.connection.servers)
+            host = servers[0]
+            fullpath = urlparse.urljoin(host,path)
+            res = self.client.request("GET",fullpath,params=params,headers={"wt":"json"},timeout=2)
+            return res
+        except:
+            pass
+                        
 
     def commit(self):
         """ Commit changes to a collection """
@@ -201,7 +209,7 @@ def solr_batch_adder(solr, batch_size=2000, auto_commit=False):
     finally:
         log.info("solr_batch_adder: flushing last few items in batch")
         batcher.flush()
-            
+
 class SolrBatchAdder(object):
     def __init__(self, solr, batch_size=100, auto_commit=True):
         """Provides an abstraction for batching commits to the Solr
@@ -214,7 +222,7 @@ class SolrBatchAdder(object):
         different performance characteristics, and this of course depends upon your average
         document size and Solr schema.  But 100 seems to improve performance
         significantly over single commits.
-        
+
         :param solr       : a `SolrIndex` object representing the solr index to use
 
         :param batch_size : the number of documents to commit at a time. The default is 100
@@ -250,7 +258,7 @@ class SolrBatchAdder(object):
 
     def flush(self):
         """
-        Flush the batch queue of the batch adder; necessary after 
+        Flush the batch queue of the batch adder; necessary after
         successive calls to `add_one` or `add_multi`.
         """
         batch_len = len(self.batch)
@@ -296,5 +304,3 @@ class SolrBatchAdder(object):
     def __unicode__(self):
         fmt = "SolrBatchAdder(batch_size={batch_size},  batch_len={batch_len}, solr={solr}"
         return fmt.format(**vars(self))
-    
-   
