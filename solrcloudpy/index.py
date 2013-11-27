@@ -201,9 +201,6 @@ def solr_batch_adder(solr, batch_size=2000, auto_commit=False):
     finally:
         log.info("solr_batch_adder: flushing last few items in batch")
         batcher.flush()
-        if not auto_commit:
-            log.info("solr_batch_adder: auto_commit was False, issuing final commit")
-            batcher.commit()
             
 class SolrBatchAdder(object):
     def __init__(self, solr, batch_size=100, auto_commit=True):
