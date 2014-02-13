@@ -82,7 +82,6 @@ class Collection(object):
         """
         return collection in self.list()
 
-    #def create(self,name,num_shards,replication_factor,max_shards_per_node=1,force=False):
     def create(self,name,replication_factor=1,force=False,**kwargs):
         """
         Create a collection
@@ -98,10 +97,10 @@ class Collection(object):
 
         :param params             : additional parameters to be passed to this operation
         """
-        params = {}
+        params = {'name':name,'replication_factor':replication_factor}
         router_name = kwargs.get("router_name",'compositeId')
         params['router.name'] = router_name
-        
+
         num_shards = kwargs.get("num_shards")
         if num_shards:
             params['numShards'] = num_shards
@@ -128,7 +127,7 @@ class Collection(object):
 
         if not self.exists(name) or force == True:
             self.client.get('admin/collections',params)
-            
+
         return index.SolrIndex(self.connection,name)
 
     def delete(self, name):
