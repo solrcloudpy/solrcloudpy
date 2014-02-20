@@ -1,13 +1,10 @@
 from requests.exceptions import *
-from requests.models import Response
-
-from time import time
 
 import requests
 import urlparse
-import json
+import time
 
-import index
+import solrcloudpy.index as index
 
 class _Request(object):
     """
@@ -127,8 +124,23 @@ class Collection(object):
 
         if not self.exists(name) or force == True:
             self.client.get('admin/collections',params)
-
+            # Create the index and wait until it's available
+            while True:
+                if not self._is_index_created(name):
+                    print "index not created yet, waiting..."
+                    time.sleep(1)
+                break
+            
         return index.SolrIndex(self.connection,name)
+
+    def _is_index_created(self,index_name):
+        """
+
+        """
+        req = self.client.get('/solr/%s' % index_name)
+        if req.status_code != requests.codes.ok
+            return False
+        return True
 
     def delete(self, name):
         """
