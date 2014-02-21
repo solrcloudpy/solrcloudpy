@@ -167,7 +167,7 @@ class Collection(object):
     def split_shard(self, shard, ranges=None, split_key=None):
         """
         """
-        params = {'action':'SPLITSHARD','name':self.name,'shard':shard}
+        params = {'action':'SPLITSHARD','collection':self.name,'shard':shard}
         if ranges:
             params['ranges'] = ranges
         if split_key:
@@ -183,27 +183,29 @@ class Collection(object):
             params['create_node_set'] = create_node_set
         self.client.get('admin/collections',params)
 
-    def create_alias(self, collections):
+    def create_alias(self, alias):
         """
 
         """
         params = {'action':'CREATEALIAS',
-                  'name':self.name,'collections':collections}
+                  'name':alias,'collections':self.name}
         self.client.get('admin/collections',params)
 
-    def delete_alias(self):
+    def delete_alias(self,alias):
         """
 
         """
-        params = {'action':'DELETEALIAS','name':self.name,}
+        params = {'action':'DELETEALIAS','name':alias,}
         self.client.get('admin/collections',params)
 
-    def delete_replica(self, replica):
+    def delete_replica(self, replica, shard):
         """
 
         """
         params = {'action':'DELETEREPLICA',
-                  'replica':replica,'collection':self.name}
+                  'replica':replica,
+                  'collection':self.name,
+                  'shard':shard}
         self.client.get('admin/collections',params)
 
     def __getattr__(self,name):
