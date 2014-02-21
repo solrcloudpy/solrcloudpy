@@ -94,13 +94,14 @@ class Collection(object):
 
         :param params             : additional parameters to be passed to this operation
         """
-        params = {'name':self.name,'replication_factor':replication_factor}
+        params = {'name':self.name,
+                  'replication_factor':replication_factor,
+                  'action':'CREATE'}
         router_name = kwargs.get("router_name",'compositeId')
         params['router.name'] = router_name
 
-        num_shards = kwargs.get("num_shards")
-        if num_shards:
-            params['numShards'] = num_shards
+        num_shards = kwargs.get("num_shards","1")
+        params['numShards'] = num_shards
 
         shards = kwargs.get("shards")
         if shards:
@@ -137,7 +138,8 @@ class Collection(object):
         """
 
         """
-        req = requests.get('/solr/%s' % self.name)
+        server = list(self.connection.servers)[0]
+        req = requests.get('%s/solr/%s' % (server,self.name))
         if req.status_code != requests.codes.ok:
             return False
         return True
@@ -207,4 +209,3 @@ class Collection(object):
     def __getattr__(self,name):
         ind = index.SolrIndex(self.connection,self.name)
         return getattr(ind,name)
-    
