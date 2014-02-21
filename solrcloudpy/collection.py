@@ -1,10 +1,9 @@
-from requests.exceptions import *
+from requests.exceptions import ConnectionError
 
+import solrcloudpy.index as index
 import requests
 import urlparse
 import time
-
-import solrcloudpy.index as index
 
 class _Request(object):
     """
@@ -42,7 +41,7 @@ class _Request(object):
         return result
 
     def update(self,path,params,body):
-        return self.request(path,params,body,method='POST')
+        return self.request(path,params,'POST',body)
 
     def get(self,path,params):
         return self.request(path,params,method='GET')
@@ -51,8 +50,9 @@ class Collection(object):
     """
     Class to manage collections
     """
-    def __init__(self,connection):
+    def __init__(self,connection,name):
         self.connection = connection
+        self.name = name
         self.client = _Request(connection)
 
     def list(self):
@@ -71,15 +71,15 @@ class Collection(object):
         cores = response.get('status',{}).keys()
         return cores
 
-    def exists(self,collection):
+    def exists(self):
         """
         Finds if a collection exists in the cluster
 
         :param collection : the collection to find
         """
-        return collection in self.list()
+        return self.name in self.list()
 
-    def create(self,name,replication_factor=1,force=False,**kwargs):
+    def create(self, replication_factor=1, force=False, **kwargs):
         """
         Create a collection
 
@@ -94,7 +94,7 @@ class Collection(object):
 
         :param params             : additional parameters to be passed to this operation
         """
-        params = {'name':name,'replication_factor':replication_factor}
+        params = {'name':self.name,'replication_factor':replication_factor}
         router_name = kwargs.get("router_name",'compositeId')
         params['router.name'] = router_name
 
@@ -122,27 +122,27 @@ class Collection(object):
             params['router.field'] = router_field
 
 
-        if not self.exists(name) or force == True:
+        if not self.exists() or force == True:
             self.client.get('admin/collections',params)
             # Create the index and wait until it's available
             while True:
-                if not self._is_index_created(name):
+                if not self._is_index_created():
                     print "index not created yet, waiting..."
                     time.sleep(1)
                 break
-            
-        return index.SolrIndex(self.connection,name)
 
-    def _is_index_created(self,index_name):
+        return index.SolrIndex(self.connection,self.name)
+
+    def _is_index_created(self):
         """
 
         """
-        req = self.client.get('/solr/%s' % index_name)
-        if req.status_code != requests.codes.ok
+        req = requests.get('/solr/%s' % self.name)
+        if req.status_code != requests.codes.ok:
             return False
         return True
 
-    def delete(self, name):
+    def delete(self):
         """
         Delete a collection
 
@@ -150,9 +150,9 @@ class Collection(object):
 
         :param params : additional parameters to be passed to this operation
         """
-        return self.client.get('admin/collections',{'action':'DELETE','name':name})
+        return self.client.get('admin/collections',{'action':'DELETE','name':self.name})
 
-    def reload(self, name):
+    def reload(self):
         """
         Reload a collection
 
@@ -160,50 +160,51 @@ class Collection(object):
 
         :param params : additional parameters to be passed to this operation
         """
-        self.client.get('admin/collections',{'action':'RELOAD','name':name})
+        self.client.get('admin/collections',{'action':'RELOAD','name':self.name})
 
-    def split_shard(self, name, shard, ranges=None, split_key=None):
+    def split_shard(self, shard, ranges=None, split_key=None):
         """
         """
-        params = {'action':'SPLITSHARD','name':name,'shard':shard}
+        params = {'action':'SPLITSHARD','name':self.name,'shard':shard}
         if ranges:
             params['ranges'] = ranges
         if split_key:
             params['split.key'] = split_key
         self.client.get('admin/collections',params)
 
-    def create_shard(self, shard, collection, create_node_set=None):
+    def create_shard(self, shard, create_node_set=None):
         """
         """
-        params = {'action':'CREATESHARD','collection':collection,
+        params = {'action':'CREATESHARD','collection':self.name,
                   'shard':shard }
         if create_node_set:
             params['create_node_set'] = create_node_set
         self.client.get('admin/collections',params)
 
-    def create_alias(self, name, collections):
+    def create_alias(self, collections):
         """
 
         """
-        params = {'action':'CREATEALIAS','name':name,'collections':collections}
+        params = {'action':'CREATEALIAS',
+                  'name':self.name,'collections':collections}
         self.client.get('admin/collections',params)
 
-    def delete_alias(self, name):
+    def delete_alias(self):
         """
 
         """
-        params = {'action':'DELETEALIAS','name':name,}
+        params = {'action':'DELETEALIAS','name':self.name,}
         self.client.get('admin/collections',params)
 
-    def delete_replica(self, collection, replica):
+    def delete_replica(self, replica):
         """
 
         """
-        params = {'action':'DELETEREPLICA','replica':replica,'collection':collection}
+        params = {'action':'DELETEREPLICA',
+                  'replica':replica,'collection':self.name}
         self.client.get('admin/collections',params)
 
-    def __getattr__(self, name):
-        return index.SolrIndex(self.connection,name)
-
-    def __getitem__(self, name):
-        return index.SolrIndex(self.connection,name)
+    def __getattr__(self,name):
+        ind = index.SolrIndex(self.connection,self.name)
+        return getattr(ind,name)
+    

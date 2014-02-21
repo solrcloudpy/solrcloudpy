@@ -13,30 +13,28 @@ log = logging.getLogger('solrcloud')
 dthandler = lambda obj: obj.isoformat() if isinstance(obj, dt.datetime) else None
 
 class DictObject(object):
-  '''The recursive class for building and representing objects with'''
-  def __init__(self, obj):
-    if not obj:
-      return
+    '''The recursive class for building and representing objects with'''
+    def __init__(self, obj):
+        if not obj:
+            return
 
-    for k, v in obj.iteritems():
-      if isinstance(v, dict):
-        setattr(self, k, DictObject(v))
-      else:
-        setattr(self, k.encode('utf8','ignore'), v)
+        for k, v in obj.iteritems():
+            if isinstance(v, dict):
+                setattr(self, k, DictObject(v))
+            else:
+                setattr(self, k.encode('utf8','ignore'), v)
 
-  def __getitem__(self, val):
-    return self.__dict__[val]
+    def __getitem__(self, val):
+        return self.__dict__[val]
 
-  def __repr__(self):
-    return 'DictObject{%s}' % str(', '.join('%s : %s' % (k, repr(v)) for
-      (k, v) in self.__dict__.iteritems()))
+    def __repr__(self):
+        return 'DictObject{%s}' % str(', '.join('%s : %s' % (k, repr(v)) for
+                                                (k, v) in self.__dict__.iteritems()))
 
 class SolrResponse(DictObject):
-  """ A generic representation of a solr response """
-  def __repr__(self):
-    if not self.response:
-      return "Empty SolrResponse"
-    return super(SolrResponse,self).__repr__()
+    """ A generic representation of a solr response """
+    def __repr__(self):
+        return super(SolrResponse,self).__repr__()
 
 class SolrException(Exception):
     pass
@@ -62,7 +60,6 @@ class SolrIndex(object):
         headers = {'content-type': 'application/json'}
         extraparams = {'wt':'json', 'omitHeader':'true','json.nl':'map'}
         params.update(extraparams)
-
         servers = list(self.connection.servers)
         if not servers:
             raise Exception("no live servers found!")
@@ -108,6 +105,7 @@ class SolrIndex(object):
         path = "%s/select" % self.collection
         params['q'] = q
         data = self._send(path,params)
+        
         if type(data) != type({}):
             raise SolrException(data)
 
@@ -184,7 +182,7 @@ class SolrIndex(object):
             return res
         except:
             pass
-                        
+
 
     def commit(self):
         """ Commit changes to a collection """

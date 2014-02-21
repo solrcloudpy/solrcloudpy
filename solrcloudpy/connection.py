@@ -1,6 +1,8 @@
 import urllib
 import json
 
+import solrcloudpy.collection as collection
+
 class HTTPConnection(object):
     """
     Connection to a solr server or several ones
@@ -10,7 +12,7 @@ class HTTPConnection(object):
 
     :param detect_live_nodes : whether to detect live nodes automativally or not. This assumes 
                                that one is able to access the IPs listed by Zookeeper.
-                               The default value is `Falsse`
+                               The default value is `False`
     """
     def __init__(self,server="localhost:8983",detect_live_nodes=False):
         if type(server) == type(''):
@@ -36,3 +38,9 @@ class HTTPConnection(object):
         children = [d['data']['title'] for d in data['tree'][0]['children']]
         nodes = [c.replace('_solr','') for c in children]
         return ["http://%s/solr/" % a for a in nodes]
+
+    def __getattr__(self, name):
+        return collection.Collection(self,name)
+
+    def __getitem__(self, name):
+        return collection.Collection(self,name)
