@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 with open('README.rst', 'r') as f:
     long_description = f.read()
-    
+
 setup(
     name = "solrcloudpy",
     version = "1.0.2",
@@ -16,6 +16,10 @@ setup(
     long_description=long_description,
     include_package_data=True,
     platforms='any',
+    entry_points = {
+        'console_scripts': [
+        'solrconsole = scripts.solrconsole:main']
+        },
     classifiers = [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -24,6 +28,6 @@ setup(
         'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP :: Indexing/Search'
         ],
-        
+
     install_requires = ['requests',]
         )
