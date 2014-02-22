@@ -25,7 +25,7 @@ def main():
     c.PlainTextFormatter.pprint = True
     c.TerminalInteractiveShell.confirm_exit = False
 
-    banner = "SolrCloud Console\n"
+    banner = "SolrCloud Console\nUse the 'conn' object to access a collection"
 
     colls = ", ".join(conn.list())
     banner2 = "\nType 'collections' to see the list of available collections"

@@ -1,7 +1,7 @@
 solrcloudpy
 ===========
 
-solrcloudpy is a python library for interacting with SolrCloud. This library aims to take advantage of the following features of Solr:
+`solrcloudpy` is a python library for interacting with SolrCloud. This library aims to take advantage of the following features of Solr:
 
 * Distributed indexing and searching and transparent failover
 * Full JSON api
@@ -35,3 +35,15 @@ Usage
      print collection.search(q='*:*')
  
      
+Console
+-------
+`solrcloudpy` comes with a console that can be run simply by typing `solrconsole`
+
+.. code-block::
+
+     $ solrconsole --host=localhost --port=8983 
+     SolrCloud Console
+     Use the 'conn' object to access a collection
+
+     Type 'collections' to see the list of available collections
+     solr localhost:8983> 
