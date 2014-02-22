@@ -2,6 +2,7 @@ import urllib
 import json
 
 import solrcloudpy.collection as collection
+from solrcloudpy.utils import _Request
 
 class HTTPConnection(object):
     """
@@ -10,7 +11,7 @@ class HTTPConnection(object):
     :param server:           The server. Can be a single one or a list of servers
                               Example: `localhost:8983` or ``[localhost,solr1.domain.com:8983]``
 
-    :param detect_live_nodes : whether to detect live nodes automativally or not. This assumes 
+    :param detect_live_nodes : whether to detect live nodes automativally or not. This assumes
                                that one is able to access the IPs listed by Zookeeper.
                                The default value is `False`
     """
@@ -30,7 +31,9 @@ class HTTPConnection(object):
                 self.servers = self.detect_nodes(url)
             else:
                 self.servers = servers
-                
+
+        self.client = _Request(self)
+
     def detect_nodes(self,url):
         url = url+'zookeeper?path=/live_nodes'
         live_nodes = urllib.urlopen(url).read()
@@ -39,8 +42,21 @@ class HTTPConnection(object):
         nodes = [c.replace('_solr','') for c in children]
         return ["http://%s/solr/" % a for a in nodes]
 
+    def list(self):
+        """
+        Lists out the current collections in the cluster
+        """
+        params = {'detail':'false','path':'/collections'}
+        response = self.client.get('/solr/zookeeper',params)
+        data = response['tree'][0]['children']
+        colls = [node['data']['title'] for node in data]
+        return colls
+
     def __getattr__(self, name):
         return collection.Collection(self,name)
 
     def __getitem__(self, name):
         return collection.Collection(self,name)
+
+    def __dir__(self):
+        return self.list()

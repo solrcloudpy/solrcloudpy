@@ -1,50 +1,7 @@
-from requests.exceptions import ConnectionError
-
 import solrcloudpy.index as index
-import requests
-import urlparse
+from solrcloudpy.utils import _Request
 import time
 
-class _Request(object):
-    """
-    Issues requests to the collections API
-    """
-    def __init__(self,connection):
-        self.connection = connection
-        self.client = requests.Session()
-
-    def request(self,path,params,method='GET',body=None):
-        headers = {'content-type': 'application/json'}
-        params['wt'] = 'json'
-
-        servers = list(self.connection.servers)
-        host = servers.pop(0)
-
-        def make_request(host,path):
-            fullpath = urlparse.urljoin(host,path)
-            try:
-                r = self.client.request(method,fullpath,
-                                        params=params,
-                                        headers=headers,data=body)
-
-                if r.status_code == requests.codes.ok:
-                    response = r.json()
-                else:
-                    response = r.text
-                return response
-
-            except ConnectionError:
-                host = servers.pop(0)
-                return make_request(host,path)
-
-        result = make_request(host,path)
-        return result
-
-    def update(self,path,params,body):
-        return self.request(path,params,'POST',body)
-
-    def get(self,path,params):
-        return self.request(path,params,method='GET')
 
 class Collection(object):
     """
@@ -54,16 +11,6 @@ class Collection(object):
         self.connection = connection
         self.name = name
         self.client = _Request(connection)
-
-    def list(self):
-        """
-        Lists out the current collections in the cluster
-        """
-        params = {'wt':'json','detail':'false','path':'/collections'}
-        response = self.client.get('/solr/zookeeper',params)
-        data = response['tree'][0]['children']
-        colls = [node['data']['title'] for node in data]
-        return colls
 
     def _list_cores(self):
         params = {'wt':'json',}
