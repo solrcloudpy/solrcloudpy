@@ -12,12 +12,6 @@ class Collection(object):
         self.name = name
         self.client = _Request(connection)
 
-    def _list_cores(self):
-        params = {'wt':'json',}
-        response = self.client.get('admin/cores',params)
-        cores = response.get('status',{}).keys()
-        return cores
-
     def exists(self):
         """
         Finds if a collection exists in the cluster

@@ -52,6 +52,12 @@ class HTTPConnection(object):
         colls = [node['data']['title'] for node in data]
         return colls
 
+    def _list_cores(self):
+        params = {'wt':'json',}
+        response = self.client.get('admin/cores',params)
+        cores = response.get('status',{}).keys()
+        return cores
+
     def __getattr__(self, name):
         return collection.Collection(self,name)
 
