@@ -2,7 +2,6 @@ import solrcloudpy.index as index
 from solrcloudpy.utils import _Request
 import time
 
-
 class Collection(object):
     """
     Class to manage collections

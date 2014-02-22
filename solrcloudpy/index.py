@@ -1,5 +1,4 @@
 from requests.exceptions import *
-from requests.models import Response
 from contextlib import contextmanager
 
 import datetime as dt
@@ -35,7 +34,7 @@ class SolrResponse(DictObject):
     """ A generic representation of a solr response """
     def __repr__(self):
         return super(SolrResponse,self).__repr__()
-
+    
 class SolrException(Exception):
     pass
 
