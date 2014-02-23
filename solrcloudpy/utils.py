@@ -1,6 +1,7 @@
 from requests.exceptions import ConnectionError
 import requests
 import urlparse
+import json
 
 class _Request(object):
     """
@@ -43,8 +44,6 @@ class _Request(object):
     def get(self,path,params):
         return self.request(path,params,method='GET')
 
-
-
 class DictObject(object):
     '''Recursive class for building and representing objects with'''
     def __init__(self, obj):
@@ -61,16 +60,24 @@ class DictObject(object):
         return self.__dict__[val]
 
     def __repr__(self):
-        value = str(', '.join('%s : %s' % (k, repr(v)) for
-                              (k, v) in self.__dict__.iteritems()))
-        return 'DictObject %s' % value
+        value = DictObjectJSONEncoder(indent=4).encode(self.__dict__)
+        return value
+
+class DictObjectJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if type(o) == type(DictObject({})):
+            val = str(o.__dict__)
+            if len(val) > 200:
+                s = val[:100] + ' ... '
+            else:
+                s = val
+            return "DictObject << %s >>" % s
+
+        # Let the base class default method raise the TypeError
+        return json.JSONEncoder.default(self, o)
 
 class SolrResponse(DictObject):
     """ A generic representation of a solr response """
-    def __repr__(self):
-        value = str(', '.join('%s : %s' % (k, repr(v)) for
-                              (k, v) in self.__dict__.iteritems()))
-        return 'SolrResponse <%s>' % value
 
 class SolrException(Exception):
     pass
