@@ -66,6 +66,7 @@ class DictObject(object):
 class DictObjectJSONEncoder(json.JSONEncoder):
     def default(self, o):
         if type(o) == type(DictObject({})):
+            print 'Dictobject'
             val = str(o.__dict__)
             if len(val) > 200:
                 s = val[:100] + ' ... '
