@@ -23,8 +23,6 @@ class Collection(object):
         """
         Create a collection
 
-        :param name               : a string indicating the name of the collection
-
         :param num_shards         : an integer indicating the number of shards for this collection
 
         :param replication_factor : an integer indicating the number of replcas for this collection
@@ -32,7 +30,7 @@ class Collection(object):
         :param force              : a boolean value indicating whether to force the operation or not
                                     The default is `False`
 
-        :param params             : additional parameters to be passed to this operation
+        :param kwargs             : additional parameters to be passed to this operation
         """
         params = {'name':self.name,
                   'replication_factor':replication_factor,
@@ -75,9 +73,6 @@ class Collection(object):
         return index.SolrIndex(self.connection,self.name)
 
     def _is_index_created(self):
-        """
-
-        """
         server = list(self.connection.servers)[0]
         req = requests.get('%s/solr/%s' % (server,self.name))
         if req.status_code != requests.codes.ok:
@@ -87,25 +82,24 @@ class Collection(object):
     def delete(self):
         """
         Delete a collection
-
-        :param name   : a string indicating the name of the collection
-
-        :param params : additional parameters to be passed to this operation
         """
         return self.client.get('admin/collections',{'action':'DELETE','name':self.name})
 
     def reload(self):
         """
         Reload a collection
-
-        :param name   : a string indicating the name of the collection
-
-        :param params : additional parameters to be passed to this operation
         """
         self.client.get('admin/collections',{'action':'RELOAD','name':self.name})
 
     def split_shard(self, shard, ranges=None, split_key=None):
         """
+        Split a shard into two new shards
+
+        :param shard         : The name of the shard to be split.
+
+        :param ranges        : A comma-separated list of hash ranges in hexadecimal e.g. ranges=0-1f4,1f5-3e8,3e9-5dc
+
+        :param split_key     : The key to use for splitting the index
         """
         params = {'action':'SPLITSHARD','collection':self.name,'shard':shard}
         if ranges:
@@ -116,6 +110,11 @@ class Collection(object):
 
     def create_shard(self, shard, create_node_set=None):
         """
+        Create a new shard
+
+        :param shard          : The name of the shard to be created.
+
+        :param create_node_set: Allows defining the nodes to spread the new collection across.
         """
         params = {'action':'CREATESHARD','collection':self.name,
                   'shard':shard }
@@ -125,7 +124,9 @@ class Collection(object):
 
     def create_alias(self, alias):
         """
+        Create or modify an alias for a collection
 
+        :param alias       : the name of the alias
         """
         params = {'action':'CREATEALIAS',
                   'name':alias,'collections':self.name}
@@ -133,14 +134,20 @@ class Collection(object):
 
     def delete_alias(self,alias):
         """
+        Delete an alias for a collection
 
+        :param alias       : the name of the alias
         """
         params = {'action':'DELETEALIAS','name':alias,}
         self.client.get('admin/collections',params)
 
     def delete_replica(self, replica, shard):
         """
+        Delete a replica
 
+        :param replica        : The name of the replica to remove.
+
+        :param shard          : The name of the shard that includes the replica to be removed.
         """
         params = {'action':'DELETEREPLICA',
                   'replica':replica,
