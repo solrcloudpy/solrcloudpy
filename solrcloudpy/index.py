@@ -67,7 +67,7 @@ class SolrIndex(object):
             raise SolrException(resp)
         return resp
 
-    def search(self,q,params={}):
+    def search(self, q, **kwargs):
         """
         Search the collection
 
@@ -76,15 +76,15 @@ class SolrIndex(object):
         :param params: additional parameters passed in a dictionary
         """
         path = "%s/select" % self.collection
-        params['q'] = q
-        data = self._send(path,params)
-        
+        kwargs['q'] = q
+        data = self._send(path,kwargs)
+
         if type(data) != type({}):
             raise SolrException(data)
 
         return SolrResponse(data)
 
-    def mlt(self,q,params={}):
+    def mlt(self, q, **kwargs):
         """
         Perform a MoreLikeThis search the collection
 
@@ -93,8 +93,9 @@ class SolrIndex(object):
         :param params: additional parameters passed in a dictionary
         """
         path = "%s/mlt" % self.collection
-        params['q'] = q
-        data = self._send(path,params)
+        kwargs['q'] = q
+        kwargs['mlt'] = 'true'
+        data = self._send(path,kwargs)
         if type(data) != type({}):
             raise SolrException(data)
 
