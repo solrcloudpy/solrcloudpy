@@ -61,13 +61,16 @@ class DictObject(object):
         return self.__dict__[val]
 
     def __repr__(self):
-        return 'DictObject{%s}' % str(', '.join('%s : %s' % (k, repr(v)) for
-                                                (k, v) in self.__dict__.iteritems()))
+        value = str(', '.join('%s : %s' % (k, repr(v)) for
+                              (k, v) in self.__dict__.iteritems()))
+        return 'DictObject %s' % value
 
 class SolrResponse(DictObject):
     """ A generic representation of a solr response """
     def __repr__(self):
-        return super(SolrResponse,self).__repr__()
-    
+        value = str(', '.join('%s : %s' % (k, repr(v)) for
+                              (k, v) in self.__dict__.iteritems()))
+        return 'SolrResponse <%s>' % value
+
 class SolrException(Exception):
     pass
