@@ -66,3 +66,6 @@ class HTTPConnection(object):
 
     def __dir__(self):
         return self.list()
+
+    def __repr__(self):
+        return "HTTPConnection %s" % str(self.servers)
