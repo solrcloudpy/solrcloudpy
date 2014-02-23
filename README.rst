@@ -8,7 +8,7 @@ solrcloudpy
 * Centralized index management
 * Near-realtime search
 
-The API is mean to be close to pymongo's API, where one can access collections as simple attributes 
+The API is meant to be close to pymongo's API, where one can access collections as simple attributes 
 or dictionary keys.  
 
 Usage
