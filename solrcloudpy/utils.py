@@ -42,3 +42,32 @@ class _Request(object):
 
     def get(self,path,params):
         return self.request(path,params,method='GET')
+
+
+
+class DictObject(object):
+    '''Recursive class for building and representing objects with'''
+    def __init__(self, obj):
+        if not obj:
+            return
+
+        for k, v in obj.iteritems():
+            if isinstance(v, dict):
+                setattr(self, k, DictObject(v))
+            else:
+                setattr(self, k.encode('utf8','ignore'), v)
+
+    def __getitem__(self, val):
+        return self.__dict__[val]
+
+    def __repr__(self):
+        return 'DictObject{%s}' % str(', '.join('%s : %s' % (k, repr(v)) for
+                                                (k, v) in self.__dict__.iteritems()))
+
+class SolrResponse(DictObject):
+    """ A generic representation of a solr response """
+    def __repr__(self):
+        return super(SolrResponse,self).__repr__()
+    
+class SolrException(Exception):
+    pass

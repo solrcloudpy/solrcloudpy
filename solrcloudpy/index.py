@@ -1,5 +1,6 @@
-from requests.exceptions import *
+from requests.exceptions import ConnectionError,Timeout
 from contextlib import contextmanager
+from solrcloudpy.utils import SolrResponse, SolrException
 
 import datetime as dt
 import requests
@@ -10,33 +11,6 @@ import logging
 
 log = logging.getLogger('solrcloud')
 dthandler = lambda obj: obj.isoformat() if isinstance(obj, dt.datetime) else None
-
-class DictObject(object):
-    '''The recursive class for building and representing objects with'''
-    def __init__(self, obj):
-        if not obj:
-            return
-
-        for k, v in obj.iteritems():
-            if isinstance(v, dict):
-                setattr(self, k, DictObject(v))
-            else:
-                setattr(self, k.encode('utf8','ignore'), v)
-
-    def __getitem__(self, val):
-        return self.__dict__[val]
-
-    def __repr__(self):
-        return 'DictObject{%s}' % str(', '.join('%s : %s' % (k, repr(v)) for
-                                                (k, v) in self.__dict__.iteritems()))
-
-class SolrResponse(DictObject):
-    """ A generic representation of a solr response """
-    def __repr__(self):
-        return super(SolrResponse,self).__repr__()
-    
-class SolrException(Exception):
-    pass
 
 class SolrIndex(object):
     """ """
@@ -153,7 +127,7 @@ class SolrIndex(object):
         elif q is not None:
             m = json.dumps({"delete":{"query":"%s" % q }})
 
-        response = self._update(m)
+        self._update(m)
         if commit:
             self.commit()
 
