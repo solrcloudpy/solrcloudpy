@@ -47,6 +47,14 @@ Console
 
      Type 'collections' to see the list of available collections
      solr localhost:8983> conn.collection1.search('sd')
-     DictObject{response : DictObject{start : 0, numFound : 0, docs : []}}
+     {   
+         "response": "DictObject << {'start': 0, 'numFound': 0, 'docs': []} >>"
+     }
 
-     solr localhost:8983> 
+     solr localhost:8983> res.response
+     {
+         "start": 0, 
+         "numFound": 0, 
+         "docs": []
+     }
+
