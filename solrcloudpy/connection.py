@@ -58,6 +58,46 @@ class HTTPConnection(object):
         cores = response.get('status',{}).keys()
         return cores
 
+    @property
+    def cluster_health(self):
+        params = {'detail':'true','path':'/clusterstate.json'}
+        response = self.client.get('/solr/zookeeper',params)
+        data = json.loads(response['znode']['data'])
+        res = []
+        collections = self.list()
+        for coll in collections:
+            shards = data[coll]['shards']
+            for shard,shard_info in shards.iteritems():
+                replicas = shard_info['replicas']
+                for replica, info in replicas.iteritems():
+                    state = info['state']
+                    if state != 'active':
+                        item = {"collection":coll,
+                                "replica":replica,
+                                "shard":shard,
+                                "info": info,
+                                }
+                        res.append(item)
+
+        if not res:
+            return {"status": "OK"}
+
+        return {"status": "NOT OK", "details": res}
+
+    @property
+    def cluster_leader(self):
+        params = {'detail':'true','path':'/overseer_elect/leader'}
+        response = self.client.get('/solr/zookeeper',params)
+        return json.loads(response['znode']['data'])
+
+    @property
+    def live_nodes(self):
+        params = {'detail':'true','path':'/live_nodes'}
+        response = self.client.get('/solr/zookeeper',params)
+        children = [d['data']['title'] for d in response['tree'][0]['children']]
+        nodes = [c.replace('_solr','') for c in children]
+        return ["http://%s/solr/" % a for a in nodes]
+
     def __getattr__(self, name):
         return collection.Collection(self,name)
 

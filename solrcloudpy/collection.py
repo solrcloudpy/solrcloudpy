@@ -1,6 +1,8 @@
 import solrcloudpy.index as index
 from solrcloudpy.utils import _Request
+
 import time
+import json
 
 class Collection(object):
     """
@@ -164,6 +166,14 @@ class Collection(object):
         """Perform MLT on this index"""
         ind = index.SolrIndex(self.connection,self.name)
         return ind.search(q,**kwargs)
+
+    @property
+    def state(self):
+        """Get the state of this collection"""
+        params = {'detail':'true','path':'/clusterstate.json'}
+        response = self.client.get('/solr/zookeeper',params)
+        data = json.loads(response['znode']['data'])
+        return data[self.name]
 
     def __getattr__(self,name):
         """Access any other attributes of this index"""
