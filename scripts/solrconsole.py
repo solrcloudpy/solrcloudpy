@@ -20,6 +20,13 @@ def display_list(ob, ppprinter, cycle):
 
     ppprinter.text(ob)
 
+def display_dict(ob, ppprinter, cycle):
+    val = json.dumps(ob,indent=4)
+    ppprinter.text(val)
+    return
+
+#ppprinter.text(ob)
+
 def get_config(args):
     c = Config()
     c.PromptManager.in_template = 'solr %s:%s> ' % (args.host,args.port)
@@ -60,6 +67,7 @@ def main():
 
     formatter = shell.get_ipython().display_formatter.formatters["text/plain"]
     formatter.for_type(type([]),display_list)
+    formatter.for_type(type({}),display_dict)
 
     shell.configurables.append(app)
     app.shell = shell
