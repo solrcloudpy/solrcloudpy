@@ -1,13 +1,14 @@
 import sys
 import argparse
 import json
-
+from pprint import pprint
 from IPython.terminal import ipapp
 from IPython.config.loader import Config
 
 from solrcloudpy.connection import HTTPConnection
+from solrcloudpy.parameters import  Params
 
-def display_list(ob, ppprinter, cycle):
+def display_list(ob, pprinter, cycle):
     if len(ob) == 0 :
         ppprinter.text('[]')
         return
@@ -15,18 +16,18 @@ def display_list(ob, ppprinter, cycle):
     e = ob[0]
     if type(e) == type({}):
         val = json.dumps(ob,indent=4)
-        ppprinter.text(val)
+        pprinter.text(val)
         return
 
-    ppprinter.text(ob)
+    pprinter.text(ob)
 
-def display_dict(ob, ppprinter, cycle):
-    val = json.dumps(ob,indent=4)
-    ppprinter.text(val)
-    return
-
-#ppprinter.text(ob)
-
+def display_dict(ob, pprinter, cycle):
+    try:
+        val = json.dumps(ob,indent=4)
+        pprinter.text(val)
+    except TypeError:
+        pprint(ob)
+        
 def get_config(args):
     c = Config()
     c.PromptManager.in_template = 'solr %s:%s> ' % (args.host,args.port)
@@ -50,7 +51,6 @@ def main():
     c = get_config(args)
 
     banner = "SolrCloud Console\nUse the 'conn' object to access a collection"
-
     banner2 = "\nType 'collections' to see the list of available collections"
 
     app = ipapp.TerminalIPythonApp.instance()
@@ -58,7 +58,9 @@ def main():
         parent=app,
         profile_dir=app.profile_dir,
         ipython_dir=app.ipython_dir,
-        user_ns={"conn":conn,"collections":conn.list()},
+        user_ns={"conn":conn,
+                 "collections":conn.list(),
+                 "Params":Params},
         banner1=banner,
         banner2=banner2,
         #banner=banner,
