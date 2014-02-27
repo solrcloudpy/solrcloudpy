@@ -1,6 +1,7 @@
 from requests.exceptions import ConnectionError,Timeout
 from contextlib import contextmanager
 from solrcloudpy.utils import SolrResponse, SolrException
+from solrcloudpy.parameters import Params
 
 import datetime as dt
 import requests
@@ -31,8 +32,6 @@ class SolrIndex(object):
 
     def _send(self,path,params,method='GET',body=None):
         headers = {'content-type': 'application/json'}
-        extraparams = {'wt':'json', 'omitHeader':'true','json.nl':'map'}
-        params.update(extraparams)
         servers = list(self.connection.servers)
         if not servers:
             raise Exception("no live servers found!")
@@ -67,7 +66,7 @@ class SolrIndex(object):
             raise SolrException(resp)
         return resp
 
-    def search(self, q, **kwargs):
+    def search(self,params):
         """
         Search the collection
 
@@ -76,15 +75,14 @@ class SolrIndex(object):
         :param params: additional parameters passed in a dictionary
         """
         path = "%s/select" % self.collection
-        kwargs['q'] = q
-        data = self._send(path,kwargs)
+        data = self._send(path,params)
 
         if type(data) != type({}):
             raise SolrException(data)
 
         return SolrResponse(data)
 
-    def mlt(self, q, **kwargs):
+    def mlt(self, params):
         """
         Perform a MoreLikeThis search the collection
 
@@ -93,9 +91,7 @@ class SolrIndex(object):
         :param params: additional parameters passed in a dictionary
         """
         path = "%s/mlt" % self.collection
-        kwargs['q'] = q
-        kwargs['mlt'] = 'true'
-        data = self._send(path,kwargs)
+        data = self._send(path,params)
         if type(data) != type({}):
             raise SolrException(data)
 

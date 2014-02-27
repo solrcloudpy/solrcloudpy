@@ -3,6 +3,7 @@ from solrcloudpy.utils import _Request
 
 import time
 import json
+import requests
 
 class Collection(object):
     """
@@ -61,7 +62,6 @@ class Collection(object):
         router_field = kwargs.get('router_field')
         if router_field:
             params['router.field'] = router_field
-
 
         if not self.exists() or force == True:
             self.client.get('admin/collections',params)
@@ -160,12 +160,12 @@ class Collection(object):
     def search(self, q, **kwargs):
         """Search this index"""
         ind = index.SolrIndex(self.connection,self.name)
-        return ind.search(q,**kwargs)
+        return ind.search(q, **kwargs)
 
-    def mlt(self, q, **kwargs):
+    def mlt(self, params):
         """Perform MLT on this index"""
         ind = index.SolrIndex(self.connection,self.name)
-        return ind.search(q,**kwargs)
+        return ind.mlt(params)
 
     @property
     def state(self):
