@@ -1,5 +1,4 @@
 from collections import defaultdict
-from pprint import pprint
 
 class BaseParams(object):
     def __init__(self, query=None, *args, **kwargs):
@@ -29,6 +28,9 @@ class BaseParams(object):
         c = self._q.copy()
         return c.iteritems()
 
+    def iterkeys(self):
+        return self._q.iterkeys()
+    
     def __len__(self):
         return len(self._q)
 
@@ -195,23 +197,24 @@ class SearchOptions(object):
         self.commonparams = CommonParams()
         self.facetparams = FacetParams()
         self.mltparams = MLTParams()
-        self.all = [self.commonparams,
+        self._all = [self.commonparams,
                     self.facetparams,
                     self.mltparams,]
 
-    def __iter__(self):
+    def iteritems(self):
         res = defaultdict(set)
         if len(self.facetparams) > 0:
             res.update({'facet':'true'})
-
-        extraparams = {'wt':'json',
-                        'omitHeader':'true',
-                       'json.nl':'map'}
-        res.update(extraparams)
-        res.update(iter(self.facetparams))
-        res.update(iter(self.commonparams))
+        for p in self._all:
+            res.update(iter(p))
         return res.iteritems()
 
+    def iterkeys(self):
+        res = []
+        for p in self._all:
+            res += list(p.iterkeys())
+        return res
+
     def __repr__(self):
-        res = {c.__class__.__name__:c for c in self.all}
+        res = {c.__class__.__name__:c for c in self._all}
         return repr(res)

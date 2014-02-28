@@ -10,7 +10,7 @@ from solrcloudpy.parameters import SearchOptions
 
 def display_list(ob, pprinter, cycle):
     if len(ob) == 0 :
-        ppprinter.text('[]')
+        pprinter.text('[]')
         return
 
     e = ob[0]

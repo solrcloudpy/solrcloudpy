@@ -157,10 +157,10 @@ class Collection(object):
                   'shard':shard}
         self.client.get('admin/collections',params)
 
-    def search(self, q, **kwargs):
+    def search(self, params):
         """Search this index"""
         ind = index.SolrIndex(self.connection,self.name)
-        return ind.search(q, **kwargs)
+        return ind.search(params)
 
     def mlt(self, params):
         """Perform MLT on this index"""
