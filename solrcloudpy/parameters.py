@@ -1,12 +1,9 @@
 from collections import defaultdict
+from pprint import pprint
 
-class Params(object):
+class BaseParams(object):
     def __init__(self, query=None, *args, **kwargs):
         self._q = defaultdict(set)
-        extraparams = {'wt':'json',
-                       'omitHeader':'true',
-                       'json.nl':'map'}
-        kwargs.update(extraparams)
         if query:
             self._q['q'].add(query)
 
@@ -15,8 +12,28 @@ class Params(object):
                 self._q[k].update(v)
             else:
                 self._q[k].update([v])
-        
-    def query(self,query):
+
+    def add_params(self,**kwargs):
+        for k,v in kwargs.items():
+            if hasattr(v,"__iter__"):
+                self._q[k].update(v)
+            else:
+                self._q[k].update([v])
+        return self
+
+    def __repr__(self):
+        c = self._q.copy()
+        return repr(dict(c))
+
+    def __iter__(self):
+        c = self._q.copy()
+        return c.iteritems()
+
+    def __len__(self):
+        return len(self._q)
+
+class CommonParams(BaseParams):
+    def q(self,query):
         self._q['q'].add(query)
         return self
 
@@ -36,7 +53,7 @@ class Params(object):
         self._q['fq'].add(query)
         return self
 
-    def fields(self,fields):
+    def fl(self,fields):
         self._q['fl'].add(fields)
         return self
 
@@ -44,32 +61,7 @@ class Params(object):
         self._q['debug'].add("true")
         return self
 
-    def add_params(self,**kwargs):
-        for k,v in kwargs.items():
-            if hasattr(v,"__iter__"):
-                self._q[k].update(v)
-            else:
-                self._q[k].update([v])
-        return self
-
-    def __repr__(self):
-        return repr(dict(self._q))
-
-    def __iter__(self):
-        return self._q.iteritems()
-
-    @property
-    def facet(self):
-        return FacetParams(**self._q)
-
-    @property
-    def mlt(self):
-        return MLTParams(**self._q)
-
-class MLTParams(Params):
-    def __init__(self, *args, **kwargs):
-        super(MLTParams,self).__init__(*args,**kwargs)
-
+class MLTParams(BaseParams):
     def mlt_fl(self,field):
         self._q['mlt.fl'].add(field)
         return self
@@ -110,17 +102,12 @@ class MLTParams(Params):
         self._q['mlt.count'].add(c)
         return self
 
-
-class FacetParams(Params):
-    def __init__(self, *args, **kwargs):
-        super(FacetParams,self).__init__(*args,**kwargs)
-        self._q['facet'].add('true')
-
-    def facet_query(self,query):
+class FacetParams(BaseParams):
+    def query(self,query):
         self._q['facet.query'].add(query)
         return self
 
-    def facet_field(self,field):
+    def field(self,field):
         self._q['facet.field'].add(field)
         return self
 
@@ -131,7 +118,7 @@ class FacetParams(Params):
             self._q['facet.prefix'].add(criteria)
         return self
 
-    def facet_sort(self,criteria,field=None):
+    def sort(self,criteria,field=None):
         if criteria not in ["count","index"]:
             criteria = "count"
 
@@ -202,3 +189,29 @@ class FacetParams(Params):
     def pivot_mincount(self,count):
         self._q['facet.pivot.mincount'].add(count)
         return self
+
+class SearchOptions(object):
+    def __init__(self):
+        self.commonparams = CommonParams()
+        self.facetparams = FacetParams()
+        self.mltparams = MLTParams()
+        self.all = [self.commonparams,
+                    self.facetparams,
+                    self.mltparams,]
+
+    def __iter__(self):
+        res = defaultdict(set)
+        if len(self.facetparams) > 0:
+            res.update({'facet':'true'})
+
+        extraparams = {'wt':'json',
+                        'omitHeader':'true',
+                       'json.nl':'map'}
+        res.update(extraparams)
+        res.update(iter(self.facetparams))
+        res.update(iter(self.commonparams))
+        return res.iteritems()
+
+    def __repr__(self):
+        res = {c.__class__.__name__:c for c in self.all}
+        return repr(res)

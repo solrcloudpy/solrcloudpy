@@ -1,7 +1,6 @@
 from requests.exceptions import ConnectionError,Timeout
 from contextlib import contextmanager
 from solrcloudpy.utils import SolrResponse, SolrException
-from solrcloudpy.parameters import Params
 
 import datetime as dt
 import requests
@@ -33,6 +32,7 @@ class SolrIndex(object):
     def _send(self,path,params,method='GET',body=None):
         headers = {'content-type': 'application/json'}
         servers = list(self.connection.servers)
+                
         if not servers:
             raise Exception("no live servers found!")
 
