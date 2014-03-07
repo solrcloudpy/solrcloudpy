@@ -1,13 +1,9 @@
 from contextlib import contextmanager
-from requests.exceptions import ConnectionError,Timeout
-
-from solrcloudpy.utils import SolrResponse, SolrException
+from solrcloudpy.utils import SolrResponse, SolrException, _Request
 
 import datetime as dt
-import requests
 import urlparse
 import json
-import itertools
 import logging
 
 log = logging.getLogger('solrcloud')
@@ -25,46 +21,14 @@ class SolrIndex(object):
         """
         self.connection = connection
         self.collection = collection
-        self.client = requests.Session()
+        #self.client = requests.Session()
+        self.client = _Request(self.connection)
 
     def __repr__(self):
         return "SolrIndex<%s>" % self.collection
 
     def _send(self,path,params,method='GET',body=None):
-        headers = {'content-type': 'application/json'}
-        servers = list(self.connection.servers)
-        extraparams = {'wt':'json',
-                        'omitHeader':'true',
-                       'json.nl':'map'}
-
-        resparams = itertools.chain(params.iteritems(),
-                                    extraparams.iteritems())
-        
-        if not servers:
-            raise Exception("no live servers found!")
-
-        host = servers.pop(0)
-
-        def make_request(host,path):
-            fullpath = urlparse.urljoin(host,path)
-            try:
-                r = self.client.request(method,fullpath,
-                                        params=resparams,
-                                        headers=headers,data=body,timeout=10.0)
-
-                if r.status_code == requests.codes.ok:
-                    response = r.json()
-                else:
-                    response = r.text
-                return response
-            except (ConnectionError,Timeout) as e:
-                print 'exception: ', e
-                if servers:
-                    host = servers.pop(0)
-                    return make_request(host,path)
-
-        result = make_request(host,path)
-        return result
+        return self.client.request(path,params,method=method,body=body)
 
     def _update(self,body):
         path = '%s/update/json' % self.collection
@@ -103,6 +67,9 @@ class SolrIndex(object):
             raise SolrException(data)
 
         return SolrResponse(data)
+
+    def find(self,params):
+        pass
 
     def add(self,docs):
         """

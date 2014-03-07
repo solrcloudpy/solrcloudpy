@@ -18,7 +18,6 @@ class _Request(object):
 
     def request(self,path,params,method='GET',body=None):
         headers = {'content-type': 'application/json'}
-        params['wt'] = 'json'
         extraparams = {'wt':'json',
                        'omitHeader':'true',
                        'json.nl':'map'}
@@ -34,7 +33,7 @@ class _Request(object):
             try:
                 r = self.client.request(method,fullpath,
                                         params=resparams,
-                                        headers=headers,data=body)
+                                        headers=headers,data=body,timeout=10.0)
 
                 if r.status_code == requests.codes.ok:
                     response = r.json()
@@ -43,6 +42,7 @@ class _Request(object):
                 return response
 
             except ConnectionError:
+                print 'exception: ', e
                 host = servers.pop(0)
                 return make_request(host,path)
 
@@ -54,13 +54,6 @@ class _Request(object):
 
     def get(self,path,params):
         return self.request(path,params,method='GET')
-
-    # def _update(self,body):
-    #     path = '%s/update/json' % self.collection
-    #     resp = self._send(path,method='POST',params={},body=body)
-    #     if type(resp) != type({}):
-    #         raise SolrException(resp)
-    #     return resp
 
 class DictObject(object):
     '''Recursive class for building and representing objects with'''
