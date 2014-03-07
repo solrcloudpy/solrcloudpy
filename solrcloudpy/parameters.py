@@ -20,6 +20,9 @@ class BaseParams(object):
                 self._q[k].update([v])
         return self
 
+    def clear_param(self,key):
+        self._q.pop(key,None)
+        
     def __repr__(self):
         c = self._q.copy()
         return repr(dict(c))
@@ -30,7 +33,7 @@ class BaseParams(object):
 
     def iterkeys(self):
         return self._q.iterkeys()
-    
+
     def __len__(self):
         return len(self._q)
 
@@ -213,8 +216,8 @@ class SearchOptions(object):
         res = []
         for p in self._all:
             res += list(p.iterkeys())
-        return res
+        return iter(res)
 
     def __repr__(self):
-        res = {c.__class__.__name__:c for c in self._all}
+        res = {c.__class__.__name__.lower():c for c in self._all}
         return repr(res)

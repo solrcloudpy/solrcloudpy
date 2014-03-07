@@ -53,6 +53,22 @@ class SolrIndex(object):
 
         return SolrResponse(data)
 
+    def clustering(self,params):
+        """
+        Search the collection
+
+        :param q     : a string representing the query
+
+        :param params: additional parameters passed in a dictionary
+        """
+        path = "%s/clustering" % self.collection
+        data = self._send(path,params)
+
+        if type(data) != type({}):
+            raise SolrException(data)
+
+        return SolrResponse(data)
+
     def mlt(self, params):
         """
         Perform a MoreLikeThis search the collection
@@ -67,9 +83,6 @@ class SolrIndex(object):
             raise SolrException(data)
 
         return SolrResponse(data)
-
-    def find(self,params):
-        pass
 
     def add(self,docs):
         """
