@@ -1,7 +1,10 @@
 from requests.exceptions import ConnectionError
+from requests.auth import HTTPBasicAuth
+
 import requests
 import urlparse
 import json
+import itertools
 
 class _Request(object):
     """
@@ -10,10 +13,18 @@ class _Request(object):
     def __init__(self,connection):
         self.connection = connection
         self.client = requests.Session()
+        if self.connection.user:
+            self.client.auth = HTTPBasicAuth(self.connection.user,self.connection.password)
 
     def request(self,path,params,method='GET',body=None):
         headers = {'content-type': 'application/json'}
         params['wt'] = 'json'
+        extraparams = {'wt':'json',
+                       'omitHeader':'true',
+                       'json.nl':'map'}
+
+        resparams = itertools.chain(params.iteritems(),
+                                    extraparams.iteritems())
 
         servers = list(self.connection.servers)
         host = servers.pop(0)
@@ -22,7 +33,7 @@ class _Request(object):
             fullpath = urlparse.urljoin(host,path)
             try:
                 r = self.client.request(method,fullpath,
-                                        params=params,
+                                        params=resparams,
                                         headers=headers,data=body)
 
                 if r.status_code == requests.codes.ok:
@@ -43,6 +54,13 @@ class _Request(object):
 
     def get(self,path,params):
         return self.request(path,params,method='GET')
+
+    # def _update(self,body):
+    #     path = '%s/update/json' % self.collection
+    #     resp = self._send(path,method='POST',params={},body=body)
+    #     if type(resp) != type({}):
+    #         raise SolrException(resp)
+    #     return resp
 
 class DictObject(object):
     '''Recursive class for building and representing objects with'''

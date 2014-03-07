@@ -15,7 +15,9 @@ class HTTPConnection(object):
                                that one is able to access the IPs listed by Zookeeper.
                                The default value is `False`
     """
-    def __init__(self,server="localhost:8983",detect_live_nodes=False):
+    def __init__(self,server="localhost:8983",detect_live_nodes=False,user=None,password=None):
+        self.user = user
+        self.password = password
         if type(server) == type(''):
             self.url = "http://%s/solr/" % server
             servers = [self.url,self.url]

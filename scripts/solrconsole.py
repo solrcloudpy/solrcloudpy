@@ -38,16 +38,20 @@ def get_config(args):
     c.TerminalInteractiveShell.confirm_exit = False
     return c
 
-def get_conn(host,port):
-    return HTTPConnection(["%s:%s"%(host,port),])
+def get_conn(args):
+    print args
+    return HTTPConnection(["%s:%s"%(args.host,args.port),],user=args.user,password=args.password)
 
 def main():
     parser = argparse.ArgumentParser(description='Parser for solrcloudpy console')
     parser.add_argument('--host', default='localhost',help='host')
     parser.add_argument('--port', default='8983',help='port')
+    parser.add_argument('--user', default=None,help='user')
+    parser.add_argument('--password', default=None,help='password')
+
     args = parser.parse_args(sys.argv[1:])
 
-    conn = get_conn(args.host,args.port)
+    conn = get_conn(args)
     c = get_config(args)
 
     banner = "SolrCloud Console\nUse the 'conn' object to access a collection"
