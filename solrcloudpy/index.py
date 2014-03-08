@@ -15,13 +15,12 @@ class SolrIndex(object):
         """
         Search for documents inside a collection
 
-        :param connection : a ``Connection`` to the solr server
+        :param connection: a ``Connection`` to the solr server
 
-        :param collection : the ``Collection`` object that will be searched
+        :param collection: the ``Collection`` object that will be searched
         """
         self.connection = connection
         self.collection = collection
-        #self.client = requests.Session()
         self.client = _Request(self.connection)
 
     def __repr__(self):
@@ -82,7 +81,7 @@ class SolrIndex(object):
         """
         Add a list of document to the collection
 
-        :param docs : a list of documents to add
+        :param docs: a list of documents to add
         """
         message = json.dumps(docs,default=dthandler)
         response = self._update(message)
@@ -92,11 +91,11 @@ class SolrIndex(object):
         """
         Delete documents in a collection. Deletes occur either by id or by query
 
-        :param id : the id of the document to pass.
+        :param id: the id of the document to pass.
 
-        :param q  : the query matching the set of documents to delete
+        :param q: the query matching the set of documents to delete
 
-        :param commit : whether to commit the change or not 
+        :param commit: whether to commit the change or not 
         """
         if id is None and q is None:
             raise ValueError('You must specify "id" or "q".')
@@ -115,10 +114,10 @@ class SolrIndex(object):
         """
         Optimize a collection for searching
 
-        :param waitsearcher : whether to make the changes to the collection visible or not
+        :param waitsearcher: whether to make the changes to the collection visible or not
                               by opening a new searcher
 
-        :param softcommit   : whether to perform a soft commit when optimizing
+        :param softcommit: whether to perform a soft commit when optimizing
         """
         waitsearcher = str(waitsearcher).lower()
         softcommit = str(softcommit).lower()
@@ -148,9 +147,9 @@ def solr_batch_adder(solr, batch_size=2000, auto_commit=False):
     """
     A context manager for adding documents in solr
 
-    :param solr       : a `SolrIndex` object representing the solr index to use
+    :param solr: a `SolrIndex` object representing the solr index to use
 
-    :param batch_size : the number of documents to commit at a time. The default is 100
+    :param batch_size: the number of documents to commit at a time. The default is 100
 
     :param auto_commit: whether to commit after adding each batch of documents
     """
@@ -174,9 +173,9 @@ class SolrBatchAdder(object):
         document size and Solr schema.  But 100 seems to improve performance
         significantly over single commits.
 
-        :param solr       : a `SolrIndex` object representing the solr index to use
+        :param solr: a `SolrIndex` object representing the solr index to use
 
-        :param batch_size : the number of documents to commit at a time. The default is 100
+        :param batch_size: the number of documents to commit at a time. The default is 100
 
         :param auto_commit: whether to commit after adding each batch of documents
         """
@@ -191,7 +190,7 @@ class SolrBatchAdder(object):
         Add a single document to the batch adder, committing only
         if we've reached batch_size.
 
-        :param doc : the document
+        :param doc: the document
         """
         self._append_commit(doc)
 

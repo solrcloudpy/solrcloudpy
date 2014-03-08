@@ -8,17 +8,12 @@ class HTTPConnection(object):
     """
     Connection to a solr server or several ones
 
-    :param server:           The server. Can be a single one or a list of servers
-                              Example: `localhost:8983` or ``[localhost,solr1.domain.com:8983]``
+    :param server: The server. Can be a single one or a list of servers. Example  ``localhost:8983`` or ``[localhost,solr1.domain.com:8983]``.
+    :param detect_live_nodes: whether to detect live nodes automativally or not. This assumes that one is able to access the IPs listed by Zookeeper. The default value is ``False``.
 
-    :param detect_live_nodes : whether to detect live nodes automativally or not. This assumes
-                               that one is able to access the IPs listed by Zookeeper.
-                               The default value is `False`
+    :param user: HTTP basic auth user name
+    :param password: HTTP basic auth password22
 
-    For HTTP authentication:
-    :param user : HTTP basic auth user name
-
-    :param password: HTTP basic auth password
     """
     def __init__(self,server="localhost:8983",detect_live_nodes=False,user=None,password=None):
         self.user = user

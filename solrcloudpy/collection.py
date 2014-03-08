@@ -8,6 +8,7 @@ import requests
 class Collection(object):
     """
     Class to manage collections
+    
     """
     def __init__(self,connection,name):
         self.connection = connection
@@ -18,7 +19,8 @@ class Collection(object):
         """
         Finds if a collection exists in the cluster
 
-        :param collection : the collection to find
+        :param collection: the collection to find
+
         """
         return self.name in self.list()
 
@@ -26,14 +28,14 @@ class Collection(object):
         """
         Create a collection
 
-        :param num_shards         : an integer indicating the number of shards for this collection
+        :param num_shards: an integer indicating the number of shards for this collection
 
-        :param replication_factor : an integer indicating the number of replcas for this collection
+        :param replication_factor: an integer indicating the number of replcas for this collection
 
-        :param force              : a boolean value indicating whether to force the operation or not
-                                    The default is `False`
+        :param force: a boolean value indicating whether to force the operation 
 
-        :param kwargs             : additional parameters to be passed to this operation
+        :param kwargs: additional parameters to be passed to this operation
+
         """
         params = {'name':self.name,
                   'replication_factor':replication_factor,
@@ -97,11 +99,10 @@ class Collection(object):
         """
         Split a shard into two new shards
 
-        :param shard         : The name of the shard to be split.
+        :param shard: The name of the shard to be split.
+        :param ranges: A comma-separated list of hash ranges in hexadecimal e.g. ranges=0-1f4,1f5-3e8,3e9-5dc
+        :param split_key: The key to use for splitting the index
 
-        :param ranges        : A comma-separated list of hash ranges in hexadecimal e.g. ranges=0-1f4,1f5-3e8,3e9-5dc
-
-        :param split_key     : The key to use for splitting the index
         """
         params = {'action':'SPLITSHARD','collection':self.name,'shard':shard}
         if ranges:
@@ -114,7 +115,7 @@ class Collection(object):
         """
         Create a new shard
 
-        :param shard          : The name of the shard to be created.
+        :param shard: The name of the shard to be created.
 
         :param create_node_set: Allows defining the nodes to spread the new collection across.
         """
@@ -128,7 +129,7 @@ class Collection(object):
         """
         Create or modify an alias for a collection
 
-        :param alias       : the name of the alias
+        :param alias: the name of the alias
         """
         params = {'action':'CREATEALIAS',
                   'name':alias,'collections':self.name}
@@ -138,7 +139,7 @@ class Collection(object):
         """
         Delete an alias for a collection
 
-        :param alias       : the name of the alias
+        :param alias: the name of the alias
         """
         params = {'action':'DELETEALIAS','name':alias,}
         self.client.get('admin/collections',params)
@@ -147,9 +148,9 @@ class Collection(object):
         """
         Delete a replica
 
-        :param replica        : The name of the replica to remove.
+        :param replica:  The name of the replica to remove.
 
-        :param shard          : The name of the shard that includes the replica to be removed.
+        :param shard: The name of the shard that includes the replica to be removed.
         """
         params = {'action':'DELETEREPLICA',
                   'replica':replica,
