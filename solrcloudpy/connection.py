@@ -14,6 +14,11 @@ class HTTPConnection(object):
     :param detect_live_nodes : whether to detect live nodes automativally or not. This assumes
                                that one is able to access the IPs listed by Zookeeper.
                                The default value is `False`
+
+    For HTTP authentication:
+    :param user : HTTP basic auth user name
+
+    :param password: HTTP basic auth password
     """
     def __init__(self,server="localhost:8983",detect_live_nodes=False,user=None,password=None):
         self.user = user
@@ -62,6 +67,10 @@ class HTTPConnection(object):
 
     @property
     def cluster_health(self):
+        """
+        Determine the state of all nodes and collections in the cluster. Problematic nodes or
+        collections are returned, along with their state, otherwise an `OK` message is returned
+        """
         params = {'detail':'true','path':'/clusterstate.json'}
         response = self.client.get('/solr/zookeeper',params)
         data = json.loads(response['znode']['data'])
@@ -88,12 +97,18 @@ class HTTPConnection(object):
 
     @property
     def cluster_leader(self):
+        """
+        Gets the cluster leader
+        """
         params = {'detail':'true','path':'/overseer_elect/leader'}
         response = self.client.get('/solr/zookeeper',params)
         return json.loads(response['znode']['data'])
 
     @property
     def live_nodes(self):
+        """
+        Lists all nodes that are currently online
+        """
         params = {'detail':'true','path':'/live_nodes'}
         response = self.client.get('/solr/zookeeper',params)
         children = [d['data']['title'] for d in response['tree'][0]['children']]

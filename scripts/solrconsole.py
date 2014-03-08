@@ -39,7 +39,6 @@ def get_config(args):
     return c
 
 def get_conn(args):
-    print args
     return HTTPConnection(["%s:%s"%(args.host,args.port),],user=args.user,password=args.password)
 
 def main():

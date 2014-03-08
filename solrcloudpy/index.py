@@ -41,9 +41,7 @@ class SolrIndex(object):
         """
         Search the collection
 
-        :param q     : a string representing the query
-
-        :param params: additional parameters passed in a dictionary
+        :param params: query parameters
         """
         path = "%s/select" % self.collection
         data = self._send(path,params)
@@ -55,11 +53,9 @@ class SolrIndex(object):
 
     def clustering(self,params):
         """
-        Search the collection
+        Perform clustering on a query
 
-        :param q     : a string representing the query
-
-        :param params: additional parameters passed in a dictionary
+        :param params: clustering query parameters
         """
         path = "%s/clustering" % self.collection
         data = self._send(path,params)
@@ -73,9 +69,7 @@ class SolrIndex(object):
         """
         Perform a MoreLikeThis search the collection
 
-        :param q     : a string representing the query
-
-        :param params: additional parameters passed in a dictionary
+        :param params: MLT query parameters
         """
         path = "%s/mlt" % self.collection
         data = self._send(path,params)
@@ -101,6 +95,8 @@ class SolrIndex(object):
         :param id : the id of the document to pass.
 
         :param q  : the query matching the set of documents to delete
+
+        :param commit : whether to commit the change or not 
         """
         if id is None and q is None:
             raise ValueError('You must specify "id" or "q".')

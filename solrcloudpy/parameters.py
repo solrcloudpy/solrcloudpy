@@ -20,7 +20,7 @@ class BaseParams(object):
                 self._q[k].update([v])
         return self
 
-    def clear_param(self,key):
+    def remove_param(self,key):
         self._q.pop(key,None)
         
     def __repr__(self):
