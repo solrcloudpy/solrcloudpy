@@ -1,3 +1,18 @@
+"""
+Connecting to a set of solr servers.
+
+To get a :class:`~solrcloudpy.collection.Collection` instance from a :class:`Connection` use either dictionary-style or attribute-style access:
+
+
+    >>> from solrcloudpy.connection import Connection
+    >>> conn = Connection()
+    >>> conn.list()
+    [u'collection1']
+    >>> conn['collection1']
+    Collection<test1>
+
+
+"""
 import urllib
 import json
 
@@ -12,7 +27,7 @@ class HTTPConnection(object):
     :param detect_live_nodes: whether to detect live nodes automativally or not. This assumes that one is able to access the IPs listed by Zookeeper. The default value is ``False``.
 
     :param user: HTTP basic auth user name
-    :param password: HTTP basic auth password22
+    :param password: HTTP basic auth password
 
     """
     def __init__(self,server="localhost:8983",detect_live_nodes=False,user=None,password=None):

@@ -22,7 +22,7 @@ class BaseParams(object):
 
     def remove_param(self,key):
         self._q.pop(key,None)
-        
+
     def __repr__(self):
         c = self._q.copy()
         return repr(dict(c))
@@ -38,6 +38,7 @@ class BaseParams(object):
         return len(self._q)
 
 class CommonParams(BaseParams):
+    
     def q(self,query):
         self._q['q'].add(query)
         return self

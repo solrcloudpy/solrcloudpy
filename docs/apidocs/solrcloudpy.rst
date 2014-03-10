@@ -4,18 +4,19 @@ solrcloudpy package
 Submodules
 ----------
 
-solrcloudpy.collection module
------------------------------
-
-.. automodule:: solrcloudpy.collection
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 solrcloudpy.connection module
 -----------------------------
 
 .. automodule:: solrcloudpy.connection
+    :synopsis: Tools for connecting to solr
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+solrcloudpy.collection module
+-----------------------------
+
+.. automodule:: solrcloudpy.collection
     :members:
     :undoc-members:
     :show-inheritance:
