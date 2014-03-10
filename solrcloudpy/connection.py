@@ -9,7 +9,7 @@ To get a :class:`~solrcloudpy.collection.Collection` instance from a :class:`Con
     >>> conn.list()
     [u'collection1']
     >>> conn['collection1']
-    Collection<test1>
+    Collection<collection1>
 
 
 """

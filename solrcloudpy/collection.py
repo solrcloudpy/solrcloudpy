@@ -1,3 +1,15 @@
+"""
+Manage a Solr Collection.
+
+The Collections API is used to enable you to create, remove, or reload collections.
+
+    >>> from solrcloudpy.connection import Connection
+    >>> conn = Connection()
+    >>> coll = conn['test1'].create('test1')
+    >>> coll
+    Collection<collection1>
+
+"""
 import solrcloudpy.index as index
 from solrcloudpy.utils import _Request
 
@@ -7,8 +19,8 @@ import requests
 
 class Collection(object):
     """
-    Class to manage collections
-    
+    Class to create, remove, reload, split, migrate collections
+
     """
     def __init__(self,connection,name):
         self.connection = connection
@@ -22,7 +34,7 @@ class Collection(object):
         :param collection: the collection to find
 
         """
-        return self.name in self.list()
+        return self.name in self.connection.list()
 
     def create(self, replication_factor=1, force=False, **kwargs):
         """
@@ -32,7 +44,7 @@ class Collection(object):
 
         :param replication_factor: an integer indicating the number of replcas for this collection
 
-        :param force: a boolean value indicating whether to force the operation 
+        :param force: a boolean value indicating whether to force the operation
 
         :param kwargs: additional parameters to be passed to this operation
 
