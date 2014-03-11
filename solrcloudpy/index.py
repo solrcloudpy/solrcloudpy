@@ -1,8 +1,13 @@
+"""
+Query and update a Solr collection. You not expected to use this class directly.
+
+
+"""
+
 from contextlib import contextmanager
 from solrcloudpy.utils import SolrResponse, SolrException, _Request
 
 import datetime as dt
-import urlparse
 import json
 import logging
 
@@ -95,7 +100,7 @@ class SolrIndex(object):
 
         :param q: the query matching the set of documents to delete
 
-        :param commit: whether to commit the change or not 
+        :param commit: whether to commit the change or not
         """
         if id is None and q is None:
             raise ValueError('You must specify "id" or "q".')
@@ -126,15 +131,8 @@ class SolrIndex(object):
                   'optimize': 'true'
                   }
         path = '%s/update' % self.collection
-        try:
-            servers = list(self.connection.servers)
-            host = servers[0]
-            fullpath = urlparse.urljoin(host,path)
-            res = self.client.request("GET",fullpath,params=params,headers={"wt":"json"},timeout=2)
-            return res
-        except:
-            pass
-
+        res = self.client.get(path,params=params)
+        return res
 
     def commit(self):
         """ Commit changes to a collection """

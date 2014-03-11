@@ -26,7 +26,6 @@ solrcloudpy.index module
 
 .. automodule:: solrcloudpy.index
     :members:
-    :undoc-members:
     :show-inheritance:
 
 solrcloudpy.parameters module
@@ -42,7 +41,6 @@ solrcloudpy.utils module
 
 .. automodule:: solrcloudpy.utils
     :members:
-    :undoc-members:
     :show-inheritance:
 
 
