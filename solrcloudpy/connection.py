@@ -19,7 +19,7 @@ import json
 import solrcloudpy.collection as collection
 from solrcloudpy.utils import _Request
 
-class HTTPConnection(object):
+class Connection(object):
     """
     Connection to a solr server or several ones
 
@@ -146,4 +146,4 @@ class HTTPConnection(object):
         return self.list()
 
     def __repr__(self):
-        return "HTTPConnection %s" % str(self.servers)
+        return "Connection %s" % str(self.servers)
