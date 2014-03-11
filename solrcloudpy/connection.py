@@ -125,6 +125,17 @@ class HTTPConnection(object):
         nodes = [c.replace('_solr','') for c in children]
         return ["http://%s/solr/" % a for a in nodes]
 
+    def create_collection(self,collname, *args, **kwargs):
+        r"""
+        Create a collection.
+
+        :param collname: The collection name
+        :param \*args: additiona arguments
+        :param \*\*kwargs: additional named parameters
+        """
+        coll = collection.Collection(self,collname)
+        coll.create(*args, **kwargs)
+
     def __getattr__(self, name):
         return collection.Collection(self,name)
 
