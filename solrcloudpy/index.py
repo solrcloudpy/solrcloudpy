@@ -1,7 +1,5 @@
 """
 Query and update a Solr collection. You not expected to use this class directly.
-
-
 """
 
 from contextlib import contextmanager

@@ -41,7 +41,7 @@ class _Request(object):
                     response = r.text
                 return response
 
-            except ConnectionError:
+            except ConnectionError as e:
                 print 'exception: ', e
                 host = servers.pop(0)
                 return make_request(host,path)
