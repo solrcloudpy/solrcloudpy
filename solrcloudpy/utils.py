@@ -56,39 +56,40 @@ class _Request(object):
         return self.request(path,params,method='GET')
 
 class DictObject(object):
-    '''Recursive class for building and representing objects with'''
     def __init__(self, obj):
         if not obj:
             return
 
         for k, v in obj.iteritems():
             if isinstance(v, dict):
-                setattr(self, k, DictObject(v))
+                # create a new object from this (sub)class,
+                # not necessarily from DictObject
+                setattr(self, k, self.__class__(v))
             else:
                 setattr(self, k.encode('utf8','ignore'), v)
 
     def __getitem__(self, val):
         return self.__dict__[val]
 
-    def __repr__(self):
-        value = DictObjectJSONEncoder(indent=4).encode(self.__dict__)
-        return value
 
-class DictObjectJSONEncoder(json.JSONEncoder):
+class SolrResponseJSONEncoder(json.JSONEncoder):
     def default(self, o):
-        if type(o) == type(DictObject({})):
+        if type(o) == type(SolrResponse({})):
             val = str(o.__dict__)
             if len(val) > 200:
                 s = val[:100] + ' ... '
             else:
                 s = val
-            return "DictObject << %s >>" % s
+            return "%s << %s >>" % (o.__class__.__name__,s)
 
         # Let the base class default method raise the TypeError
         return json.JSONEncoder.default(self, o)
 
 class SolrResponse(DictObject):
     """ A generic representation of a solr response """
+    def __repr__(self):
+        value = SolrResponseJSONEncoder(indent=4).encode(self.__dict__)
+        return value
 
 class SolrException(Exception):
     pass
