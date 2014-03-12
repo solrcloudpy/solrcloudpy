@@ -134,7 +134,7 @@ class Connection(object):
         :param \*\*kwargs: additional named parameters
         """
         coll = collection.Collection(self,collname)
-        coll.create(*args, **kwargs)
+        return coll.create(*args, **kwargs)
 
     def __getattr__(self, name):
         return collection.Collection(self,name)

@@ -10,7 +10,7 @@ Consult the `Collections API <https://cwiki.apache.org/confluence/display/solr/C
     >>> coll
     Collection<collection1>
 
-This class is alos used for query a Solr collection. The endpoints supported by default are:
+This class is also used for query a Solr collection. The endpoints supported by default are:
 
  - `/select` : the default Solr request handler
  - `/mlt`: the request handler for doing *more like this* search
@@ -22,7 +22,7 @@ Support will be coming for the following endpoints:
  - `/highlight`: Solr's search highlight component
  - `/terms`: Term component
 
- 
+
      >>> from solrcloudpy import Connection
      >>> coll = Connection()['collection1']
      >>> coll.sarch(**{'q':'money'})
@@ -117,8 +117,9 @@ class Collection(object):
                     time.sleep(1)
                 break
 
-        return index.SolrIndex(self.connection,self.name)
-
+            #return index.SolrIndex(self.connection,self.name)
+        return Collection(self.connection,self.name)
+    
     def _is_index_created(self):
         server = list(self.connection.servers)[0]
         req = requests.get('%s/solr/%s' % (server,self.name))

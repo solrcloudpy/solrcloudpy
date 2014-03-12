@@ -13,7 +13,7 @@ class SolrInstance(object):
 
     def start(self):
         args = [
-        'java -Dcollection.configName=myconf -DzkRun -DnumShards=1 -jar start.jar >/dev/null',
+        'java -Dcollection.configName=myconf -DzkRun -DnumShards=1 -jar start.jar>/dev/null',
             ]
 
         self._process = subprocess.Popen(args=args,
