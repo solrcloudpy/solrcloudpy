@@ -72,6 +72,12 @@ class DictObject(object):
         return self.__dict__[val]
 
 
+class SolrResponse(DictObject):
+    """ A generic representation of a solr response """
+    def __repr__(self):
+        value = SolrResponseJSONEncoder(indent=4).encode(self.__dict__)
+        return value
+
 class SolrResponseJSONEncoder(json.JSONEncoder):
     def default(self, o):
         if type(o) == type(SolrResponse({})):
@@ -84,12 +90,6 @@ class SolrResponseJSONEncoder(json.JSONEncoder):
 
         # Let the base class default method raise the TypeError
         return json.JSONEncoder.default(self, o)
-
-class SolrResponse(DictObject):
-    """ A generic representation of a solr response """
-    def __repr__(self):
-        value = SolrResponseJSONEncoder(indent=4).encode(self.__dict__)
-        return value
 
 class SolrException(Exception):
     pass

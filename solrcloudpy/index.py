@@ -88,7 +88,7 @@ class SolrIndex(object):
         """
         message = json.dumps(docs,default=dthandler)
         response = self._update(message)
-        return response
+        return SolrException(response)
 
     def delete(self,id=None,q=None,commit=True):
         """
@@ -130,12 +130,12 @@ class SolrIndex(object):
                   }
         path = '%s/update' % self.collection
         res = self.client.get(path,params=params)
-        return res
+        return SolrException(res)
 
     def commit(self):
         """ Commit changes to a collection """
         response = self._update('{"commit":{}}')
-        return response
+        return SolrException(response)
 
 
 @contextmanager
