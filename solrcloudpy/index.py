@@ -42,8 +42,6 @@ class SolrIndex(object):
     def search(self,params):
         """
         Search the collection
-
-        :param params: query parameters
         """
         path = "%s/select" % self.collection
         data = self._send(path,params)

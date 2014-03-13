@@ -25,9 +25,9 @@ Support will be coming for the following endpoints:
 
      >>> from solrcloudpy import Connection
      >>> coll = Connection()['collection1']
-     >>> coll.sarch(**{'q':'money'})
+     >>> coll.search(**{'q':'money'})
      {
-         "response": "DictObject << {'start': 0, 'numFound': 0, 'docs': []} >>"
+         "response": "SolrResponse << {'start': 0, 'numFound': 0, 'docs': []} >>"
      }
 
 """
@@ -224,12 +224,20 @@ class Collection(object):
         return self.client.get('admin/collections',params)
 
     def search(self, params):
-        """Search this index"""
+        """
+        Search this index
+
+        :param params: query parameters. Here `params` can be any container that has an `iteritems()` method.
+        """
         ind = index.SolrIndex(self.connection,self.name)
         return ind.search(params)
 
     def mlt(self, params):
-        """Perform MLT on this index"""
+        """
+        Perform MLT on this index
+
+        :param params: query parameters. Here `params` can be any container that has an `iteritems()` method.
+        """
         ind = index.SolrIndex(self.connection,self.name)
         return ind.mlt(params)
 
@@ -243,6 +251,10 @@ class Collection(object):
         response = self.client.get('/solr/zookeeper',params)
         data = json.loads(response['znode']['data'])
         return data[self.name]
+
+    @property
+    def shards(self):
+        return self.state
 
     def __getattr__(self,name):
         """Access any other attributes of this index"""

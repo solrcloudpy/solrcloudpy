@@ -38,7 +38,9 @@ class BaseParams(object):
         return len(self._q)
 
 class CommonParams(BaseParams):
-    
+    """
+    Common parameters passed to search queries
+    """
     def q(self,query):
         self._q['q'].add(query)
         return self
@@ -68,6 +70,9 @@ class CommonParams(BaseParams):
         return self
 
 class MLTParams(BaseParams):
+    """
+    Parameters passed to mlt searches
+    """
     def mlt_fl(self,field):
         self._q['mlt.fl'].add(field)
         return self
@@ -109,6 +114,9 @@ class MLTParams(BaseParams):
         return self
 
 class FacetParams(BaseParams):
+    """
+    Parameters to pass when doing faceted search
+    """
     def query(self,query):
         self._q['facet.query'].add(query)
         return self
@@ -197,6 +205,26 @@ class FacetParams(BaseParams):
         return self
 
 class SearchOptions(object):
+    """
+    Manage options to pass to a solr query
+
+    Although one can use plain dictionaries to pass parameters to solr, this class
+    makes this task more convenient. Currently, it covers all options to pass to do:
+
+     - MLT search via the `commonparams` member variable
+     - normal search via `mltparams` member variable
+     - faceted search via the `facetparams` member variable
+
+    Example:
+
+        >>> se = SearchOptions()
+        >>> se.commonparams.q("*:*").fl('*,score')
+        {'q': set(['*:*']), 'fl': set(['*,score'])}
+        >>> se.facetparams.field("id")
+        {'facet.field': set(['id'])}
+        >>> se
+        {'commonparams': {'q': set(['*:*']), 'fl': set(['*,score'])}, 'facetparams': {'facet.field': set(['id'])}, 'mltparams': {}}
+    """
     def __init__(self):
         self.commonparams = CommonParams()
         self.facetparams = FacetParams()

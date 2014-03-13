@@ -31,10 +31,8 @@ solrcloudpy.index module
 solrcloudpy.parameters module
 -----------------------------
 
-.. automodule:: solrcloudpy.parameters
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autoclass:: solrcloudpy.parameters.SearchOptions
+
 
 solrcloudpy.utils module
 ------------------------
