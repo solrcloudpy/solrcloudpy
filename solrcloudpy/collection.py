@@ -32,7 +32,7 @@ Support will be coming for the following endpoints:
 
 """
 import solrcloudpy.index as index
-from solrcloudpy.utils import _Request
+from solrcloudpy.utils import _Request, SolrException
 
 import time
 import json
@@ -81,7 +81,7 @@ class Collection(object):
         Additional parameters are further documented at https://cwiki.apache.org/confluence/display/solr/Collections+API#CollectionsAPI-CreateaCollection
         """
         params = {'name':self.name,
-                  'replication_factor':replication_factor,
+                  'replicationFactor':replication_factor,
                   'action':'CREATE'}
         router_name = kwargs.get("router_name",'compositeId')
         params['router.name'] = router_name
@@ -108,24 +108,45 @@ class Collection(object):
         if router_field:
             params['router.field'] = router_field
 
+        # this collection doesn't exist yet, actually create it
         if not self.exists() or force == True:
-            self.client.get('admin/collections',params)
-            # Create the index and wait until it's available
-            while True:
-                if not self._is_index_created():
-                    print "index not created yet, waiting..."
-                    time.sleep(1)
-                break
+            res = self.client.get('admin/collections',params)
+            if res.has_key('success'):
+                # Create the index and wait until it's available
+                while True:
+                    if not self._is_index_created():
+                        print "index not created yet, waiting..."
+                        time.sleep(1)
+                    else: break
 
-            #return index.SolrIndex(self.connection,self.name)
+                    return Collection(self.connection,self.name)
+            else:
+                raise SolrException(str(res))
+
+        # this collection is already present, just return it
         return Collection(self.connection,self.name)
-    
+
     def _is_index_created(self):
         server = list(self.connection.servers)[0]
         req = requests.get('%s/solr/%s' % (server,self.name))
         if req.status_code != requests.codes.ok:
             return False
         return True
+
+    def is_alias(self):
+        """
+        Determines if this collection is an alias for a 'real' collection
+        """
+        params = {'detail':'true','path':'/aliases.json'}
+        response = self.client.get('/solr/zookeeper',params)
+        data = json.loads(response['znode'].get('data','{}'))
+        if not data:
+            return False
+        collections = data['collection']
+        for alias in collections.iterkeys():
+            if self.name == alias:
+                return True
+        return False
 
     def delete(self):
         """
@@ -137,7 +158,7 @@ class Collection(object):
         """
         Reload a collection
         """
-        self.client.get('admin/collections',{'action':'RELOAD','name':self.name})
+        return self.client.get('admin/collections',{'action':'RELOAD','name':self.name})
 
     def split_shard(self, shard, ranges=None, split_key=None):
         """
@@ -153,7 +174,7 @@ class Collection(object):
             params['ranges'] = ranges
         if split_key:
             params['split.key'] = split_key
-        self.client.get('admin/collections',params)
+        return self.client.get('admin/collections',params)
 
     def create_shard(self, shard, create_node_set=None):
         """
@@ -167,7 +188,7 @@ class Collection(object):
                   'shard':shard }
         if create_node_set:
             params['create_node_set'] = create_node_set
-        self.client.get('admin/collections',params)
+        return self.client.get('admin/collections',params)
 
     def create_alias(self, alias):
         """
@@ -177,7 +198,7 @@ class Collection(object):
         """
         params = {'action':'CREATEALIAS',
                   'name':alias,'collections':self.name}
-        self.client.get('admin/collections',params)
+        return self.client.get('admin/collections',params)
 
     def delete_alias(self,alias):
         """
@@ -186,7 +207,7 @@ class Collection(object):
         :param alias: the name of the alias
         """
         params = {'action':'DELETEALIAS','name':alias,}
-        self.client.get('admin/collections',params)
+        return self.client.get('admin/collections',params)
 
     def delete_replica(self, replica, shard):
         """
@@ -200,7 +221,7 @@ class Collection(object):
                   'replica':replica,
                   'collection':self.name,
                   'shard':shard}
-        self.client.get('admin/collections',params)
+        return self.client.get('admin/collections',params)
 
     def search(self, params):
         """Search this index"""
@@ -215,6 +236,9 @@ class Collection(object):
     @property
     def state(self):
         """Get the state of this collection"""
+        if self.is_alias():
+            return {"warn":"no state info avilable for aliases"}
+
         params = {'detail':'true','path':'/clusterstate.json'}
         response = self.client.get('/solr/zookeeper',params)
         data = json.loads(response['znode']['data'])
