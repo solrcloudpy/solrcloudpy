@@ -73,43 +73,43 @@ class MLTParams(BaseParams):
     """
     Parameters passed to mlt searches
     """
-    def mlt_fl(self,field):
+    def fl(self,field):
         self._q['mlt.fl'].add(field)
         return self
 
-    def mlt_mintf(self,tf):
+    def mintf(self,tf):
         self._q['mlt.mintf'].add(tf)
         return self
 
-    def mlt_mindf(self,df):
+    def mindf(self,df):
         self._q['mlt.mindf'].add(df)
         return self
 
-    def mlt_minwl(self,wl):
+    def minwl(self,wl):
         self._q['mlt.minwl'].add(wl)
         return self
 
-    def mlt_maxwl(self,wl):
+    def maxwl(self,wl):
         self._q['mlt.maxwl'].add(wl)
         return self
 
-    def mlt_maxqt(self,qt):
+    def maxqt(self,qt):
         self._q['mlt.maxqt'].add(qt)
         return self
 
-    def mlt_maxntp(self,ntp):
+    def maxntp(self,ntp):
         self._q['mlt.maxntp'].add(ntp)
         return self
 
-    def mlt_boost(self,val):
+    def boost(self,val):
         self._q['mlt.boost'].add(val)
         return self
 
-    def mlt_qf(self,fields):
+    def qf(self,fields):
         self._q['mlt.qf'].add(fields)
         return self
 
-    def mlt_count(self,c):
+    def count(self,c):
         self._q['mlt.count'].add(c)
         return self
 
