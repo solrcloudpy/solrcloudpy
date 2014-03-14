@@ -1,0 +1,605 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>solrcloudpy package &mdash; solrcloudpy 1.4.6 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="solrcloudpy 1.4.6 documentation" href="../index.html" />
+    <link rel="up" title="API for solrcloudpy" href="modules.html" />
+    <link rel="prev" title="API for solrcloudpy" href="modules.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="API for solrcloudpy"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">solrcloudpy 1.4.6 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">API for solrcloudpy</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="solrcloudpy-package">
+<h1>solrcloudpy package<a class="headerlink" href="#solrcloudpy-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-solrcloudpy.connection">
+<span id="solrcloudpy-connection-module"></span><h2>solrcloudpy.connection module<a class="headerlink" href="#module-solrcloudpy.connection" title="Permalink to this headline">¶</a></h2>
+<p>Connecting to a set of solr servers.</p>
+<p>To get a <a class="reference internal" href="#solrcloudpy.collection.Collection" title="solrcloudpy.collection.Collection"><tt class="xref py py-class docutils literal"><span class="pre">Collection</span></tt></a> instance from a <a class="reference internal" href="#solrcloudpy.connection.Connection" title="solrcloudpy.connection.Connection"><tt class="xref py py-class docutils literal"><span class="pre">Connection</span></tt></a> use either dictionary-style or attribute-style access:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">solrcloudpy.connection</span> <span class="kn">import</span> <span class="n">Connection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<span class="go">[u&#39;collection1&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="p">[</span><span class="s">&#39;collection1&#39;</span><span class="p">]</span>
+<span class="go">Collection&lt;collection1&gt;</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="solrcloudpy.connection.Connection">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.connection.</tt><tt class="descname">Connection</tt><big>(</big><em>server='localhost:8983'</em>, <em>detect_live_nodes=False</em>, <em>user=None</em>, <em>password=None</em><big>)</big><a class="headerlink" href="#solrcloudpy.connection.Connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Connection to a solr server or several ones</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>server</strong> &#8211; The server. Can be a single one or a list of servers. Example  <tt class="docutils literal"><span class="pre">localhost:8983</span></tt> or <tt class="docutils literal"><span class="pre">[localhost,solr1.domain.com:8983]</span></tt>.</li>
+<li><strong>detect_live_nodes</strong> &#8211; whether to detect live nodes automativally or not. This assumes that one is able to access the IPs listed by Zookeeper. The default value is <tt class="docutils literal"><span class="pre">False</span></tt>.</li>
+<li><strong>user</strong> &#8211; HTTP basic auth user name</li>
+<li><strong>password</strong> &#8211; HTTP basic auth password</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="solrcloudpy.connection.Connection.cluster_health">
+<tt class="descname">cluster_health</tt><a class="headerlink" href="#solrcloudpy.connection.Connection.cluster_health" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the state of all nodes and collections in the cluster. Problematic nodes or
+collections are returned, along with their state, otherwise an <cite>OK</cite> message is returned</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="solrcloudpy.connection.Connection.cluster_leader">
+<tt class="descname">cluster_leader</tt><a class="headerlink" href="#solrcloudpy.connection.Connection.cluster_leader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the cluster leader</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.connection.Connection.create_collection">
+<tt class="descname">create_collection</tt><big>(</big><em>collname</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#solrcloudpy.connection.Connection.create_collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a collection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>collname</strong> &#8211; The collection name</li>
+<li><strong>*args</strong> &#8211; additiona arguments</li>
+<li><strong>**kwargs</strong> &#8211; additional named parameters</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.connection.Connection.detect_nodes">
+<tt class="descname">detect_nodes</tt><big>(</big><em>url</em><big>)</big><a class="headerlink" href="#solrcloudpy.connection.Connection.detect_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.connection.Connection.list">
+<tt class="descname">list</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.connection.Connection.list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists out the current collections in the cluster</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="solrcloudpy.connection.Connection.live_nodes">
+<tt class="descname">live_nodes</tt><a class="headerlink" href="#solrcloudpy.connection.Connection.live_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists all nodes that are currently online</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-solrcloudpy.collection">
+<span id="solrcloudpy-collection-module"></span><h2>solrcloudpy.collection module<a class="headerlink" href="#module-solrcloudpy.collection" title="Permalink to this headline">¶</a></h2>
+<p>Manage a Solr Collection.</p>
+<p>The Collections API is used to enable you to create, remove, or reload collections.
+Consult the <a class="reference external" href="https://cwiki.apache.org/confluence/display/solr/Collections+API">Collections API</a> for more details</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">solrcloudpy.connection</span> <span class="kn">import</span> <span class="n">Connection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span> <span class="o">=</span> <span class="n">conn</span><span class="p">[</span><span class="s">&#39;test1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;test1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span>
+<span class="go">Collection&lt;collection1&gt;</span>
+</pre></div>
+</div>
+<p>This class is also used for query a Solr collection. The endpoints supported by default are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><cite>/select</cite> : the default Solr request handler</li>
+<li><cite>/mlt</cite>: the request handler for doing <em>more like this</em> search</li>
+<li><cite>/clustering</cite>: Solr&#8217;s clustering component</li>
+</ul>
+</div></blockquote>
+<p>Support will be coming for the following endpoints:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><cite>/get</cite>: Solr&#8217;s real-time get request handler</p>
+</li>
+<li><p class="first"><cite>/highlight</cite>: Solr&#8217;s search highlight component</p>
+</li>
+<li><p class="first"><cite>/terms</cite>: Term component</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">solrcloudpy</span> <span class="kn">import</span> <span class="n">Connection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()[</span><span class="s">&#39;collection1&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s">&#39;q&#39;</span><span class="p">:</span><span class="s">&#39;money&#39;</span><span class="p">})</span>
+<span class="go">{</span>
+<span class="go">    &quot;response&quot;: &quot;SolrResponse &lt;&lt; {&#39;start&#39;: 0, &#39;numFound&#39;: 0, &#39;docs&#39;: []} &gt;&gt;&quot;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+<dl class="class">
+<dt id="solrcloudpy.collection.Collection">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.collection.</tt><tt class="descname">Collection</tt><big>(</big><em>connection</em>, <em>name</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Class to create, remove, reload, split, migrate collections</p>
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.create">
+<tt class="descname">create</tt><big>(</big><em>replication_factor=1</em>, <em>force=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a collection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>num_shards</strong> &#8211; an integer indicating the number of shards for this collection</li>
+<li><strong>replication_factor</strong> &#8211; an integer indicating the number of replcas for this collection</li>
+<li><strong>force</strong> &#8211; a boolean value indicating whether to force the operation</li>
+<li><strong>kwargs</strong> &#8211; additional parameters to be passed to this operation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Additional Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><cite>router_name</cite>: router name that will be used. defines how documents will be distributed among the shards</li>
+<li><cite>num_shards</cite>: number of shards to create for this collection</li>
+<li><cite>shards</cite>: A comma separated list of shard names. Required when using the <cite>implicit</cite> router</li>
+<li><cite>max_shards_per_node</cite>: max number of shards/replicas to put on a node for this collection</li>
+<li><cite>create_node_set</cite>: Allows defining which nodes to spread the new collection across.</li>
+<li><cite>collection_config_name</cite>: the name of the configuration to use for this collection</li>
+<li><cite>router_field</cite>: if this field is specified, the router will look at the value of the field in an input document to compute the hash and identify of a shard instead of looking at the <cite>uniqueKey</cite> field</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Additional parameters are further documented at <a class="reference external" href="https://cwiki.apache.org/confluence/display/solr/Collections+API#CollectionsAPI-CreateaCollection">https://cwiki.apache.org/confluence/display/solr/Collections+API#CollectionsAPI-CreateaCollection</a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.create_alias">
+<tt class="descname">create_alias</tt><big>(</big><em>alias</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.create_alias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create or modify an alias for a collection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>alias</strong> &#8211; the name of the alias</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.create_shard">
+<tt class="descname">create_shard</tt><big>(</big><em>shard</em>, <em>create_node_set=None</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.create_shard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new shard</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>shard</strong> &#8211; The name of the shard to be created.</li>
+<li><strong>create_node_set</strong> &#8211; Allows defining the nodes to spread the new collection across.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.delete">
+<tt class="descname">delete</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.delete_alias">
+<tt class="descname">delete_alias</tt><big>(</big><em>alias</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.delete_alias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete an alias for a collection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>alias</strong> &#8211; the name of the alias</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.delete_replica">
+<tt class="descname">delete_replica</tt><big>(</big><em>replica</em>, <em>shard</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.delete_replica" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a replica</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>replica</strong> &#8211; The name of the replica to remove.</li>
+<li><strong>shard</strong> &#8211; The name of the shard that includes the replica to be removed.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.exists">
+<tt class="descname">exists</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds if a collection exists in the cluster</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>collection</strong> &#8211; the collection to find</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.is_alias">
+<tt class="descname">is_alias</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.is_alias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines if this collection is an alias for a &#8216;real&#8217; collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.mlt">
+<tt class="descname">mlt</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.mlt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform MLT on this index</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> &#8211; query parameters. Here <cite>params</cite> can be any container that has an <cite>iteritems()</cite> method.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.reload">
+<tt class="descname">reload</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reload a collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.search">
+<tt class="descname">search</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search this index</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> &#8211; query parameters. Here <cite>params</cite> can be any container that has an <cite>iteritems()</cite> method.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="solrcloudpy.collection.Collection.shards">
+<tt class="descname">shards</tt><a class="headerlink" href="#solrcloudpy.collection.Collection.shards" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.Collection.split_shard">
+<tt class="descname">split_shard</tt><big>(</big><em>shard</em>, <em>ranges=None</em>, <em>split_key=None</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.Collection.split_shard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split a shard into two new shards</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>shard</strong> &#8211; The name of the shard to be split.</li>
+<li><strong>ranges</strong> &#8211; A comma-separated list of hash ranges in hexadecimal e.g. ranges=0-1f4,1f5-3e8,3e9-5dc</li>
+<li><strong>split_key</strong> &#8211; The key to use for splitting the index</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="solrcloudpy.collection.Collection.state">
+<tt class="descname">state</tt><a class="headerlink" href="#solrcloudpy.collection.Collection.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the state of this collection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-solrcloudpy.index">
+<span id="solrcloudpy-index-module"></span><h2>solrcloudpy.index module<a class="headerlink" href="#module-solrcloudpy.index" title="Permalink to this headline">¶</a></h2>
+<p>Query and update a Solr collection. You not expected to use this class directly.</p>
+<dl class="class">
+<dt id="solrcloudpy.index.SolrIndex">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.index.</tt><tt class="descname">SolrIndex</tt><big>(</big><em>connection</em>, <em>collection</em><big>)</big><a class="headerlink" href="#solrcloudpy.index.SolrIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="solrcloudpy.index.SolrIndex.add">
+<tt class="descname">add</tt><big>(</big><em>docs</em><big>)</big><a class="headerlink" href="#solrcloudpy.index.SolrIndex.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a list of document to the collection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>docs</strong> &#8211; a list of documents to add</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.index.SolrIndex.clustering">
+<tt class="descname">clustering</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#solrcloudpy.index.SolrIndex.clustering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform clustering on a query</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> &#8211; clustering query parameters</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.index.SolrIndex.commit">
+<tt class="descname">commit</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.index.SolrIndex.commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commit changes to a collection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.index.SolrIndex.delete">
+<tt class="descname">delete</tt><big>(</big><em>id=None</em>, <em>q=None</em>, <em>commit=True</em><big>)</big><a class="headerlink" href="#solrcloudpy.index.SolrIndex.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete documents in a collection. Deletes occur either by id or by query</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; the id of the document to pass.</li>
+<li><strong>q</strong> &#8211; the query matching the set of documents to delete</li>
+<li><strong>commit</strong> &#8211; whether to commit the change or not</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.index.SolrIndex.mlt">
+<tt class="descname">mlt</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#solrcloudpy.index.SolrIndex.mlt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a MoreLikeThis search the collection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> &#8211; MLT query parameters</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.index.SolrIndex.optimize">
+<tt class="descname">optimize</tt><big>(</big><em>waitsearcher=False</em>, <em>softcommit=False</em><big>)</big><a class="headerlink" href="#solrcloudpy.index.SolrIndex.optimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optimize a collection for searching</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>waitsearcher</strong> &#8211; whether to make the changes to the collection visible or not
+by opening a new searcher</li>
+<li><strong>softcommit</strong> &#8211; whether to perform a soft commit when optimizing</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.index.SolrIndex.search">
+<tt class="descname">search</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#solrcloudpy.index.SolrIndex.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the collection</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="solrcloudpy.index.solr_batch_adder">
+<tt class="descclassname">solrcloudpy.index.</tt><tt class="descname">solr_batch_adder</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#solrcloudpy.index.solr_batch_adder" title="Permalink to this definition">¶</a></dt>
+<dd><p>A context manager for adding documents in solr</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>solr</strong> &#8211; a <cite>SolrIndex</cite> object representing the solr index to use</li>
+<li><strong>batch_size</strong> &#8211; the number of documents to commit at a time. The default is 100</li>
+<li><strong>auto_commit</strong> &#8211; whether to commit after adding each batch of documents</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="solrcloudpy-parameters-module">
+<h2>solrcloudpy.parameters module<a class="headerlink" href="#solrcloudpy-parameters-module" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="solrcloudpy.parameters.SearchOptions">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.parameters.</tt><tt class="descname">SearchOptions</tt><a class="headerlink" href="#solrcloudpy.parameters.SearchOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manage options to pass to a solr query</p>
+<p>Although one can use plain dictionaries to pass parameters to solr, this class
+makes this task more convenient. Currently, it covers all options to pass to do:</p>
+<blockquote>
+<div><ul class="simple">
+<li>MLT search via the <cite>mltparams</cite>  member variable</li>
+<li>normal search via <cite>commonparams</cite> member variable</li>
+<li>faceted search via the <cite>facetparams</cite> member variable</li>
+</ul>
+</div></blockquote>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">se</span> <span class="o">=</span> <span class="n">SearchOptions</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">commonparams</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="s">&quot;*:*&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fl</span><span class="p">(</span><span class="s">&#39;*,score&#39;</span><span class="p">)</span>
+<span class="go">{&#39;q&#39;: set([&#39;*:*&#39;]), &#39;fl&#39;: set([&#39;*,score&#39;])}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">facetparams</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">)</span>
+<span class="go">{&#39;facet.field&#39;: set([&#39;id&#39;])}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">se</span>
+<span class="go">{&#39;commonparams&#39;: {&#39;q&#39;: set([&#39;*:*&#39;]), &#39;fl&#39;: set([&#39;*,score&#39;])}, &#39;facetparams&#39;: {&#39;facet.field&#39;: set([&#39;id&#39;])}, &#39;mltparams&#39;: {}}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-solrcloudpy.utils">
+<span id="solrcloudpy-utils-module"></span><h2>solrcloudpy.utils module<a class="headerlink" href="#module-solrcloudpy.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="solrcloudpy.utils.SolrResponse">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.utils.</tt><tt class="descname">SolrResponse</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#solrcloudpy.utils.SolrResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">solrcloudpy.utils.DictObject</span></tt></p>
+<p>A generic representation of a solr response</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-solrcloudpy">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-solrcloudpy" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">solrcloudpy package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-solrcloudpy.connection">solrcloudpy.connection module</a></li>
+<li><a class="reference internal" href="#module-solrcloudpy.collection">solrcloudpy.collection module</a></li>
+<li><a class="reference internal" href="#module-solrcloudpy.index">solrcloudpy.index module</a></li>
+<li><a class="reference internal" href="#solrcloudpy-parameters-module">solrcloudpy.parameters module</a></li>
+<li><a class="reference internal" href="#module-solrcloudpy.utils">solrcloudpy.utils module</a></li>
+<li><a class="reference internal" href="#module-solrcloudpy">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">API for solrcloudpy</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/apidocs/solrcloudpy.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="API for solrcloudpy"
+             >previous</a> |</li>
+        <li><a href="../index.html">solrcloudpy 1.4.6 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >API for solrcloudpy</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, didier deshommes.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

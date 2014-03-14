@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Console &mdash; solrcloudpy 1.4.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.4.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="solrcloudpy 1.4.6 documentation" href="index.html" />
+    <link rel="next" title="Searching a collection" href="searching.html" />
+    <link rel="prev" title="Intro" href="intro.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="searching.html" title="Searching a collection"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Intro"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">solrcloudpy 1.4.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="console">
+<h1>Console<a class="headerlink" href="#console" title="Permalink to this headline">¶</a></h1>
+<p><tt class="docutils literal"><span class="pre">solrcloudpy</span></tt> comes with a console that can be run simply by typing
+<tt class="docutils literal"><span class="pre">solrconsole</span></tt>. It has a few convenniences, such as an already-created
+<tt class="xref py py-class docutils literal"><span class="pre">Connection</span></tt> object and <tt class="xref py py-class docutils literal"><span class="pre">SearchOptions</span></tt> that can be referred to directly.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ solrconsole --host=localhost --port=8983
+SolrCloud Console
+Use the &#39;conn&#39; object to access a collection
+
+Type &#39;collections&#39; to see the list of available collections
+solr localhost:8983&gt; conn.collection1.search(SearchOptions.commonparameters.q(&quot;junk&quot;))
+{
+    &quot;response&quot;: &quot;SolrResponse &lt;&lt; {&#39;start&#39;: 0, &#39;numFound&#39;: 0, &#39;docs&#39;: []} &gt;&gt;&quot;
+}
+
+solr localhost:8983&gt; res.response
+{
+    &quot;start&quot;: 0,
+    &quot;numFound&quot;: 0,
+    &quot;docs&quot;: []
+}
+</pre></div>
+</div>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre>usage: solrconsole [-h] [--host HOST] [--port PORT] [--user USER]
+               [--password PASSWORD]
+
+Parser for solrcloudpy console
+
+optional arguments:
+-h, --help           show this help message and exit
+--host HOST          host
+--port PORT          port
+--user USER          user
+--password PASSWORD  password
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Intro</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="searching.html"
+                        title="next chapter">Searching a collection</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/console.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="searching.html" title="Searching a collection"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Intro"
+             >previous</a> |</li>
+        <li><a href="index.html">solrcloudpy 1.4.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, didier deshommes.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

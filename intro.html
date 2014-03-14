@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Intro &mdash; solrcloudpy 1.4.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.4.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="solrcloudpy 1.4.6 documentation" href="index.html" />
+    <link rel="next" title="Console" href="console.html" />
+    <link rel="prev" title="solrcloudpy documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="console.html" title="Console"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="solrcloudpy documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">solrcloudpy 1.4.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="intro">
+<h1>Intro<a class="headerlink" href="#intro" title="Permalink to this headline">¶</a></h1>
+<p><tt class="docutils literal"><span class="pre">solrcloudpy</span></tt> is a python library for interacting with SolrCloud. This library aims to take advantage of the following features of Solr:</p>
+<ul class="simple">
+<li>Distributed indexing and searching and transparent failover</li>
+<li>Full JSON api</li>
+<li>Centralized index management</li>
+<li>Near-realtime search</li>
+</ul>
+<p>The API is meant to be close to <tt class="docutils literal"><span class="pre">pymongo</span></tt>&#8216;s API, where one can access collections as simple attributes or dictionary keys.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">([</span><span class="s">&quot;localhost:9983&quot;</span><span class="p">,</span><span class="s">&quot;localhost:8984&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;test1&#39;</span><span class="p">,</span><span class="n">num_shards</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">replication_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="go"># Access an existing collection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">test_collection</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s">&#39;query&#39;</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">    &quot;response&quot;: &quot;SolrResponse &lt;&lt; {&#39;start&#39;: 0, &#39;numFound&#39;: 0, &#39;docs&#39;: []} &gt;&gt;&quot;</span>
+<span class="go">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="p">[</span><span class="s">&quot;test_collection&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s">&#39;query 2&#39;</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">    &quot;response&quot;: &quot;SolrResponse &lt;&lt; {&#39;start&#39;: 0, &#39;numFound&#39;: 0, &#39;docs&#39;: []} &gt;&gt;&quot;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">solrcloudpy</span></tt> is available on pypi: <tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">solrcloudpy</span></tt>. To
+install the development version:</p>
+<p><tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span>
+<span class="pre">git+https://github.com/dfdeshom/solrcloudpy.git#egg=solrcloudpy</span></tt></p>
+</div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<p>Send pull requests!</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Intro</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#contributing">Contributing</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">solrcloudpy documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="console.html"
+                        title="next chapter">Console</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/intro.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="console.html" title="Console"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="solrcloudpy documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">solrcloudpy 1.4.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, didier deshommes.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
