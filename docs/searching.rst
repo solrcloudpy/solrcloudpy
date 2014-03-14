@@ -28,7 +28,6 @@ Example:
    {'commonparams': {'q': set(['nsa']), 'sort': set(['pub_date desc']), 'fl': set(['author,link'])}, 'facetparams': {},'mltparams': {}}
 
 
-
 Faceted search
 ---------------
 
@@ -51,7 +50,7 @@ Example:
      }
 
 More Like This search
------------
+------------------------
 
 More Like This (MLT) is a Solr feature that returns documents similar
 to the result of a query. This is supported in `solrcloudpy` via the
@@ -70,12 +69,14 @@ Example
    }
 
 Working with query responses
-----------------------------
+-----------------------------
 
 All query results are wrapped around a
 :class:`~solrcloudpy.utils.SolrResponse` object.This object takes the
 JSON response for the Solr server and makes its keys accessible  by
-normal key syntax or attribute access  syntax 
+normal key syntax or attribute access  syntax. 
+
+Example:
 
 ::
 
