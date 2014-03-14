@@ -14,9 +14,7 @@ following queries:
 Normal search
 ---------------
 
-Most common search parameters are supported and can be chained. Method
-names correspond to the parameters one passes to Solr. For common
-search parameters, they can be found here: https://cwiki.apache.org/confluence/display/solr/Common+Query+Parameters
+Most common search parameters are supported and can be chained. Method names correspond to the parameters one passes to Solr. Common search parameters can be found here: https://cwiki.apache.org/confluence/display/solr/Common+Query+Parameters
 
 Example:
 
@@ -62,7 +60,7 @@ Example
 
    >>> se.commonparams.q("nsa")
    >>> se.mltparams.count("5")
-   >>> conn.slatecogtree.mlt(se)
+   >>> conn.collection1.mlt(se)
    {   
     "response": "SolrResponse << {'start': 0, 'numFound': 0, 'docs': []} >>",
     "match": "SolrResponse << {'start': 0, 'numFound': 590, 'docs': [{u'title': u'Booz Allen Fires NSA Leaker', u'section': u'brie...  >>"
