@@ -185,5 +185,5 @@ gh-pages:
 	git checkout coll-api $(GH_PAGES_SOURCES)
 	git reset HEAD
 	cd docs; make html
-	mv -fv _build/html/* ./
+	cd docs; mv -fv _build/html/* ./
 	rm -rf $(GH_PAGES_SOURCES) build
