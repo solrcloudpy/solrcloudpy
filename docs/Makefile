@@ -187,3 +187,5 @@ gh-pages:
 	cd docs; make html
 	cd docs; mv -fv _build/html/* ../
 	rm -rf $(GH_PAGES_SOURCES) build
+	git commit -m "Generated gh-pages for `git log coll-api -1 --pretty=short` \
+	--abbrev-commit`" && git push origin gh-pages ;
