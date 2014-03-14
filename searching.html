@@ -65,6 +65,23 @@ following queries:</p>
 <li>faceted search via the <cite>facetparams</cite> member variable</li>
 </ul>
 </div></blockquote>
+<div class="section" id="normal-search">
+<h2>Normal search<a class="headerlink" href="#normal-search" title="Permalink to this headline">¶</a></h2>
+<p>Most common search parameters are supported and can be chained. Method
+names correspond to the parameters one passes to Solr. For common
+search parameters, they can be found here: <a class="reference external" href="https://cwiki.apache.org/confluence/display/solr/Common+Query+Parameters">https://cwiki.apache.org/confluence/display/solr/Common+Query+Parameters</a></p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">commonparams</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="s">&quot;nsa&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">commonparams</span><span class="o">.</span><span class="n">fl</span><span class="p">(</span><span class="s">&quot;author,link&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s">&quot;pub_date desc&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">se</span>
+<span class="go">{&#39;commonparams&#39;: {&#39;q&#39;: set([&#39;nsa&#39;]), &#39;sort&#39;: set([&#39;pub_date desc&#39;]), &#39;fl&#39;: set([&#39;author,link&#39;])}, &#39;facetparams&#39;: {},&#39;mltparams&#39;: {}}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="faceted-search">
+<h2>Faceted search<a class="headerlink" href="#faceted-search" title="Permalink to this headline">¶</a></h2>
+<p>Faceted search also supports most parameters one can pass to Solr from
+the documentation: <a class="reference external" href="http://wiki.apache.org/solr/SimpleFacetParameters">http://wiki.apache.org/solr/SimpleFacetParameters</a> .</p>
 <p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre> &gt;&gt;&gt; se = SearchOptions()
  &gt;&gt;&gt; se.commonparams.q(&quot;*:*&quot;).fl(&#39;title,author&#39;)
@@ -78,12 +95,30 @@ following queries:</p>
  }
 </pre></div>
 </div>
+</div>
+<div class="section" id="more-like-this-search">
+<h2>More Like This search<a class="headerlink" href="#more-like-this-search" title="Permalink to this headline">¶</a></h2>
+<p>More Like This (MLT) is a Solr feature that returns documents similar
+to the result of a query. This is supported in <cite>solrcloudpy</cite> via the
+<a class="reference internal" href="apidocs/solrcloudpy.html#solrcloudpy.index.SolrIndex.mlt" title="solrcloudpy.index.SolrIndex.mlt"><tt class="xref py py-meth docutils literal"><span class="pre">mlt()</span></tt></a> method.</p>
+<p>Example</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">commonparams</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="s">&quot;nsa&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">mltparams</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&quot;5&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">slatecogtree</span><span class="o">.</span><span class="n">mlt</span><span class="p">(</span><span class="n">se</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go"> &quot;response&quot;: &quot;SolrResponse &lt;&lt; {&#39;start&#39;: 0, &#39;numFound&#39;: 0, &#39;docs&#39;: []} &gt;&gt;&quot;,</span>
+<span class="go"> &quot;match&quot;: &quot;SolrResponse &lt;&lt; {&#39;start&#39;: 0, &#39;numFound&#39;: 590, &#39;docs&#39;: [{u&#39;title&#39;: u&#39;Booz Allen Fires NSA Leaker&#39;, u&#39;section&#39;: u&#39;brie...  &gt;&gt;&quot;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="working-with-query-responses">
 <h2>Working with query responses<a class="headerlink" href="#working-with-query-responses" title="Permalink to this headline">¶</a></h2>
 <p>All query results are wrapped around a
 <a class="reference internal" href="apidocs/solrcloudpy.html#solrcloudpy.utils.SolrResponse" title="solrcloudpy.utils.SolrResponse"><tt class="xref py py-class docutils literal"><span class="pre">SolrResponse</span></tt></a> object.This object takes the
-JSON response for the Solr server and makes its keys accessible    by
-normal key syntax or attribute access  syntax</p>
+JSON response for the Solr server and makes its keys accessible  by
+normal key syntax or attribute access  syntax.</p>
+<p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">collection1</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">se</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span>
 <span class="go">{</span>
@@ -113,6 +148,9 @@ normal key syntax or attribute access  syntax</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Searching a collection</a><ul>
+<li><a class="reference internal" href="#normal-search">Normal search</a></li>
+<li><a class="reference internal" href="#faceted-search">Faceted search</a></li>
+<li><a class="reference internal" href="#more-like-this-search">More Like This search</a></li>
 <li><a class="reference internal" href="#working-with-query-responses">Working with query responses</a></li>
 </ul>
 </li>
