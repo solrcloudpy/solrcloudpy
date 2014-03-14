@@ -211,8 +211,8 @@ class SearchOptions(object):
     Although one can use plain dictionaries to pass parameters to solr, this class
     makes this task more convenient. Currently, it covers all options to pass to do:
 
-     - MLT search via the `commonparams` member variable
-     - normal search via `mltparams` member variable
+     - MLT search via the `mltparams`  member variable
+     - normal search via `commonparams` member variable
      - faceted search via the `facetparams` member variable
 
     Example:
