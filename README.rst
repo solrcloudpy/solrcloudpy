@@ -11,28 +11,37 @@ solrcloudpy
 The API is meant to be close to pymongo's API, where one can access collections as simple attributes 
 or dictionary keys.  
 
-Usage
--------
-.. code-block:: python
+Example Usage
+--------------
 
-     from solrcloudpy.connection import HTTPConnection
-     from solrcloudpy.collection import Collection 
+create a collection
+::
    
-     # create a collection
-     conn = HTTPConnection(["localhost:9983","localhost:8984"])
-     collection = Collection(conn)
-     collection.create('test1',num_shards=1,replication_factor=2)
      
-     # Access an existing collection
-     conn.test_collection.search(q='query')
-     conn["test_collection"].search(q='query 2')
-     
-     # Indexing documents
-     docs = [{"id":"1", "name":"a"},{"id":"2","name":"b"}]
-     collection.add(docs)
+     >>> conn = Connection(["localhost:9983","localhost:8984"])
+     >>> conn.create('test1',num_shards=1,replication_factor=2)
+  
+Access an existing collection
 
-     # Searching documents
-     print collection.search(q='*:*')
+::
+   
+     
+     >>> conn.test_collection.search(q='query')
+     >>> conn["test_collection"].search(q='query 2')
+
+
+Index documents
+
+::     
+     
+     >>> docs = [{"id":"1", "name":"a"},{"id":"2","name":"b"}]
+     >>> collection.add(docs)
+
+
+Search documents
+
+::
+     >>> print collection.search(q='*:*')
  
      
 Console
