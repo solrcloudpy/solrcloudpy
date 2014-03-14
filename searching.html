@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Searching a collection &mdash; solrcloudpy 1.4.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.4.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="solrcloudpy 1.4.6 documentation" href="index.html" />
+    <link rel="next" title="API for solrcloudpy" href="apidocs/modules.html" />
+    <link rel="prev" title="Console" href="console.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apidocs/modules.html" title="API for solrcloudpy"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="console.html" title="Console"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">solrcloudpy 1.4.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="searching-a-collection">
+<h1>Searching a collection<a class="headerlink" href="#searching-a-collection" title="Permalink to this headline">¶</a></h1>
+<p>Although one can use plain dictionaries to pass parameters to solr,
+the <a class="reference internal" href="apidocs/solrcloudpy.html#solrcloudpy.parameters.SearchOptions" title="solrcloudpy.parameters.SearchOptions"><tt class="xref py py-class docutils literal"><span class="pre">SearchOptions</span></tt></a> class
+makes this task more convenient. Using this class, one can make the
+following queries:</p>
+<blockquote>
+<div><ul class="simple">
+<li>normal search via <cite>commonparams</cite>  member variable</li>
+<li>MLT search via the <cite>mltparams</cite> member variable</li>
+<li>faceted search via the <cite>facetparams</cite> member variable</li>
+</ul>
+</div></blockquote>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre> &gt;&gt;&gt; se = SearchOptions()
+ &gt;&gt;&gt; se.commonparams.q(&quot;*:*&quot;).fl(&#39;title,author&#39;)
+ {&#39;q&#39;: set([&#39;*:*&#39;]), &#39;fl&#39;: set([&#39;title,author&#39;])}
+ &gt;&gt;&gt; se.facetparams.field(&quot;author&quot;)
+ {&#39;facet.field&#39;: set([&#39;id&#39;])}
+ &gt;&gt;&gt; conn.collection1.search(se)
+ {
+&quot;facet_counts&quot;: &quot;SolrResponse &lt;&lt; {&#39;facet_ranges&#39;: {}, &#39;facet_fields&#39;: {\n    \&quot;author\&quot;: \&quot;SolrResponse &lt;&lt; {&#39;William Saletan&#39;: 1325, &#39;Jun ...  &gt;&gt;&quot;,
+&quot;response&quot;: &quot;SolrResponse &lt;&lt; {&#39;start&#39;: 0, &#39;numFound&#39;: 74104, &#39;docs&#39;: [{u&#39;title&#39;: u&#39;The Case for Getting Drunk at Work&#39;, u&#39;author&#39; ...  &gt;&gt;&quot;
+ }
+</pre></div>
+</div>
+<div class="section" id="working-with-query-responses">
+<h2>Working with query responses<a class="headerlink" href="#working-with-query-responses" title="Permalink to this headline">¶</a></h2>
+<p>All query results are wrapped around a
+<a class="reference internal" href="apidocs/solrcloudpy.html#solrcloudpy.utils.SolrResponse" title="solrcloudpy.utils.SolrResponse"><tt class="xref py py-class docutils literal"><span class="pre">SolrResponse</span></tt></a> object.This object takes the
+JSON response for the Solr server and makes its keys accessible    by
+normal key syntax or attribute access  syntax</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">collection1</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">se</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span>
+<span class="go">{</span>
+<span class="go"> &quot;facet_counts&quot;: &quot;SolrResponse &lt;&lt; {&#39;facet_ranges&#39;: {}, &#39;facet_fields&#39;: {\n    \&quot;author\&quot;: \&quot;SolrResponse &lt;&lt; {&#39;William Saletan&#39;: 1325, &#39;Jun ...  &gt;&gt;&quot;,</span>
+<span class="go"> &quot;response&quot;: &quot;SolrResponse &lt;&lt; {&#39;start&#39;: 0, &#39;numFound&#39;: 74104, &#39;docs&#39;: [{u&#39;title&#39;: u&#39;The Case for Getting Drunk at Work&#39;, u&#39;author&#39; ...  &gt;&gt;&quot;</span>
+<span class="go">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">facet_counts</span>
+<span class="go">{</span>
+<span class="go"> &quot;facet_ranges&quot;: &quot;SolrResponse &lt;&lt; {} &gt;&gt;&quot;,</span>
+<span class="go"> &quot;facet_fields&quot;: &quot;SolrResponse &lt;&lt; {&#39;author&#39;: {\n    \&quot;William Saletan\&quot;: 1325, \n    \&quot;June Thomas\&quot;: 612, \n   \&quot;Mike  Steinberger\&quot;: 103, \n   ...  &gt;&gt;&quot;,</span>
+<span class="go"> &quot;facet_dates&quot;: &quot;SolrResponse &lt;&lt; {} &gt;&gt;&quot;,</span>
+<span class="go"> &quot;facet_queries&quot;: &quot;SolrResponse &lt;&lt; {} &gt;&gt;&quot;</span>
+<span class="go">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">facet_counts</span><span class="o">.</span><span class="n">facet_fields</span><span class="o">.</span><span class="n">author</span><span class="p">[</span><span class="s">&#39;Aisha Harris&#39;</span><span class="p">]</span>
+<span class="go">472</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Searching a collection</a><ul>
+<li><a class="reference internal" href="#working-with-query-responses">Working with query responses</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="console.html"
+                        title="previous chapter">Console</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="apidocs/modules.html"
+                        title="next chapter">API for solrcloudpy</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/searching.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apidocs/modules.html" title="API for solrcloudpy"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="console.html" title="Console"
+             >previous</a> |</li>
+        <li><a href="index.html">solrcloudpy 1.4.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, didier deshommes.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
