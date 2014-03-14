@@ -184,6 +184,7 @@ gh-pages:
 	rm -rf build _sources _static _modules
 	git checkout coll-api $(GH_PAGES_SOURCES)
 	git reset HEAD
-	make -f docs/Makefile html
+	cd docs
+	make html
 	mv -fv build/html/* ./
 	rm -rf $(GH_PAGES_SOURCES) build
