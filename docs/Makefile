@@ -8,7 +8,7 @@ PAPER         =
 BUILDDIR     = _build
 #BUILDDIR      = ../gh-pages/html
 
-GH_PAGES_SOURCES = docs/ docs/Makefile
+GH_PAGES_SOURCES = docs/ docs/apidocs docs/Makefile
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
@@ -184,6 +184,7 @@ gh-pages:
 	rm -rf build _sources _static _modules
 	git checkout coll-api $(GH_PAGES_SOURCES)
 	git reset HEAD
+	mkdir html
 	cd docs; make html
-	cd docs; mv -fv _build/html/* ./
+	cd docs; mv -fv _build/html/* ../html
 	rm -rf $(GH_PAGES_SOURCES) build
