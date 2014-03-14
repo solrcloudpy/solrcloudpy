@@ -32,7 +32,7 @@ Access an existing collection
 
 Index documents
 
-::     
+::
      
      >>> docs = [{"id":"1", "name":"a"},{"id":"2","name":"b"}]
      >>> collection.add(docs)
@@ -41,7 +41,10 @@ Index documents
 Search documents
 
 ::
-     >>> print collection.search(q='*:*')
+
+     >>> collection.search(q='*:*')
+
+     
  
      
 Console
