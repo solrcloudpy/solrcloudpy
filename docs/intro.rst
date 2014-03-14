@@ -8,7 +8,7 @@ Intro
 * Centralized index management
 * Near-realtime search
 
-The API is meant to be close to ``pymongo`` 's API, where one can access collections as simple attributes or dictionary keys.  
+The API is meant to be close to ``pymongo``'s API, where one can access collections as simple attributes or dictionary keys.  
 
 ::
 
@@ -25,3 +25,18 @@ The API is meant to be close to ``pymongo`` 's API, where one can access collect
          "response": "SolrResponse << {'start': 0, 'numFound': 0, 'docs': []} >>"
      }
 
+
+Installation
+--------------
+
+``solrcloudpy`` is available on pypi: ``pip install solrcloudpy``. To
+install the development version:
+
+``pip install
+git+https://github.com/dfdeshom/solrcloudpy.git#egg=solrcloudpy``
+
+
+Contributing
+-------------
+
+Send pull requests!
