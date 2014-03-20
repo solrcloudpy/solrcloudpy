@@ -5,7 +5,7 @@ with open('README.rst', 'r') as f:
 
 setup(
     name = "solrcloudpy",
-    version = "1.4.6",
+    version = "1.460.1",
     author = 'Didier Deshommes',
     author_email = 'dfdeshom@gmail.com',
     packages=find_packages(exclude=['ez_setup']),
