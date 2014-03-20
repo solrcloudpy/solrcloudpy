@@ -64,14 +64,14 @@ class Connection(object):
         Lists out the current collections in the cluster
         """
         params = {'detail':'false','path':'/collections'}
-        response = self.client.get('/solr/zookeeper',params)
+        response = self.client.get('/solr/zookeeper',params).result
         data = response['tree'][0]['children']
         colls = [node['data']['title'] for node in data]
         return colls
 
     def _list_cores(self):
         params = {'wt':'json',}
-        response = self.client.get('admin/cores',params)
+        response = self.client.get('admin/cores',params).result
         cores = response.get('status',{}).keys()
         return cores
 
@@ -82,7 +82,7 @@ class Connection(object):
         collections are returned, along with their state, otherwise an `OK` message is returned
         """
         params = {'detail':'true','path':'/clusterstate.json'}
-        response = self.client.get('/solr/zookeeper',params)
+        response = self.client.get('/solr/zookeeper',params).result
         data = json.loads(response['znode']['data'])
         res = []
         collections = self.list()
@@ -111,7 +111,7 @@ class Connection(object):
         Gets the cluster leader
         """
         params = {'detail':'true','path':'/overseer_elect/leader'}
-        response = self.client.get('/solr/zookeeper',params)
+        response = self.client.get('/solr/zookeeper',params).result
         return json.loads(response['znode']['data'])
 
     @property
@@ -120,7 +120,7 @@ class Connection(object):
         Lists all nodes that are currently online
         """
         params = {'detail':'true','path':'/live_nodes'}
-        response = self.client.get('/solr/zookeeper',params)
+        response = self.client.get('/solr/zookeeper',params).result
         children = [d['data']['title'] for d in response['tree'][0]['children']]
         nodes = [c.replace('_solr','') for c in children]
         return ["http://%s/solr/" % a for a in nodes]

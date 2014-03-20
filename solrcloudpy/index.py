@@ -3,7 +3,7 @@ Query and update a Solr collection. You not expected to use this class directly.
 """
 
 from contextlib import contextmanager
-from solrcloudpy.utils import SolrResponse, SolrException, _Request
+from solrcloudpy.utils import SolrException, _Request
 
 import datetime as dt
 import json
@@ -35,8 +35,6 @@ class SolrIndex(object):
     def _update(self,body):
         path = '%s/update/json' % self.collection
         resp = self._send(path,method='POST',params={},body=body)
-        if type(resp) != type({}):
-            raise SolrException(resp)
         return resp
 
     def search(self,params):
@@ -45,11 +43,7 @@ class SolrIndex(object):
         """
         path = "%s/select" % self.collection
         data = self._send(path,params)
-
-        if type(data) != type({}):
-            raise SolrException(data)
-
-        return SolrResponse(data)
+        return data
 
     def clustering(self,params):
         """
@@ -59,12 +53,8 @@ class SolrIndex(object):
         """
         path = "%s/clustering" % self.collection
         data = self._send(path,params)
-
-        if type(data) != type({}):
-            raise SolrException(data)
-
-        return SolrResponse(data)
-
+        return data
+    
     def mlt(self, params):
         """
         Perform a MoreLikeThis search the collection
@@ -73,10 +63,7 @@ class SolrIndex(object):
         """
         path = "%s/mlt" % self.collection
         data = self._send(path,params)
-        if type(data) != type({}):
-            raise SolrException(data)
-
-        return SolrResponse(data)
+        return data
 
     def add(self,docs):
         """
@@ -127,13 +114,13 @@ class SolrIndex(object):
                   'optimize': 'true'
                   }
         path = '%s/update' % self.collection
-        res = self.client.get(path,params=params)
-        return SolrException(res)
+        res = self.client.get(path,params=params).result
+        return res
 
     def commit(self):
         """ Commit changes to a collection """
-        response = self._update('{"commit":{}}')
-        return SolrException(response)
+        response = self._update('{"commit":{}}').result
+        return response
 
 
 @contextmanager

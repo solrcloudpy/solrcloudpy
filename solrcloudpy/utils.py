@@ -35,11 +35,12 @@ class _Request(object):
                                         params=resparams,
                                         headers=headers,data=body,timeout=10.0)
 
-                if r.status_code == requests.codes.ok:
-                    response = r.json()
-                else:
-                    response = r.text
-                return response
+                # if r.status_code == requests.codes.ok:
+                #     response = r.json()
+                # else:
+                #     response = r.text
+                return SolrResponse(r)
+            #return response
 
             except ConnectionError as e:
                 print 'exception: ', e
@@ -72,15 +73,44 @@ class DictObject(object):
         return self.__dict__[val]
 
 
-class SolrResponse(DictObject):
-    """ A generic representation of a solr response """
+class SolrResult(DictObject):
     def __repr__(self):
         value = SolrResponseJSONEncoder(indent=4).encode(self.__dict__)
         return value
 
+class SolrResponse(object):
+    """
+    A generic representation of a solr response.
+
+    """
+    def __init__(self,response_obj):
+        """
+        Init this object. This objects contains both the response object variable
+        from the `requests` package and the parsed content in a :class:`~SolrResult`
+
+        :param response_object: the `Response` object from the `requests` package
+        """
+        # try to parse the content of this response as json
+        # if that fails, try to save the text
+        result = None
+        try:
+            result = response_obj.json()
+        except ValueError:
+            result = {"error":response_obj.text}
+            
+        self.result = SolrResult(result)
+        self._response_obj = response_obj
+
+    @property
+    def code(self):
+        return self._response_obj.status_code
+
+    def __repr__(self):
+        return "<SolrResponse [%s]>" % self.code
+
 class SolrResponseJSONEncoder(json.JSONEncoder):
     def default(self, o):
-        if type(o) == type(SolrResponse({})):
+        if type(o) == type(SolrResult({})):
             val = str(o.__dict__)
             if len(val) > 200:
                 s = val[:100] + ' ... '
