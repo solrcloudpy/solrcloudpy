@@ -29,6 +29,6 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Indexing/Search'
         ],
 
-    install_requires = ['requests == 1.2.0',],
+    install_requires = ['requests == 2.3.0',],
     extras_require = {"ip": ['IPython == 1.2.0'] }, 
         )
