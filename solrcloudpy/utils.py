@@ -72,7 +72,6 @@ class DictObject(object):
     def __getitem__(self, val):
         return self.__dict__[val]
 
-
 class SolrResult(DictObject):
     def __repr__(self):
         value = SolrResponseJSONEncoder(indent=4).encode(self.__dict__)
@@ -97,7 +96,7 @@ class SolrResponse(object):
             result = response_obj.json()
         except ValueError:
             result = {"error":response_obj.text}
-            
+
         self.result = SolrResult(result)
         self._response_obj = response_obj
 
