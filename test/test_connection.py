@@ -1,7 +1,6 @@
 import unittest
 from solr_instance import SolrInstance
-from solrcloudpy import Connection
-from solrcloudpy import Collection
+from solrcloudpy import Connection, Collection
 
 class TestConnection(unittest.TestCase):
     def setUp(self):
@@ -11,7 +10,7 @@ class TestConnection(unittest.TestCase):
         self.conn = Connection()
 
     def tearDown(self):
-        self.conn.test2.delete()
+        #
         self.solrprocess.terminate()
 
     def test_list(self):
@@ -29,6 +28,7 @@ class TestConnection(unittest.TestCase):
     def test_create_collection(self):
         coll = self.conn.create_collection('test2')
         self.assertTrue(isinstance(coll,Collection))
-
+        self.conn.test2.delete()
+        
 if __name__ == '__main__':
     unittest.main()

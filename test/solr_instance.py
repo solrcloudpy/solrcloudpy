@@ -12,14 +12,17 @@ class SolrInstance(object):
         running_instances[self.name] = self
 
     def start(self):
+        subprocess.Popen(['rm -rf /home/dfdeshom/code/solr-4.6.0/example/solr/zoo_data/version-2/'],shell=True)
+        subprocess.Popen(['rm -rf /home/dfdeshom/code/solr-4.6.0/example/solr/coll2*'],shell=True)
+
         args = [
-        'java -Dcollection.configName=myconf -DzkRun -DnumShards=1 -jar start.jar>/dev/null',
+        'java -Dcollection.configName=myconf -Dbootstrap_confdir=./solr/collection1/conf -DzkRun -DnumShards=1 -jar start.jar',
             ]
 
         self._process = subprocess.Popen(args=args,
                                          shell=True,
                                          cwd='/home/dfdeshom/code/solr-4.6.0/example')
-        
+
     def wait_ready(self):
         while True:
             try:
@@ -49,6 +52,8 @@ def _cleanup():
 
 def _remove_all():
     subprocess.Popen(['killall -9 java'],shell=True)
-    
+    subprocess.Popen(['rm -rf /home/dfdeshom/code/solr-4.6.0/example/solr/zoo_data/version-2/'],shell=True)
+    subprocess.Popen(['rm -rf /home/dfdeshom/code/solr-4.6.0/example/solr/coll2*'],shell=True)
+
 atexit.register(_cleanup)
 atexit.register(_remove_all)
