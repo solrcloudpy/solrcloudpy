@@ -31,7 +31,6 @@ Support will be coming for the following endpoints:
      }
 
 """
-import solrcloudpy.collection.search as search
 from solrcloudpy.utils import SolrException, CollectionBase
 
 import time
@@ -240,7 +239,3 @@ class CollectionAdmin(CollectionBase):
 
     def __repr__(self):
         return "Collection<%s>" % self.name
-
-
-class Collection(CollectionAdmin,search.CollectionSearch):
-    pass
