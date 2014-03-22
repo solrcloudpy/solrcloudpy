@@ -22,7 +22,11 @@ class _Request(object):
                        'omitHeader':'true',
                        'json.nl':'map'}
 
-        resparams = itertools.chain(params.iteritems(),
+        # pass either a dictionary or a tuple
+        if hasattr(params,'iteritems'):
+            params = params.iteritems()
+            
+        resparams = itertools.chain(params,
                                     extraparams.iteritems())
 
         servers = list(self.connection.servers)
