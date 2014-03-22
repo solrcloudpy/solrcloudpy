@@ -242,5 +242,5 @@ class CollectionAdmin(CollectionBase):
         return "Collection<%s>" % self.name
 
 
-class Collection(CollectionAdmin,index.SolrIndex):
+class Collection(CollectionAdmin,index.CollectionSearch):
     pass
