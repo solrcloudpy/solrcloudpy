@@ -6,7 +6,7 @@
 
 
 solrcloudpy documentation
------------------
+---------------------------
 
 .. toctree::
    :maxdepth: 2
@@ -14,6 +14,12 @@ solrcloudpy documentation
    intro
    console
    searching
+
+API
+-----
+.. toctree::
+   :maxdepth: 2
+
    apidocs/modules
    
 

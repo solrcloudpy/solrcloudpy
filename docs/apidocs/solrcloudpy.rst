@@ -19,21 +19,23 @@ solrcloudpy.connection module
     :undoc-members:
     :show-inheritance:
 
-solrcloudpy.parameters module
------------------------------
+..
+   solrcloudpy.parameters module
+   -----------------------------
 
-.. automodule:: solrcloudpy.parameters
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   .. automodule:: solrcloudpy.parameters
+       :members:
+       :undoc-members:
+       :show-inheritance:
 
-solrcloudpy.utils module
-------------------------
+..
+   solrcloudpy.utils module
+   ------------------------
 
-.. automodule:: solrcloudpy.utils
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   .. automodule:: solrcloudpy.utils
+       :members:
+       :undoc-members:
+       :show-inheritance:
 
 
 Module contents
