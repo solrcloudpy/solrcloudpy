@@ -1,5 +1,5 @@
-API for solrcloudpy
-====================
+solrcloudpy
+===========
 
 .. toctree::
    :maxdepth: 4

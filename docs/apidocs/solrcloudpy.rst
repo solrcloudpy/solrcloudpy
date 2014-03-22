@@ -1,6 +1,13 @@
 solrcloudpy package
 ===================
 
+Subpackages
+-----------
+
+.. toctree::
+
+    solrcloudpy.collection
+
 Submodules
 ----------
 
@@ -8,37 +15,24 @@ solrcloudpy.connection module
 -----------------------------
 
 .. automodule:: solrcloudpy.connection
-    :synopsis: Tools for connecting to solr
     :members:
     :undoc-members:
-    :show-inheritance:
-
-solrcloudpy.collection module
------------------------------
-
-.. automodule:: solrcloudpy.collection
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-solrcloudpy.index module
-------------------------
-
-.. automodule:: solrcloudpy.index
-    :members:
     :show-inheritance:
 
 solrcloudpy.parameters module
 -----------------------------
 
-.. autoclass:: solrcloudpy.parameters.SearchOptions
-
+.. automodule:: solrcloudpy.parameters
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 solrcloudpy.utils module
 ------------------------
 
 .. automodule:: solrcloudpy.utils
     :members:
+    :undoc-members:
     :show-inheritance:
 
 
