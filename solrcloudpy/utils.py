@@ -65,7 +65,6 @@ class CollectionBase(object):
         self.name = name
         self.client = _Request(connection)
 
-
 class DictObject(object):
     def __init__(self, obj):
         if not obj:
