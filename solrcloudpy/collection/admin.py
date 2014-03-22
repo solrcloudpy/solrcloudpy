@@ -1,35 +1,5 @@
 """
-Manage a Solr Collection.
-
-The Collections API is used to enable you to create, remove, or reload collections.
-Consult the `Collections API <https://cwiki.apache.org/confluence/display/solr/Collections+API>`_ for more details
-
-    >>> from solrcloudpy.connection import Connection
-    >>> conn = Connection()
-    >>> coll = conn['test1'].create('test1')
-    >>> coll
-    Collection<collection1>
-
-This class is also used for query a Solr collection. The endpoints supported by default are:
-
- - `/select` : the default Solr request handler
- - `/mlt`: the request handler for doing *more like this* search
- - `/clustering`: Solr's clustering component
-
-Support will be coming for the following endpoints:
-
- - `/get`: Solr's real-time get request handler
- - `/highlight`: Solr's search highlight component
- - `/terms`: Term component
-
-
-     >>> from solrcloudpy import Connection
-     >>> coll = Connection()['collection1']
-     >>> coll.search(**{'q':'money'})
-     {
-         "response": "SolrResponse << {'start': 0, 'numFound': 0, 'docs': []} >>"
-     }
-
+Manage and administer a collection
 """
 from solrcloudpy.utils import SolrException, CollectionBase
 
@@ -39,8 +9,7 @@ import requests
 
 class CollectionAdmin(CollectionBase):
     """
-    Class to create, remove, reload, split, migrate collections
-
+    Manage and administer a collection
     """
 
     def exists(self):
@@ -114,12 +83,12 @@ class CollectionAdmin(CollectionBase):
                         time.sleep(1)
                     else: break
 
-                    return Collection(self.connection,self.name)
+                    return CollectionAdmin(self.connection,self.name)
             else:
                 raise SolrException(str(res))
 
         # this collection is already present, just return it
-        return Collection(self.connection,self.name)
+        return CollectionAdmin(self.connection,self.name)
 
     def _is_index_created(self):
         server = list(self.connection.servers)[0]

@@ -1,5 +1,5 @@
 """
-Query and update a Solr collection. You not expected to use this class directly.
+Query and update a Solr collection
 """
 
 from solrcloudpy.utils import SolrException, CollectionBase
