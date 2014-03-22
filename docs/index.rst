@@ -4,9 +4,12 @@
    contain the root `toctree` directive.
 
 
+Welcome to solrcloudpy
+======================
 
-solrcloudpy documentation
----------------------------
+
+User's Guide
+------------
 
 .. toctree::
    :maxdepth: 2
@@ -15,18 +18,10 @@ solrcloudpy documentation
    console
    searching
 
-API
------
+API reference
+-------------
 .. toctree::
    :maxdepth: 2
 
-   apidocs/modules
-   
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   apidocs/solrcloudpy
 

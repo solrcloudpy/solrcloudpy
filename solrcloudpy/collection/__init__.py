@@ -39,6 +39,29 @@ from .search import CollectionSearch
 
 class Collection(CollectionAdmin,CollectionSearch):
     def create(self, replication_factor=1, force=False, **kwargs):
+        """
+        Create a collection
+
+        :param num_shards: an integer indicating the number of shards for this collection
+
+        :param replication_factor: an integer indicating the number of replcas for this collection
+
+        :param force: a boolean value indicating whether to force the operation
+
+        :param kwargs: additional parameters to be passed to this operation
+
+        :Additional Parameters:
+          - `router_name`: router name that will be used. defines how documents will be distributed among the shards
+          - `num_shards`: number of shards to create for this collection
+          - `shards`: A comma separated list of shard names. Required when using the `implicit` router
+          - `max_shards_per_node`: max number of shards/replicas to put on a node for this collection
+          - `create_node_set`: Allows defining which nodes to spread the new collection across.
+          - `collection_config_name`: the name of the configuration to use for this collection
+          - `router_field`: if this field is specified, the router will look at the value of the field in an input document to compute the hash and identify of a shard instead of looking at the `uniqueKey` field
+
+        Additional parameters are further documented at https://cwiki.apache.org/confluence/display/solr/Collections+API#CollectionsAPI-CreateaCollection
+        """
+
         admin = super(Collection,self).create(replication_factor,
                                               force, **kwargs)
         return Collection(admin.connection,admin.name)

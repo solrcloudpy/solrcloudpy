@@ -1,47 +1,18 @@
-solrcloudpy package
-===================
+API
+===
 
-Subpackages
------------
-
-.. toctree::
-
-    solrcloudpy.collection
-
-Submodules
-----------
-
-solrcloudpy.connection module
------------------------------
-
+Connection object
+-----------------
 .. automodule:: solrcloudpy.connection
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :inherited-members:
 
-..
-   solrcloudpy.parameters module
-   -----------------------------
+Collection object
+------------------
+.. automodule:: solrcloudpy.collection
+   :members:
+   :inherited-members:
 
-   .. automodule:: solrcloudpy.parameters
-       :members:
-       :undoc-members:
-       :show-inheritance:
-
-..
-   solrcloudpy.utils module
-   ------------------------
-
-   .. automodule:: solrcloudpy.utils
-       :members:
-       :undoc-members:
-       :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: solrcloudpy
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autoclass:: solrcloudpy.Collection
+   :members:
+   :inherited-members:

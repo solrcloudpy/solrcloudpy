@@ -1,5 +1,5 @@
-Console
-========
+Using the console
+=================
 
 ``solrcloudpy`` comes with a console that can be run simply by typing
 ``solrconsole``. It has a few convenniences, such as an already-created
