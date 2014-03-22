@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Searching a collection &mdash; solrcloudpy 1.4.6 documentation</title>
+    <title>Searching a collection &mdash; solrcloudpy 1.460.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.4.6',
+        VERSION:     '1.460.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,11 +23,18 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="solrcloudpy 1.4.6 documentation" href="index.html" />
-    <link rel="next" title="API for solrcloudpy" href="apidocs/modules.html" />
-    <link rel="prev" title="Console" href="console.html" /> 
+    <link rel="top" title="solrcloudpy 1.460.1 documentation" href="index.html" />
+    <link rel="next" title="API" href="apidocs/solrcloudpy.html" />
+    <link rel="prev" title="Using the console" href="console.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
   <body>
+  
+  
+
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -38,12 +45,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="apidocs/modules.html" title="API for solrcloudpy"
+          <a href="apidocs/solrcloudpy.html" title="API"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="console.html" title="Console"
+          <a href="console.html" title="Using the console"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">solrcloudpy 1.4.6 documentation</a> &raquo;</li> 
+        <li><a href="index.html">solrcloudpy 1.460.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -55,7 +62,7 @@
   <div class="section" id="searching-a-collection">
 <h1>Searching a collection<a class="headerlink" href="#searching-a-collection" title="Permalink to this headline">¶</a></h1>
 <p>Although one can use plain dictionaries to pass parameters to solr,
-the <a class="reference internal" href="apidocs/solrcloudpy.html#solrcloudpy.parameters.SearchOptions" title="solrcloudpy.parameters.SearchOptions"><tt class="xref py py-class docutils literal"><span class="pre">SearchOptions</span></tt></a> class
+the <tt class="xref py py-class docutils literal"><span class="pre">SearchOptions</span></tt> class
 makes this task more convenient. Using this class, one can make the
 following queries:</p>
 <blockquote>
@@ -98,7 +105,7 @@ the documentation: <a class="reference external" href="http://wiki.apache.org/so
 <h2>More Like This search<a class="headerlink" href="#more-like-this-search" title="Permalink to this headline">¶</a></h2>
 <p>More Like This (MLT) is a Solr feature that returns documents similar
 to the result of a query. This is supported in <cite>solrcloudpy</cite> via the
-<a class="reference internal" href="apidocs/solrcloudpy.html#solrcloudpy.index.SolrIndex.mlt" title="solrcloudpy.index.SolrIndex.mlt"><tt class="xref py py-meth docutils literal"><span class="pre">mlt()</span></tt></a> method.</p>
+<tt class="xref py py-meth docutils literal"><span class="pre">mlt()</span></tt> method.</p>
 <p>Example</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">commonparams</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="s">&quot;nsa&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">mltparams</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&quot;5&quot;</span><span class="p">)</span>
@@ -113,7 +120,7 @@ to the result of a query. This is supported in <cite>solrcloudpy</cite> via the
 <div class="section" id="working-with-query-responses">
 <h2>Working with query responses<a class="headerlink" href="#working-with-query-responses" title="Permalink to this headline">¶</a></h2>
 <p>All query results are wrapped around a
-<a class="reference internal" href="apidocs/solrcloudpy.html#solrcloudpy.utils.SolrResponse" title="solrcloudpy.utils.SolrResponse"><tt class="xref py py-class docutils literal"><span class="pre">SolrResponse</span></tt></a> object.This object takes the
+<tt class="xref py py-class docutils literal"><span class="pre">SolrResponse</span></tt> object.This object takes the
 JSON response for the Solr server and makes its keys accessible  by
 normal key syntax or attribute access  syntax.</p>
 <p>Example:</p>
@@ -153,13 +160,13 @@ normal key syntax or attribute access  syntax.</p>
 </ul>
 </li>
 </ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="console.html"
-                        title="previous chapter">Console</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="apidocs/modules.html"
-                        title="next chapter">API for solrcloudpy</a></p>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="console.html" title="previous chapter">Using the console</a></li>
+      <li>Next: <a href="apidocs/solrcloudpy.html" title="next chapter">API</a></li>
+  </ul></li>
+</ul>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/searching.txt"
@@ -182,27 +189,10 @@ normal key syntax or attribute access  syntax.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="apidocs/modules.html" title="API for solrcloudpy"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="console.html" title="Console"
-             >previous</a> |</li>
-        <li><a href="index.html">solrcloudpy 1.4.6 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
-    <div class="footer">
-        &copy; Copyright 2014, didier deshommes.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
-    </div>
+  <div class="footer">
+    &copy; Copyright 2014, didier deshommes.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
   </body>
 </html>
