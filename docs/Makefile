@@ -8,7 +8,7 @@ PAPER         =
 BUILDDIR     = _build
 #BUILDDIR      = ../gh-pages/html
 
-GH_PAGES_SOURCES = docs/ docs/apidocs docs/Makefile
+GH_PAGES_SOURCES = ./ ./apidocs ./Makefile
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
