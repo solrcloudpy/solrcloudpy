@@ -3,7 +3,7 @@ Query and update a Solr collection. You not expected to use this class directly.
 """
 
 from contextlib import contextmanager
-from solrcloudpy.utils import SolrException, _Request
+from solrcloudpy.utils import SolrException, CollectionBase
 
 import datetime as dt
 import json
@@ -12,36 +12,30 @@ import logging
 log = logging.getLogger('solrcloud')
 dthandler = lambda obj: obj.isoformat() if isinstance(obj, dt.datetime) else None
 
-class SolrIndex(object):
-    """ """
-    def __init__(self,connection,collection):
-        """
-        Search for documents inside a collection
-
-        :param connection: a ``Connection`` to the solr server
-
-        :param collection: the ``Collection`` object that will be searched
-        """
-        self.connection = connection
-        self.collection = collection
-        self.client = _Request(self.connection)
+class SolrIndex(CollectionBase):
+    """
+    Performs search-related operations on a collection
+    """
 
     def __repr__(self):
-        return "SolrIndex<%s>" % self.collection
+        return "SolrIndex<%s>" % self.name
 
     def _send(self,path,params,method='GET',body=None):
         return self.client.request(path,params,method=method,body=body)
 
     def _update(self,body):
-        path = '%s/update/json' % self.collection
+        path = '%s/update/json' % self.name
         resp = self._send(path,method='POST',params={},body=body)
         return resp
 
     def search(self,params):
         """
-        Search the collection
+        Search this index
+
+        :param params: query parameters. Here `params` can be any container that has an `iteritems()` method.
+
         """
-        path = "%s/select" % self.collection
+        path = "%s/select" % self.name
         data = self._send(path,params)
         return data
 
@@ -51,17 +45,19 @@ class SolrIndex(object):
 
         :param params: clustering query parameters
         """
-        path = "%s/clustering" % self.collection
+        path = "%s/clustering" % self.name
         data = self._send(path,params)
         return data
-    
+
     def mlt(self, params):
         """
-        Perform a MoreLikeThis search the collection
+        Perform MLT on this index
+
+        :param params: query parameters. Here `params` can be any container that has an `iteritems()` method.
 
         :param params: MLT query parameters
         """
-        path = "%s/mlt" % self.collection
+        path = "%s/mlt" % self.name
         data = self._send(path,params)
         return data
 
@@ -113,7 +109,7 @@ class SolrIndex(object):
                   'waitSearcher': waitsearcher,
                   'optimize': 'true'
                   }
-        path = '%s/update' % self.collection
+        path = '%s/update' % self.name
         res = self.client.get(path,params=params).result
         return res
 

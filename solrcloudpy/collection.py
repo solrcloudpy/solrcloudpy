@@ -32,21 +32,17 @@ Support will be coming for the following endpoints:
 
 """
 import solrcloudpy.index as index
-from solrcloudpy.utils import _Request, SolrException
+from solrcloudpy.utils import SolrException, CollectionBase
 
 import time
 import json
 import requests
 
-class Collection(object):
+class CollectionAdmin(CollectionBase):
     """
     Class to create, remove, reload, split, migrate collections
 
     """
-    def __init__(self,connection,name):
-        self.connection = connection
-        self.name = name
-        self.client = _Request(connection)
 
     def exists(self):
         """
@@ -151,7 +147,7 @@ class Collection(object):
                 return True
         return False
 
-    def delete(self):
+    def drop(self):
         """
         Delete a collection
         """
@@ -226,23 +222,6 @@ class Collection(object):
                   'shard':shard}
         return self.client.get('admin/collections',params).result
 
-    def search(self, params):
-        """
-        Search this index
-
-        :param params: query parameters. Here `params` can be any container that has an `iteritems()` method.
-        """
-        ind = index.SolrIndex(self.connection,self.name)
-        return ind.search(params)
-
-    def mlt(self, params):
-        """
-        Perform MLT on this index
-
-        :param params: query parameters. Here `params` can be any container that has an `iteritems()` method.
-        """
-        ind = index.SolrIndex(self.connection,self.name)
-        return ind.mlt(params)
 
     @property
     def state(self):
@@ -259,10 +238,9 @@ class Collection(object):
     def shards(self):
         return self.state
 
-    def __getattr__(self,name):
-        """Access any other attributes of this index"""
-        ind = index.SolrIndex(self.connection,self.name)
-        return getattr(ind,name)
-
     def __repr__(self):
         return "Collection<%s>" % self.name
+
+
+class Collection(CollectionAdmin,index.SolrIndex):
+    pass

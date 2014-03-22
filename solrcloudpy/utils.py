@@ -56,6 +56,16 @@ class _Request(object):
     def get(self,path,params):
         return self.request(path,params,method='GET')
 
+class CollectionBase(object):
+    """
+    Base class for operations on collections
+    """
+    def __init__(self,connection,name):
+        self.connection = connection
+        self.name = name
+        self.client = _Request(connection)
+
+
 class DictObject(object):
     def __init__(self, obj):
         if not obj:
