@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 class BaseParams(object):
-    def __init__(self, query=None, *args, **kwargs):
+    def __init__(self, query=None, **kwargs):
         self._q = defaultdict(set)
         if query:
             self._q['q'].add(query)
@@ -39,7 +39,8 @@ class BaseParams(object):
 
 class CommonParams(BaseParams):
     """
-    Common parameters passed to search queries
+    Common parameters passed to search queries. These parameters
+    are usually found under Solr's `/select` handler
     """
     def q(self,query):
         self._q['q'].add(query)
@@ -225,8 +226,8 @@ class SearchOptions(object):
         >>> se
         {'commonparams': {'q': set(['*:*']), 'fl': set(['*,score'])}, 'facetparams': {'facet.field': set(['id'])}, 'mltparams': {}}
     """
-    def __init__(self):
-        self.commonparams = CommonParams()
+    def __init__(self, **kwargs):
+        self.commonparams = CommonParams(**kwargs)
         self.facetparams = FacetParams()
         self.mltparams = MLTParams()
         self._all = [self.commonparams,

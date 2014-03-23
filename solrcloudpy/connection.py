@@ -1,7 +1,7 @@
 """
 Connecting to a set of solr servers.
 
-To get a :class:`~solrcloudpy.collection.Collection` instance from a :class:`Connection` use either dictionary-style or attribute-style access:
+To get a :class:`~solrcloudpy.Collection` instance from a :class:`Connection` use either dictionary-style or attribute-style access:
 
 
     >>> from solrcloudpy.connection import Connection

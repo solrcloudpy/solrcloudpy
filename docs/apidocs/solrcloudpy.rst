@@ -16,3 +16,9 @@ Collection object
 .. autoclass:: solrcloudpy.Collection
    :members:
    :inherited-members:
+
+SearchOptions object
+--------------------
+.. autoclass:: solrcloudpy.parameters.SearchOptions
+   :members:
+   :inherited-members:
