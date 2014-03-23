@@ -29,7 +29,7 @@ class CollectionSearch(CollectionBase):
         """
         Search this index
 
-        :param params: query parameters. Here `params` can be a :class:`~solrcloudpy.parameters.Searchoptions` instance, a dictionary or a list of tuples
+        :param params: query parameters. Here `params` can be a :class:`~solrcloudpy.parameters.SearchOptions` instance, a dictionary or a list of tuples
 
         """
         path = "%s/select" % self.name
@@ -40,7 +40,7 @@ class CollectionSearch(CollectionBase):
         """
         Perform clustering on a query
 
-        :param params: query parameters. Here `params` can be a :class:`~solrcloudpy.parameters.Searchoptions` instance, a dictionary or a list of tuples
+        :param params: query parameters. Here `params` can be a :class:`~solrcloudpy.parameters.SearchOptions` instance, a dictionary or a list of tuples
 
         """
         path = "%s/clustering" % self.name
@@ -51,7 +51,7 @@ class CollectionSearch(CollectionBase):
         """
         Perform MLT on this index
 
-        :param params: query parameters. Here `params` can be a :class:`~solrcloudpy.parameters.Searchoptions` instance, a dictionary or a list of tuples
+        :param params: query parameters. Here `params` can be a :class:`~solrcloudpy.parameters.SearchOptions` instance, a dictionary or a list of tuples
         """
         path = "%s/mlt" % self.name
         data = self._send(path,params)
