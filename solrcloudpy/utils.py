@@ -88,7 +88,19 @@ class DictObject(object):
 class SolrResult(DictObject):
     """
     Generic representation of a Solr search result. The response is a
-    :class:`~dict`-like object.
+    object whose attributes can be also accessed as dictionary keys.
+
+    Example:
+
+         >>> result
+         {
+         "response": "SolrResponse << {'start': 0, 'numFound': 0, 'docs': []} >>"
+         }
+         >>> result['response'].start
+         0
+         >>> result.response.numFound
+         0
+
     """
     def __repr__(self):
         value = SolrResponseJSONEncoder(indent=4).encode(self.__dict__)
