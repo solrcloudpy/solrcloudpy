@@ -25,7 +25,7 @@ class _Request(object):
         # pass either a dictionary or a tuple
         if hasattr(params,'iteritems'):
             params = params.iteritems()
-            
+
         resparams = itertools.chain(params,
                                     extraparams.iteritems())
 
@@ -86,19 +86,22 @@ class DictObject(object):
         return self.__dict__[val]
 
 class SolrResult(DictObject):
+    """
+    Generic representation of a Solr search result. The response is a
+    :class:`~dict`-like object.
+    """
     def __repr__(self):
         value = SolrResponseJSONEncoder(indent=4).encode(self.__dict__)
         return value
 
 class SolrResponse(object):
     """
-    A generic representation of a solr response.
+    A generic representation of a solr response. This objects contains both the `Response` object variable from the `requests` package and the parsed content in a :class:`~solrcloudpy.utils.SolrResult` instance.
 
     """
     def __init__(self,response_obj):
         """
-        Init this object. This objects contains both the response object variable
-        from the `requests` package and the parsed content in a :class:`~SolrResult`
+        Init this object.
 
         :param response_object: the `Response` object from the `requests` package
         """
@@ -115,6 +118,7 @@ class SolrResponse(object):
 
     @property
     def code(self):
+        """Status code of this response"""
         return self._response_obj.status_code
 
     def __repr__(self):
