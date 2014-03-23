@@ -7,6 +7,12 @@
 Welcome to solrcloudpy
 ======================
 
+Welcome to solrcloudpy
+----------------------
+This is `solrcloudpy`, a python library to insteract with an
+installation of Solrcloud. Look over the quick examples over at
+:doc:`searching` to see how to use it. The internals of the library
+are detailed in the :doc:`apidocs/solrcloudpy` .
 
 User's Guide
 ------------

@@ -25,6 +25,10 @@ The API is meant to be close to ``pymongo``'s API, where one can access collecti
          "response": "SolrResponse << {'start': 0, 'numFound': 0, 'docs': []} >>"
      }
 
+Pre-requisites
+-------------
+You will need to run Solr in "cloud" mode to use this library. To use
+the console, you will need to install the `ipython` package.
 
 Installation
 --------------
