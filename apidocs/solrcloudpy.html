@@ -60,7 +60,7 @@
 <div class="section" id="module-solrcloudpy.connection">
 <span id="connection-object"></span><h2>Connection object<a class="headerlink" href="#module-solrcloudpy.connection" title="Permalink to this headline">¶</a></h2>
 <p>Connecting to a set of solr servers.</p>
-<p>To get a <tt class="xref py py-class docutils literal"><span class="pre">Collection</span></tt> instance from a <a class="reference internal" href="#solrcloudpy.connection.Connection" title="solrcloudpy.connection.Connection"><tt class="xref py py-class docutils literal"><span class="pre">Connection</span></tt></a> use either dictionary-style or attribute-style access:</p>
+<p>To get a <a class="reference internal" href="#solrcloudpy.Collection" title="solrcloudpy.Collection"><tt class="xref py py-class docutils literal"><span class="pre">Collection</span></tt></a> instance from a <a class="reference internal" href="#solrcloudpy.connection.Connection" title="solrcloudpy.connection.Connection"><tt class="xref py py-class docutils literal"><span class="pre">Connection</span></tt></a> use either dictionary-style or attribute-style access:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">solrcloudpy.connection</span> <span class="kn">import</span> <span class="n">Connection</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
@@ -201,7 +201,7 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> &#8211; clustering query parameters</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> &#8211; query parameters. Here <cite>params</cite> can be a <a class="reference internal" href="#solrcloudpy.parameters.SearchOptions" title="solrcloudpy.parameters.SearchOptions"><tt class="xref py py-class docutils literal"><span class="pre">SearchOptions</span></tt></a> instance, a dictionary or a list of tuples</td>
 </tr>
 </tbody>
 </table>
@@ -363,11 +363,7 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>params</strong> &#8211; query parameters. Here <cite>params</cite> can be any container that has an <cite>iteritems()</cite> method.</li>
-<li><strong>params</strong> &#8211; MLT query parameters</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> &#8211; query parameters. Here <cite>params</cite> can be a <a class="reference internal" href="#solrcloudpy.parameters.SearchOptions" title="solrcloudpy.parameters.SearchOptions"><tt class="xref py py-class docutils literal"><span class="pre">SearchOptions</span></tt></a> instance, a dictionary or a list of tuples</td>
 </tr>
 </tbody>
 </table>
@@ -406,7 +402,7 @@ by opening a new searcher</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> &#8211; query parameters. Here <cite>params</cite> can be any container that has an <cite>iteritems()</cite> method.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> &#8211; query parameters. Here <cite>params</cite> can be a <a class="reference internal" href="#solrcloudpy.parameters.SearchOptions" title="solrcloudpy.parameters.SearchOptions"><tt class="xref py py-class docutils literal"><span class="pre">SearchOptions</span></tt></a> instance, a dictionary or a list of tuples</td>
 </tr>
 </tbody>
 </table>
@@ -440,6 +436,70 @@ by opening a new searcher</li>
 </dd></dl>
 
 </div>
+<div class="section" id="searchoptions-object">
+<h2>SearchOptions object<a class="headerlink" href="#searchoptions-object" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="solrcloudpy.parameters.SearchOptions">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.parameters.</tt><tt class="descname">SearchOptions</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#solrcloudpy.parameters.SearchOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manage options to pass to a solr query</p>
+<p>Although one can use plain dictionaries to pass parameters to solr, this class
+makes this task more convenient. Currently, it covers all options to pass to do:</p>
+<blockquote>
+<div><ul class="simple">
+<li>MLT search via the <cite>mltparams</cite>  member variable</li>
+<li>normal search via <cite>commonparams</cite> member variable</li>
+<li>faceted search via the <cite>facetparams</cite> member variable</li>
+</ul>
+</div></blockquote>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">se</span> <span class="o">=</span> <span class="n">SearchOptions</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">commonparams</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="s">&quot;*:*&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fl</span><span class="p">(</span><span class="s">&#39;*,score&#39;</span><span class="p">)</span>
+<span class="go">{&#39;q&#39;: set([&#39;*:*&#39;]), &#39;fl&#39;: set([&#39;*,score&#39;])}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">se</span><span class="o">.</span><span class="n">facetparams</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">)</span>
+<span class="go">{&#39;facet.field&#39;: set([&#39;id&#39;])}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">se</span>
+<span class="go">{&#39;commonparams&#39;: {&#39;q&#39;: set([&#39;*:*&#39;]), &#39;fl&#39;: set([&#39;*,score&#39;])}, &#39;facetparams&#39;: {&#39;facet.field&#39;: set([&#39;id&#39;])}, &#39;mltparams&#39;: {}}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="solrresponse-object">
+<h2>SolrResponse object<a class="headerlink" href="#solrresponse-object" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="solrcloudpy.utils.SolrResponse">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.utils.</tt><tt class="descname">SolrResponse</tt><big>(</big><em>response_obj</em><big>)</big><a class="headerlink" href="#solrcloudpy.utils.SolrResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>A generic representation of a solr response. This objects contains both the <cite>Response</cite> object variable from the <cite>requests</cite> package and the parsed content in a <a class="reference internal" href="#solrcloudpy.utils.SolrResult" title="solrcloudpy.utils.SolrResult"><tt class="xref py py-class docutils literal"><span class="pre">SolrResult</span></tt></a> instance.</p>
+<dl class="attribute">
+<dt id="solrcloudpy.utils.SolrResponse.code">
+<tt class="descname">code</tt><a class="headerlink" href="#solrcloudpy.utils.SolrResponse.code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Status code of this response</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="solrresult-object">
+<h2>SolrResult object<a class="headerlink" href="#solrresult-object" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="solrcloudpy.utils.SolrResult">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.utils.</tt><tt class="descname">SolrResult</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#solrcloudpy.utils.SolrResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic representation of a Solr search result. The response is a
+object whose attributes can be also accessed as dictionary keys.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">{</span>
+<span class="go">&quot;response&quot;: &quot;SolrResponse &lt;&lt; {&#39;start&#39;: 0, &#39;numFound&#39;: 0, &#39;docs&#39;: []} &gt;&gt;&quot;</span>
+<span class="go">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s">&#39;response&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">start</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">numFound</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -453,6 +513,9 @@ by opening a new searcher</li>
 <li><a class="reference internal" href="#">API</a><ul>
 <li><a class="reference internal" href="#module-solrcloudpy.connection">Connection object</a></li>
 <li><a class="reference internal" href="#module-solrcloudpy.collection">Collection object</a></li>
+<li><a class="reference internal" href="#searchoptions-object">SearchOptions object</a></li>
+<li><a class="reference internal" href="#solrresponse-object">SolrResponse object</a></li>
+<li><a class="reference internal" href="#solrresult-object">SolrResult object</a></li>
 </ul>
 </li>
 </ul>
