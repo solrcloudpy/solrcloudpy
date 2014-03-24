@@ -58,7 +58,10 @@ Console
      Use the 'conn' object to access a collection
 
      Type 'collections' to see the list of available collections
-     solr localhost:8983> conn.collection1.search('sd')
+     solr localhost:8983> resp = conn.collection1.search('sd')
+     solr localhost:8983> resp
+     <SolrResponse [200]>
+     solr localhost:8983> res.result
      {   
          "response": "DictObject << {'start': 0, 'numFound': 0, 'docs': []} >>"
      }
