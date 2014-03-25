@@ -26,8 +26,8 @@ Access an existing collection
 ::
    
      
-     >>> conn.test_collection.search(q='query')
-     >>> conn["test_collection"].search(q='query 2')
+     >>> conn.test_collection.search({'q':'query1'})
+     >>> conn["test_collection"].search({'q':'query2'})
 
 
 Index documents
