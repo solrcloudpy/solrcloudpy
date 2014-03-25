@@ -12,7 +12,7 @@ class SolrInstance(object):
         subprocess.Popen(['rm -rf /home/dfdeshom/code/solr-4.6.0/example/solr/coll2*'],shell=True)
 
         args = [
-        'java -Dcollection.configName=myconf -Dbootstrap_confdir=./solr/collection1/conf -DSTOP.PORT=8079 -DSTOP.KEY=./etc/solrtest.keystore -DzkRun -DnumShards=1 -jar start.jar',
+        'java -Dcollection.configName=myconf -Dbootstrap_confdir=./solr/collection1/conf  -DzkRun -DnumShards=1 -jar start.jar>/dev/null',
             ]
 
         self._process = subprocess.Popen(args=args,
@@ -32,12 +32,5 @@ class SolrInstance(object):
         pass
 
     def terminate(self):
-        args = [
-        'java -Dcollection.configName=myconf -Dbootstrap_confdir=./solr/collection1/conf -DSTOP.PORT=8079 -DSTOP.KEY=./etc/solrtest.keystore -DzkRun -DnumShards=1 -jar start.jar --stop',
-            ]
-
-        self._process = subprocess.Popen(args=args,
-                                         shell=True,
-                                         cwd='/home/dfdeshom/code/solr-4.6.0/example')
-        self._process.wait()
-        self._process = None
+        print 'terminate'
+        subprocess.Popen(args=['killall -9 java'],shell=True)

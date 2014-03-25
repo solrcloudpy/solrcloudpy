@@ -64,8 +64,8 @@ class CollectionSearch(CollectionBase):
         :param docs: a list of documents to add
         """
         message = json.dumps(docs,default=dthandler)
-        response = self._update(message)
-        return SolrException(response)
+        response = self._update(message).result
+        return response
 
     def delete(self,id=None,q=None,commit=True):
         """

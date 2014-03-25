@@ -3,7 +3,7 @@ import time
 from test.solr_instance import SolrInstance
 from solrcloudpy import Connection
 
-class TestCollectionAdminCommands(unittest.TestCase):
+class TestCollectionAdmin(unittest.TestCase):
     def setUp(self):
         self.conn = Connection()
 
@@ -40,7 +40,6 @@ class TestCollectionAdminCommands(unittest.TestCase):
 
     def test_create_delete_alias(self):
         coll2 = self.conn.create_collection('coll2')
-        time.sleep(3)
         coll2.create_alias('alias2')
         time.sleep(3)
         self.assertTrue(self.conn.alias2.is_alias())
@@ -57,14 +56,19 @@ class TestCollectionAdminCommands(unittest.TestCase):
         coll2.delete_replica('core_node2','myshard1')
         coll2.drop()
 
-if __name__ == '__main__':
-    # start solr
+def setUpModule():
+    print 'start solr'
     solrprocess = SolrInstance("solr2")
     solrprocess.start()
     solrprocess.wait_ready()
+    time.sleep(1)
+    
+def tearDownModule():
+    # stop solr
+    import subprocess
+    print 'kill solr'
+    subprocess.call(args=['killall -9 java'],shell=True)
 
+if __name__ == '__main__':
     # run tests
     unittest.main()
-
-    # stop solr
-    solrprocess.terminate()
