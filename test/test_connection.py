@@ -1,17 +1,11 @@
 import unittest
 from solr_instance import SolrInstance
+import time
 from solrcloudpy import Connection, Collection
 
 class TestConnection(unittest.TestCase):
     def setUp(self):
-        self.solrprocess = SolrInstance("solr1")
-        self.solrprocess.start()
-        self.solrprocess.wait_ready()
         self.conn = Connection()
-
-    def tearDown(self):
-        #
-        self.solrprocess.terminate()
 
     def test_list(self):
         colls = self.conn.list()
@@ -29,6 +23,18 @@ class TestConnection(unittest.TestCase):
         coll = self.conn.create_collection('test2')
         self.assertTrue(isinstance(coll,Collection))
         self.conn.test2.delete()
-        
+
+def setUpModule():
+    # start solr
+    solrprocess = SolrInstance("solr2")
+    solrprocess.start()
+    solrprocess.wait_ready()
+    time.sleep(1)
+
+def tearDownModule():
+    # stop solr
+    import subprocess
+    subprocess.call(args=['killall -9 java'],shell=True)
+
 if __name__ == '__main__':
     unittest.main()

@@ -17,7 +17,6 @@ class TestCollectionSearch(unittest.TestCase):
         self.assertTrue(len(res.response.docs)== 1)
         coll2.drop()
 
-
 def setUpModule():
     # start solr
     solrprocess = SolrInstance("solr2")
