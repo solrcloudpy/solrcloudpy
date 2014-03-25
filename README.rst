@@ -42,7 +42,7 @@ Search documents
 
 ::
 
-     >>> collection.search(q='*:*')
+     >>> collection.search({'q':'*:*'})
 
      
  
@@ -58,7 +58,7 @@ Console
      Use the 'conn' object to access a collection
 
      Type 'collections' to see the list of available collections
-     solr localhost:8983> resp = conn.collection1.search('sd')
+     solr localhost:8983> resp = conn.collection1.search({'q':'*:*'})
      solr localhost:8983> resp
      <SolrResponse [200]>
      solr localhost:8983> res.result
