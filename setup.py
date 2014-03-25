@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
-
+import solrcloudpy 
 with open('README.rst', 'r') as f:
     long_description = f.read()
 
 setup(
     name = "solrcloudpy",
-    version = "1.460.1",
+    version = solrcloudpy.__version__,
     author = 'Didier Deshommes',
     author_email = 'dfdeshom@gmail.com',
     packages=find_packages(exclude=['ez_setup']),
