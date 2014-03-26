@@ -184,7 +184,7 @@ pseudoxml:
 gh-pages:
 	git checkout gh-pages
 	rm -rf build _sources _static _modules apidocs
-	git checkout coll-api $(GH_PAGES_SOURCES)
+	git checkout master $(GH_PAGES_SOURCES)
 	git reset HEAD
 	cd docs; make html
 	cd docs; mv -fv _build/html/* ../
