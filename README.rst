@@ -1,31 +1,75 @@
 solrcloudpy
 ===========
 
-solrcloudpy is a python library for interacting with SolrCloud. This library aims to take advantage of the following features of Solr:
+``solrcloudpy`` is a python library for interacting with SolrCloud. This library aims to take advantage of the following features of Solr:
 
 * Distributed indexing and searching and transparent failover
 * Full JSON api
 * Centralized index management
 * Near-realtime search
 
-The API is mean to be close to pymongo's API, where one can access collections and databases as simple attributes 
+The API is meant to be close to pymongo's API, where one can access collections as simple attributes 
 or dictionary keys.  
 
-Usage
--------
-.. code-block:: python
+Example Usage
+--------------
 
-     from solrcloudpy.connection import HTTPConnection
-     from solrcloudpy.collection import Collection 
+create a collection
+::
    
-     conn = HTTPConnection(["localhost:9983","localhost:8984"])
-     collection = Collection(conn)
-     collection.create('test1',num_shards=1,replication_factor=2)
-          
-     # Indexing documents
-     docs = [{"id":"1", "name":"a"},{"id":"2","name":"b"}]
-     collection.test1.add(docs)
+     
+     >>> conn = Connection(["localhost:9983","localhost:8984"])
+     >>> conn.create('test1',num_shards=1,replication_factor=2)
+  
+Access an existing collection
 
-     # Searching documents
-     print collection.test1.search(q='*:*')
+::
+   
+     
+     >>> conn.test_collection.search({'q':'query1'})
+     >>> conn["test_collection"].search({'q':'query2'})
+
+
+Index documents
+
+::
+     
+     >>> docs = [{"id":"1", "name":"a"},{"id":"2","name":"b"}]
+     >>> collection.add(docs)
+
+
+Search documents
+
+::
+
+     >>> collection.search({'q':'*:*'})
+
+     
  
+     
+Console
+-------
+``solrcloudpy`` comes with a console that can be run simply by typing ``solrconsole``
+
+.. code-block::
+
+     $ solrconsole --host=localhost --port=8983 
+     SolrCloud Console
+     Use the 'conn' object to access a collection
+
+     Type 'collections' to see the list of available collections
+     solr localhost:8983> resp = conn.collection1.search({'q':'*:*'})
+     solr localhost:8983> resp
+     <SolrResponse [200]>
+     solr localhost:8983> res.result
+     {   
+         "response": "DictObject << {'start': 0, 'numFound': 0, 'docs': []} >>"
+     }
+
+     solr localhost:8983> res.response
+     {
+         "start": 0, 
+         "numFound": 0, 
+         "docs": []
+     }
+
