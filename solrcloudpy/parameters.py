@@ -66,6 +66,26 @@ class CommonParams(BaseParams):
         self._q['fl'].add(fields)
         return self
 
+    def deftype(self,t):
+        self._q['defType'].add(t)
+        return self
+
+    def explain_other(self,val):
+        self._q['explainOther'].add(val)
+        return self
+
+    def time_allowed(self,t):
+        self._q['timeAllowed'].add(t)
+        return self
+
+    def cache(self,val):
+        self._q['cache'].add(val)
+        return self
+
+    def log_param_list(self,val):
+        self._q['logParamList'].add(val)
+        return self
+
     def debug(self):
         self._q['debug'].add("true")
         return self

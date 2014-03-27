@@ -39,12 +39,7 @@ class _Request(object):
                                         params=resparams,
                                         headers=headers,data=body,timeout=10.0)
 
-                # if r.status_code == requests.codes.ok:
-                #     response = r.json()
-                # else:
-                #     response = r.text
                 return SolrResponse(r)
-            #return response
 
             except ConnectionError as e:
                 print 'exception: ', e
