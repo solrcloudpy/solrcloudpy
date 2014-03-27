@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Intro &mdash; solrcloudpy 1.460.1 documentation</title>
+    <title>Intro &mdash; solrcloudpy 1.1.460 documentation</title>
     
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.460.1',
+        VERSION:     '1.1.460',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="solrcloudpy 1.460.1 documentation" href="index.html" />
+    <link rel="top" title="solrcloudpy 1.1.460 documentation" href="index.html" />
     <link rel="next" title="Using the console" href="console.html" />
     <link rel="prev" title="Welcome to solrcloudpy" href="index.html" />
    
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to solrcloudpy"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">solrcloudpy 1.460.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">solrcloudpy 1.1.460 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -69,7 +69,7 @@
 <li>Near-realtime search</li>
 </ul>
 <p>The API is meant to be close to <tt class="docutils literal"><span class="pre">pymongo</span></tt>&#8216;s API, where one can access collections as simple attributes or dictionary keys.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">([</span><span class="s">&quot;localhost:9983&quot;</span><span class="p">,</span><span class="s">&quot;localhost:8984&quot;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">SolrConnection</span><span class="p">([</span><span class="s">&quot;localhost:9983&quot;</span><span class="p">,</span><span class="s">&quot;localhost:8984&quot;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;test1&#39;</span><span class="p">,</span><span class="n">num_shards</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">replication_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="go"># Access an existing collection</span>

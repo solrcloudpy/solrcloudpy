@@ -3,7 +3,7 @@ Using the console
 
 ``solrcloudpy`` comes with a console that can be run simply by typing
 ``solrconsole``. It has a few convenniences, such as an already-created
-:class:`~solrcoudpy.connection.Connection` object and :class:`~solrcoudpy.parameters.SearchOptions` that can be referred to directly. 
+:class:`~solrcloudpy.connection.SolrConnection` object and :class:`~solrcloudpy.parameters.SearchOptions` that can be referred to directly. 
 
 
 ::

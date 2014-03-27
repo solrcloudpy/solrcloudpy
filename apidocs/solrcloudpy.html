@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &mdash; solrcloudpy 1.460.1 documentation</title>
+    <title>API &mdash; solrcloudpy 1.1.460 documentation</title>
     
     <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.460.1',
+        VERSION:     '1.1.460',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="solrcloudpy 1.460.1 documentation" href="../index.html" />
+    <link rel="top" title="solrcloudpy 1.1.460 documentation" href="../index.html" />
     <link rel="prev" title="Searching a collection" href="../searching.html" />
    
   
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="../searching.html" title="Searching a collection"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">solrcloudpy 1.460.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">solrcloudpy 1.1.460 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,20 +58,20 @@
   <div class="section" id="api">
 <h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-solrcloudpy.connection">
-<span id="connection-object"></span><h2>Connection object<a class="headerlink" href="#module-solrcloudpy.connection" title="Permalink to this headline">¶</a></h2>
+<span id="solrconnection-object"></span><h2>SolrConnection object<a class="headerlink" href="#module-solrcloudpy.connection" title="Permalink to this headline">¶</a></h2>
 <p>Connecting to a set of solr servers.</p>
-<p>To get a <a class="reference internal" href="#solrcloudpy.Collection" title="solrcloudpy.Collection"><tt class="xref py py-class docutils literal"><span class="pre">Collection</span></tt></a> instance from a <a class="reference internal" href="#solrcloudpy.connection.Connection" title="solrcloudpy.connection.Connection"><tt class="xref py py-class docutils literal"><span class="pre">Connection</span></tt></a> use either dictionary-style or attribute-style access:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">solrcloudpy.connection</span> <span class="kn">import</span> <span class="n">Connection</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
+<p>To get a <a class="reference internal" href="#solrcloudpy.SolrCollection" title="solrcloudpy.SolrCollection"><tt class="xref py py-class docutils literal"><span class="pre">SolrCollection</span></tt></a> instance from a <a class="reference internal" href="#solrcloudpy.connection.SolrConnection" title="solrcloudpy.connection.SolrConnection"><tt class="xref py py-class docutils literal"><span class="pre">SolrConnection</span></tt></a> use either dictionary-style or attribute-style access:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">solrcloudpy.connection</span> <span class="kn">import</span> <span class="n">SolrConnection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">SolrConnection</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 <span class="go">[u&#39;collection1&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="p">[</span><span class="s">&#39;collection1&#39;</span><span class="p">]</span>
-<span class="go">Collection&lt;collection1&gt;</span>
+<span class="go">SolrCollection&lt;collection1&gt;</span>
 </pre></div>
 </div>
 <dl class="class">
-<dt id="solrcloudpy.connection.Connection">
-<em class="property">class </em><tt class="descclassname">solrcloudpy.connection.</tt><tt class="descname">Connection</tt><big>(</big><em>server='localhost:8983'</em>, <em>detect_live_nodes=False</em>, <em>user=None</em>, <em>password=None</em><big>)</big><a class="headerlink" href="#solrcloudpy.connection.Connection" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.connection.SolrConnection">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.connection.</tt><tt class="descname">SolrConnection</tt><big>(</big><em>server='localhost:8983'</em>, <em>detect_live_nodes=False</em>, <em>user=None</em>, <em>password=None</em><big>)</big><a class="headerlink" href="#solrcloudpy.connection.SolrConnection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connection to a solr server or several ones</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -88,21 +88,21 @@
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="solrcloudpy.connection.Connection.cluster_health">
-<tt class="descname">cluster_health</tt><a class="headerlink" href="#solrcloudpy.connection.Connection.cluster_health" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.connection.SolrConnection.cluster_health">
+<tt class="descname">cluster_health</tt><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.cluster_health" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine the state of all nodes and collections in the cluster. Problematic nodes or
 collections are returned, along with their state, otherwise an <cite>OK</cite> message is returned</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="solrcloudpy.connection.Connection.cluster_leader">
-<tt class="descname">cluster_leader</tt><a class="headerlink" href="#solrcloudpy.connection.Connection.cluster_leader" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.connection.SolrConnection.cluster_leader">
+<tt class="descname">cluster_leader</tt><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.cluster_leader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the cluster leader</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.connection.Connection.create_collection">
-<tt class="descname">create_collection</tt><big>(</big><em>collname</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#solrcloudpy.connection.Connection.create_collection" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.connection.SolrConnection.create_collection">
+<tt class="descname">create_collection</tt><big>(</big><em>collname</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.create_collection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a collection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -120,14 +120,14 @@ collections are returned, along with their state, otherwise an <cite>OK</cite> m
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.connection.Connection.list">
-<tt class="descname">list</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.connection.Connection.list" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.connection.SolrConnection.list">
+<tt class="descname">list</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lists out the current collections in the cluster</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="solrcloudpy.connection.Connection.live_nodes">
-<tt class="descname">live_nodes</tt><a class="headerlink" href="#solrcloudpy.connection.Connection.live_nodes" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.connection.SolrConnection.live_nodes">
+<tt class="descname">live_nodes</tt><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.live_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lists all nodes that are currently online</p>
 </dd></dl>
 
@@ -135,15 +135,15 @@ collections are returned, along with their state, otherwise an <cite>OK</cite> m
 
 </div>
 <div class="section" id="module-solrcloudpy.collection">
-<span id="collection-object"></span><h2>Collection object<a class="headerlink" href="#module-solrcloudpy.collection" title="Permalink to this headline">¶</a></h2>
+<span id="solrcollection-object"></span><h2>SolrCollection object<a class="headerlink" href="#module-solrcloudpy.collection" title="Permalink to this headline">¶</a></h2>
 <p>Manage and search a Solr Collection.</p>
 <p>The Collections API is used to enable you to create, remove, or reload collections.
 Consult the <a class="reference external" href="https://cwiki.apache.org/confluence/display/solr/Collections+API">Collections API</a> for more details</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">solrcloudpy.connection</span> <span class="kn">import</span> <span class="n">Connection</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">solrcloudpy.connection</span> <span class="kn">import</span> <span class="n">SolrConnection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">SolrConnection</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span> <span class="o">=</span> <span class="n">conn</span><span class="p">[</span><span class="s">&#39;test1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;test1&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span>
-<span class="go">Collection&lt;collection1&gt;</span>
+<span class="go">SolrCollection&lt;collection1&gt;</span>
 </pre></div>
 </div>
 <p>This class is also used for query a Solr collection. The endpoints supported by default are:</p>
@@ -162,8 +162,8 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 <li><p class="first"><cite>/highlight</cite>: Solr&#8217;s search highlight component</p>
 </li>
 <li><p class="first"><cite>/terms</cite>: Term component</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">solrcloudpy</span> <span class="kn">import</span> <span class="n">Connection</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()[</span><span class="s">&#39;collection1&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">solrcloudpy</span> <span class="kn">import</span> <span class="n">SolrConnection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span> <span class="o">=</span> <span class="n">SolrConnection</span><span class="p">()[</span><span class="s">&#39;collection1&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">coll</span><span class="o">.</span><span class="n">search</span><span class="p">({</span><span class="s">&#39;q&#39;</span><span class="p">:</span><span class="s">&#39;money&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">response</span>
 <span class="go">&lt;SolrResponse [200]&gt;</span>
@@ -177,11 +177,11 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </ul>
 </div></blockquote>
 <dl class="class">
-<dt id="solrcloudpy.Collection">
-<em class="property">class </em><tt class="descclassname">solrcloudpy.</tt><tt class="descname">Collection</tt><big>(</big><em>connection</em>, <em>name</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.</tt><tt class="descname">SolrCollection</tt><big>(</big><em>connection</em>, <em>name</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
-<dt id="solrcloudpy.Collection.add">
-<tt class="descname">add</tt><big>(</big><em>docs</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.add" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.add">
+<tt class="descname">add</tt><big>(</big><em>docs</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a list of document to the collection</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -194,8 +194,8 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.clustering">
-<tt class="descname">clustering</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.clustering" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.clustering">
+<tt class="descname">clustering</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.clustering" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform clustering on a query</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -208,14 +208,14 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.commit">
-<tt class="descname">commit</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.commit" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.commit">
+<tt class="descname">commit</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.commit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Commit changes to a collection</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.create">
-<tt class="descname">create</tt><big>(</big><em>replication_factor=1</em>, <em>force=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.create" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.create">
+<tt class="descname">create</tt><big>(</big><em>replication_factor=1</em>, <em>force=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a collection</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -247,8 +247,8 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.create_alias">
-<tt class="descname">create_alias</tt><big>(</big><em>alias</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.create_alias" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.create_alias">
+<tt class="descname">create_alias</tt><big>(</big><em>alias</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.create_alias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create or modify an alias for a collection</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -261,8 +261,8 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.create_shard">
-<tt class="descname">create_shard</tt><big>(</big><em>shard</em>, <em>create_node_set=None</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.create_shard" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.create_shard">
+<tt class="descname">create_shard</tt><big>(</big><em>shard</em>, <em>create_node_set=None</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.create_shard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new shard</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -279,8 +279,8 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.delete">
-<tt class="descname">delete</tt><big>(</big><em>id=None</em>, <em>q=None</em>, <em>commit=True</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.delete" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.delete">
+<tt class="descname">delete</tt><big>(</big><em>id=None</em>, <em>q=None</em>, <em>commit=True</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete documents in a collection. Deletes occur either by id or by query</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -298,8 +298,8 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.delete_alias">
-<tt class="descname">delete_alias</tt><big>(</big><em>alias</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.delete_alias" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.delete_alias">
+<tt class="descname">delete_alias</tt><big>(</big><em>alias</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.delete_alias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete an alias for a collection</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -312,8 +312,8 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.delete_replica">
-<tt class="descname">delete_replica</tt><big>(</big><em>replica</em>, <em>shard</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.delete_replica" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.delete_replica">
+<tt class="descname">delete_replica</tt><big>(</big><em>replica</em>, <em>shard</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.delete_replica" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a replica</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -330,14 +330,14 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.drop">
-<tt class="descname">drop</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.drop" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.drop">
+<tt class="descname">drop</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.drop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a collection</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.exists">
-<tt class="descname">exists</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.exists" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.exists">
+<tt class="descname">exists</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds if a collection exists in the cluster</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -350,14 +350,14 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.is_alias">
-<tt class="descname">is_alias</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.is_alias" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.is_alias">
+<tt class="descname">is_alias</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.is_alias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines if this collection is an alias for a &#8216;real&#8217; collection</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.mlt">
-<tt class="descname">mlt</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.mlt" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.mlt">
+<tt class="descname">mlt</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.mlt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform MLT on this index</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -370,8 +370,8 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.optimize">
-<tt class="descname">optimize</tt><big>(</big><em>waitsearcher=False</em>, <em>softcommit=False</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.optimize" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.optimize">
+<tt class="descname">optimize</tt><big>(</big><em>waitsearcher=False</em>, <em>softcommit=False</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.optimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optimize a collection for searching</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -389,14 +389,14 @@ by opening a new searcher</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.reload">
-<tt class="descname">reload</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.reload" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.reload">
+<tt class="descname">reload</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.reload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reload a collection</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.search">
-<tt class="descname">search</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.search" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.search">
+<tt class="descname">search</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search this index</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -409,8 +409,8 @@ by opening a new searcher</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="solrcloudpy.Collection.split_shard">
-<tt class="descname">split_shard</tt><big>(</big><em>shard</em>, <em>ranges=None</em>, <em>split_key=None</em><big>)</big><a class="headerlink" href="#solrcloudpy.Collection.split_shard" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.split_shard">
+<tt class="descname">split_shard</tt><big>(</big><em>shard</em>, <em>ranges=None</em>, <em>split_key=None</em><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.split_shard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Split a shard into two new shards</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -428,8 +428,8 @@ by opening a new searcher</li>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="solrcloudpy.Collection.state">
-<tt class="descname">state</tt><a class="headerlink" href="#solrcloudpy.Collection.state" title="Permalink to this definition">¶</a></dt>
+<dt id="solrcloudpy.SolrCollection.state">
+<tt class="descname">state</tt><a class="headerlink" href="#solrcloudpy.SolrCollection.state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the state of this collection</p>
 </dd></dl>
 
@@ -511,8 +511,8 @@ object whose attributes can be also accessed as dictionary keys.</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">API</a><ul>
-<li><a class="reference internal" href="#module-solrcloudpy.connection">Connection object</a></li>
-<li><a class="reference internal" href="#module-solrcloudpy.collection">Collection object</a></li>
+<li><a class="reference internal" href="#module-solrcloudpy.connection">SolrConnection object</a></li>
+<li><a class="reference internal" href="#module-solrcloudpy.collection">SolrCollection object</a></li>
 <li><a class="reference internal" href="#searchoptions-object">SearchOptions object</a></li>
 <li><a class="reference internal" href="#solrresponse-object">SolrResponse object</a></li>
 <li><a class="reference internal" href="#solrresult-object">SolrResult object</a></li>
