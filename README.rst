@@ -18,7 +18,7 @@ create a collection
 ::
    
      
-     >>> conn = Connection(["localhost:9983","localhost:8984"])
+     >>> conn = SolrConnection(["localhost:9983","localhost:8984"])
      >>> conn.create('test1',num_shards=1,replication_factor=2)
   
 Access an existing collection
@@ -61,12 +61,12 @@ Console
      solr localhost:8983> resp = conn.collection1.search({'q':'*:*'})
      solr localhost:8983> resp
      <SolrResponse [200]>
-     solr localhost:8983> res.result
+     solr localhost:8983> resp.result
      {   
-         "response": "DictObject << {'start': 0, 'numFound': 0, 'docs': []} >>"
+         "response": "SolrResult << {'start': 0, 'numFound': 0, 'docs': []} >>"
      }
 
-     solr localhost:8983> res.response
+     solr localhost:8983> resp.result.response
      {
          "start": 0, 
          "numFound": 0, 
