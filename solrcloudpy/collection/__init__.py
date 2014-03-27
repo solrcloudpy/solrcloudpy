@@ -4,11 +4,11 @@ Manage and search a Solr Collection.
 The Collections API is used to enable you to create, remove, or reload collections.
 Consult the `Collections API <https://cwiki.apache.org/confluence/display/solr/Collections+API>`_ for more details
 
-    >>> from solrcloudpy.connection import Connection
-    >>> conn = Connection()
+    >>> from solrcloudpy.connection import SolrConnection
+    >>> conn = SolrConnection()
     >>> coll = conn['test1'].create('test1')
     >>> coll
-    Collection<collection1>
+    SolrCollection<collection1>
 
 This class is also used for query a Solr collection. The endpoints supported by default are:
 
@@ -23,8 +23,8 @@ Support will be coming for the following endpoints:
  - `/terms`: Term component
 
 
-     >>> from solrcloudpy import Connection
-     >>> coll = Connection()['collection1']
+     >>> from solrcloudpy import SolrConnection
+     >>> coll = SolrConnection()['collection1']
      >>> response = coll.search({'q':'money'})
      >>> response
      <SolrResponse [200]>
@@ -34,10 +34,10 @@ Support will be coming for the following endpoints:
      }
 
 """
-from .admin import CollectionAdmin
-from .search import CollectionSearch
+from .admin import SolrCollectionAdmin
+from .search import SolrCollectionSearch
 
-class Collection(CollectionAdmin,CollectionSearch):
+class SolrCollection(SolrCollectionAdmin,SolrCollectionSearch):
     def create(self, replication_factor=1, force=False, **kwargs):
         """
         Create a collection
@@ -62,8 +62,11 @@ class Collection(CollectionAdmin,CollectionSearch):
         Additional parameters are further documented at https://cwiki.apache.org/confluence/display/solr/Collections+API#CollectionsAPI-CreateaCollection
         """
 
-        admin = super(Collection,self).create(replication_factor,
+        admin = super(SolrCollection,self).create(replication_factor,
                                               force, **kwargs)
-        return Collection(admin.connection,admin.name)
+        return SolrCollection(admin.connection,admin.name)
 
-__all__ = ['Collection']
+    def __repr__(self):
+        return "SolrCollection<%s>" % self.name
+
+__all__ = ['SolrCollection']

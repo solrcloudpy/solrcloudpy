@@ -1,11 +1,11 @@
 import unittest
 from solr_instance import SolrInstance
 import time
-from solrcloudpy import Connection, Collection
+from solrcloudpy import SolrConnection, SolrCollection
 
 class TestConnection(unittest.TestCase):
     def setUp(self):
-        self.conn = Connection()
+        self.conn = SolrConnection()
 
     def test_list(self):
         colls = self.conn.list()
@@ -21,8 +21,8 @@ class TestConnection(unittest.TestCase):
 
     def test_create_collection(self):
         coll = self.conn.create_collection('test2')
-        self.assertTrue(isinstance(coll,Collection))
-        self.conn.test2.delete()
+        self.assertTrue(isinstance(coll,SolrCollection))
+        self.conn.test2.drop()
 
 def setUpModule():
     # start solr

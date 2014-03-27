@@ -1,7 +1,7 @@
 import unittest
 import time
 from test.solr_instance import SolrInstance
-from solrcloudpy import Connection
+from solrcloudpy import SolrConnection as Connection
 
 class TestCollectionAdmin(unittest.TestCase):
     def setUp(self):
@@ -66,7 +66,6 @@ def setUpModule():
 def tearDownModule():
     # stop solr
     import subprocess
-    print 'kill solr'
     subprocess.call(args=['killall -9 java'],shell=True)
 
 if __name__ == '__main__':

@@ -1,15 +1,15 @@
 """
 Connecting to a set of solr servers.
 
-To get a :class:`~solrcloudpy.Collection` instance from a :class:`Connection` use either dictionary-style or attribute-style access:
+To get a :class:`~solrcloudpy.SolrCollection` instance from a :class:`SolrConnection` use either dictionary-style or attribute-style access:
 
 
-    >>> from solrcloudpy.connection import Connection
-    >>> conn = Connection()
+    >>> from solrcloudpy.connection import SolrConnection
+    >>> conn = SolrConnection()
     >>> conn.list()
     [u'collection1']
     >>> conn['collection1']
-    Collection<collection1>
+    SolrCollection<collection1>
 
 
 """
@@ -19,7 +19,7 @@ import json
 import solrcloudpy.collection as collection
 from solrcloudpy.utils import _Request
 
-class Connection(object):
+class SolrConnection(object):
     """
     Connection to a solr server or several ones
 
@@ -133,17 +133,17 @@ class Connection(object):
         :param \*args: additiona arguments
         :param \*\*kwargs: additional named parameters
         """
-        coll = collection.Collection(self,collname)
+        coll = collection.SolrCollection(self,collname)
         return coll.create(*args, **kwargs)
 
     def __getattr__(self, name):
-        return collection.Collection(self,name)
+        return collection.SolrCollection(self,name)
 
     def __getitem__(self, name):
-        return collection.Collection(self,name)
+        return collection.SolrCollection(self,name)
 
     def __dir__(self):
         return self.list()
 
     def __repr__(self):
-        return "Connection %s" % str(self.servers)
+        return "SolrConnection %s" % str(self.servers)

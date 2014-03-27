@@ -5,7 +5,7 @@ from pprint import pprint
 from IPython.terminal import ipapp
 from IPython.config.loader import Config
 
-from solrcloudpy.connection import Connection
+from solrcloudpy.connection import SolrConnection
 from solrcloudpy.parameters import SearchOptions
 
 def display_list(ob, pprinter, cycle):
@@ -39,7 +39,9 @@ def get_config(args):
     return c
 
 def get_conn(args):
-    return Connection(["%s:%s"%(args.host,args.port),],user=args.user,password=args.password)
+    return SolrConnection(["%s:%s"%(args.host,args.port),],
+                          user=args.user,
+                          password=args.password)
 
 def main():
     parser = argparse.ArgumentParser(description='Parser for solrcloudpy console')

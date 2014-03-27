@@ -1,11 +1,11 @@
 import unittest
 import time
 from test.solr_instance import SolrInstance
-from solrcloudpy import Connection
+from solrcloudpy import SolrConnection
 
 class TestCollectionSearch(unittest.TestCase):
     def setUp(self):
-        self.conn = Connection()
+        self.conn = SolrConnection()
 
     def test_add(self):
         coll2 = self.conn.create_collection('coll2')

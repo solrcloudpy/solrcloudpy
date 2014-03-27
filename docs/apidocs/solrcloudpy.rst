@@ -1,24 +1,24 @@
 API
 ===
 
-Connection object
------------------
+SolrConnection object
+-----------------------
 .. automodule:: solrcloudpy.connection
    :members:
    :inherited-members:
 
-Collection object
-------------------
+SolrCollection object
+----------------------
 .. automodule:: solrcloudpy.collection
    :members:
    :inherited-members:
 
-.. autoclass:: solrcloudpy.Collection
+.. autoclass:: solrcloudpy.SolrCollection
    :members:
    :inherited-members:
 
 SearchOptions object
---------------------
+---------------------
 .. autoclass:: solrcloudpy.parameters.SearchOptions
    :members:
    :inherited-members:

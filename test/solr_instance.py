@@ -32,5 +32,4 @@ class SolrInstance(object):
         pass
 
     def terminate(self):
-        print 'terminate'
         subprocess.Popen(args=['killall -9 java'],shell=True)

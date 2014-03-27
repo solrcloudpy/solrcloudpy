@@ -7,7 +7,7 @@ import time
 import json
 import requests
 
-class CollectionAdmin(CollectionBase):
+class SolrCollectionAdmin(CollectionBase):
     """
     Manage and administer a collection
     """
@@ -83,12 +83,12 @@ class CollectionAdmin(CollectionBase):
                         time.sleep(1)
                     else: break
 
-                    return CollectionAdmin(self.connection,self.name)
+                    return SolrCollectionAdmin(self.connection,self.name)
             else:
                 raise SolrException(str(res))
 
         # this collection is already present, just return it
-        return CollectionAdmin(self.connection,self.name)
+        return SolrCollectionAdmin(self.connection,self.name)
 
     def _is_index_created(self):
         server = list(self.connection.servers)[0]
@@ -205,6 +205,3 @@ class CollectionAdmin(CollectionBase):
     @property
     def shards(self):
         return self.state
-
-    def __repr__(self):
-        return "Collection<%s>" % self.name

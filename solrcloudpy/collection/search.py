@@ -2,14 +2,14 @@
 Query and update a Solr collection
 """
 
-from solrcloudpy.utils import SolrException, CollectionBase
+from solrcloudpy.utils import CollectionBase
 
 import datetime as dt
 import json
 
 dthandler = lambda obj: obj.isoformat() if isinstance(obj, dt.datetime) else None
 
-class CollectionSearch(CollectionBase):
+class SolrCollectionSearch(CollectionBase):
     """
     Performs search-related operations on a collection
     """
