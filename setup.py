@@ -1,11 +1,15 @@
 from setuptools import setup, find_packages
+import re
 
 with open('README.rst', 'r') as f:
     long_description = f.read()
 
+def get_version():
+    return re.search(r"""__version__\s+=\s+(?P<quote>['"])(?P<version>.+?)(?P=quote)""", open('solrcloudpy/__init__.py').read()).group('version')
+
 setup(
     name = "solrcloudpy",
-    version = "1.1.406",
+    version = get_version(),
     author = 'Didier Deshommes',
     author_email = 'dfdeshom@gmail.com',
     packages=find_packages(exclude=['ez_setup']),
@@ -30,5 +34,5 @@ setup(
         ],
 
     install_requires = ['requests == 2.2.1','IPython == 1.2.0'],
-    extras_require = {"ip": ['IPython == 1.2.0'] }, 
+    extras_require = {"ip": ['IPython == 1.2.0'] },
         )
