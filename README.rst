@@ -73,3 +73,7 @@ Console
          "docs": []
      }
 
+
+Documentation and API
+---------------------
+Documentation can be found at http://dfdeshom.github.io/solrcloudpy/ 
