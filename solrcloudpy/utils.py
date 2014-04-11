@@ -10,9 +10,10 @@ class _Request(object):
     """
     Issues requests to the collections API
     """
-    def __init__(self,connection):
+    def __init__(self,connection,timeout=10):
         self.connection = connection
         self.client = requests.Session()
+        self.timeout = timeout
         if self.connection.user:
             self.client.auth = HTTPBasicAuth(self.connection.user,self.connection.password)
 
@@ -37,7 +38,7 @@ class _Request(object):
             try:
                 r = self.client.request(method,fullpath,
                                         params=resparams,
-                                        headers=headers,data=body,timeout=10.0)
+                                        headers=headers,data=body,timeout=self.timeout)
 
                 return SolrResponse(r)
 

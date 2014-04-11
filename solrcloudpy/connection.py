@@ -28,9 +28,13 @@ class SolrConnection(object):
 
     :param user: HTTP basic auth user name
     :param password: HTTP basic auth password
-
+    :param timeout: timeout for HTTP requests
     """
-    def __init__(self,server="localhost:8983",detect_live_nodes=False,user=None,password=None):
+    def __init__(self,server="localhost:8983",
+                 detect_live_nodes=False,
+                 user=None,
+                 password=None,
+                 timeout=10):
         self.user = user
         self.password = password
         if type(server) == type(''):
@@ -49,7 +53,7 @@ class SolrConnection(object):
             else:
                 self.servers = servers
 
-        self.client = _Request(self)
+        self.client = _Request(self,timeout)
 
     def detect_nodes(self,url):
         url = url+'zookeeper?path=/live_nodes'
