@@ -66,6 +66,7 @@ class CollectionBase(object):
         self.client = _Request(connection)
 
 class DictObject(object):
+    # XXX TODO: make all dict ops work on this object
     def __init__(self, obj):
         if not obj:
             return

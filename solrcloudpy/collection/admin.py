@@ -205,3 +205,12 @@ class SolrCollectionAdmin(CollectionBase):
     @property
     def shards(self):
         return self.state
+
+    @property
+    def index_info(self):
+        response = self.client.get('%s/admin/luke' % self.name,{}).result
+        # XXX ugly
+        data = response['index'].__dict__
+        data.pop('directory',None)
+        data.pop('userData',None)
+        return data
