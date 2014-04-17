@@ -103,6 +103,16 @@ class SolrResult(DictObject):
         value = SolrResponseJSONEncoder(indent=4).encode(self.__dict__)
         return value
 
+    @property
+    def dict(self):
+        res = {}
+        for (k,v) in self.__dict__.iteritems():
+            if isinstance(v, SolrResult):
+                res[k] = v.dict
+            else:
+                res[k] = v
+        return res
+    
 class SolrResponse(object):
     """
     A generic representation of a solr response. This objects contains both the `Response` object variable from the `requests` package and the parsed content in a :class:`~solrcloudpy.utils.SolrResult` instance.
