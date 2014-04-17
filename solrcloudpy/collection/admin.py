@@ -2,6 +2,7 @@
 Manage and administer a collection
 """
 from solrcloudpy.utils import SolrException, CollectionBase
+from .stats import SolrIndexStats
 
 import time
 import json
@@ -11,6 +12,9 @@ class SolrCollectionAdmin(CollectionBase):
     """
     Manage and administer a collection
     """
+    def __init__(self,connection,name):
+        super(SolrCollectionAdmin,self).__init__(connection,name)
+        self.index_stats = SolrIndexStats(self.connection,self.name)
 
     def exists(self):
         """
@@ -208,9 +212,17 @@ class SolrCollectionAdmin(CollectionBase):
 
     @property
     def index_info(self):
+        """
+        Get a high-level overview of this collection's index
+        """
         response = self.client.get('%s/admin/luke' % self.name,{}).result
         # XXX ugly
-        data = response['index'].__dict__
+        data = response['index'].dict
         data.pop('directory',None)
         data.pop('userData',None)
         return data
+
+
+    @property
+    def stats(self):
+        return self.index_stats
