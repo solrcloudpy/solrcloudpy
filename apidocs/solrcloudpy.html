@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &mdash; solrcloudpy 1.1.460 documentation</title>
+    <title>API &mdash; solrcloudpy 1.2.460 documentation</title>
     
     <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.1.460',
+        VERSION:     '1.2.460',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="solrcloudpy 1.1.460 documentation" href="../index.html" />
+    <link rel="top" title="solrcloudpy 1.2.460 documentation" href="../index.html" />
     <link rel="prev" title="Searching a collection" href="../searching.html" />
    
   
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="../searching.html" title="Searching a collection"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">solrcloudpy 1.1.460 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">solrcloudpy 1.2.460 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -71,7 +71,7 @@
 </div>
 <dl class="class">
 <dt id="solrcloudpy.connection.SolrConnection">
-<em class="property">class </em><tt class="descclassname">solrcloudpy.connection.</tt><tt class="descname">SolrConnection</tt><big>(</big><em>server='localhost:8983'</em>, <em>detect_live_nodes=False</em>, <em>user=None</em>, <em>password=None</em><big>)</big><a class="headerlink" href="#solrcloudpy.connection.SolrConnection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">solrcloudpy.connection.</tt><tt class="descname">SolrConnection</tt><big>(</big><em>server='localhost:8983'</em>, <em>detect_live_nodes=False</em>, <em>user=None</em>, <em>password=None</em>, <em>timeout=10</em><big>)</big><a class="headerlink" href="#solrcloudpy.connection.SolrConnection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connection to a solr server or several ones</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -82,6 +82,7 @@
 <li><strong>detect_live_nodes</strong> &#8211; whether to detect live nodes automativally or not. This assumes that one is able to access the IPs listed by Zookeeper. The default value is <tt class="docutils literal"><span class="pre">False</span></tt>.</li>
 <li><strong>user</strong> &#8211; HTTP basic auth user name</li>
 <li><strong>password</strong> &#8211; HTTP basic auth password</li>
+<li><strong>timeout</strong> &#8211; timeout for HTTP requests</li>
 </ul>
 </td>
 </tr>
@@ -349,6 +350,12 @@ Consult the <a class="reference external" href="https://cwiki.apache.org/conflue
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="solrcloudpy.SolrCollection.index_info">
+<tt class="descname">index_info</tt><a class="headerlink" href="#solrcloudpy.SolrCollection.index_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a high-level overview of this collection&#8217;s index</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="solrcloudpy.SolrCollection.is_alias">
 <tt class="descname">is_alias</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.SolrCollection.is_alias" title="Permalink to this definition">¶</a></dt>
@@ -436,6 +443,28 @@ by opening a new searcher</li>
 </dd></dl>
 
 </div>
+<div class="section" id="solrindexstats-object">
+<h2>SolrIndexStats object<a class="headerlink" href="#solrindexstats-object" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="solrcloudpy.collection.stats.SolrIndexStats">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.collection.stats.</tt><tt class="descname">SolrIndexStats</tt><big>(</big><em>connection</em>, <em>name</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.stats.SolrIndexStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get different statistics about the undelying index in a collection</p>
+<dl class="attribute">
+<dt id="solrcloudpy.collection.stats.SolrIndexStats.cache_stats">
+<tt class="descname">cache_stats</tt><a class="headerlink" href="#solrcloudpy.collection.stats.SolrIndexStats.cache_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get cache statistics about the index.
+We retrieve cache stats for the document, filter, fiedvalue, fieldcache caches</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="solrcloudpy.collection.stats.SolrIndexStats.queryhandler_stats">
+<tt class="descname">queryhandler_stats</tt><a class="headerlink" href="#solrcloudpy.collection.stats.SolrIndexStats.queryhandler_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get query handler statistics for all of the handlers used in this Solr node</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="searchoptions-object">
 <h2>SearchOptions object<a class="headerlink" href="#searchoptions-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -497,6 +526,12 @@ object whose attributes can be also accessed as dictionary keys.</p>
 <span class="go">0</span>
 </pre></div>
 </div>
+<dl class="attribute">
+<dt id="solrcloudpy.utils.SolrResult.dict">
+<tt class="descname">dict</tt><a class="headerlink" href="#solrcloudpy.utils.SolrResult.dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert this result into a python <cite>dict</cite> for easier manipulation</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -513,6 +548,7 @@ object whose attributes can be also accessed as dictionary keys.</p>
 <li><a class="reference internal" href="#">API</a><ul>
 <li><a class="reference internal" href="#module-solrcloudpy.connection">SolrConnection object</a></li>
 <li><a class="reference internal" href="#module-solrcloudpy.collection">SolrCollection object</a></li>
+<li><a class="reference internal" href="#solrindexstats-object">SolrIndexStats object</a></li>
 <li><a class="reference internal" href="#searchoptions-object">SearchOptions object</a></li>
 <li><a class="reference internal" href="#solrresponse-object">SolrResponse object</a></li>
 <li><a class="reference internal" href="#solrresult-object">SolrResult object</a></li>

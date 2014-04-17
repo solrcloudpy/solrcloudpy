@@ -17,6 +17,12 @@ SolrCollection object
    :members:
    :inherited-members:
 
+SolrIndexStats object
+----------------------
+.. autoclass:: solrcloudpy.collection.stats.SolrIndexStats
+   :members:
+   :inherited-members:
+
 SearchOptions object
 ---------------------
 .. autoclass:: solrcloudpy.parameters.SearchOptions
