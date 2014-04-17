@@ -105,6 +105,9 @@ class SolrResult(DictObject):
 
     @property
     def dict(self):
+        """
+        Convert this result into a python `dict` for easier manipulation
+        """
         res = {}
         for (k,v) in self.__dict__.iteritems():
             if isinstance(v, SolrResult):
@@ -112,7 +115,7 @@ class SolrResult(DictObject):
             else:
                 res[k] = v
         return res
-    
+
 class SolrResponse(object):
     """
     A generic representation of a solr response. This objects contains both the `Response` object variable from the `requests` package and the parsed content in a :class:`~solrcloudpy.utils.SolrResult` instance.
