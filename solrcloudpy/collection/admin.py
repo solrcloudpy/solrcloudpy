@@ -3,6 +3,7 @@ Manage and administer a collection
 """
 from solrcloudpy.utils import SolrException, CollectionBase
 from .stats import SolrIndexStats
+from .schema import SolrSchema
 
 import time
 import json
@@ -15,7 +16,8 @@ class SolrCollectionAdmin(CollectionBase):
     def __init__(self,connection,name):
         super(SolrCollectionAdmin,self).__init__(connection,name)
         self.index_stats = SolrIndexStats(self.connection,self.name)
-
+        self.schema = SolrSchema(self.connection,self.name)
+        
     def exists(self):
         """
         Finds if a collection exists in the cluster
@@ -221,7 +223,6 @@ class SolrCollectionAdmin(CollectionBase):
         data.pop('directory',None)
         data.pop('userData',None)
         return data
-
 
     @property
     def stats(self):
