@@ -23,6 +23,12 @@ SolrIndexStats object
    :members:
    :inherited-members:
 
+SolrSchema object
+----------------------
+.. autoclass:: solrcloudpy.collection.schema.SolrSchema
+   :members:
+   :inherited-members:
+
 SearchOptions object
 ---------------------
 .. autoclass:: solrcloudpy.parameters.SearchOptions

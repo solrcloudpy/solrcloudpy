@@ -26,7 +26,7 @@ The API is meant to be close to ``pymongo``'s API, where one can access collecti
      }
 
 Pre-requisites
--------------
+----------------
 You will need to run Solr in "cloud" mode to use this library. To use
 the console, you will need to install the `ipython` package.
 
