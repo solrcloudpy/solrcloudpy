@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &mdash; solrcloudpy 1.2.460 documentation</title>
+    <title>API &mdash; solrcloudpy 1.3.460 documentation</title>
     
     <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.460',
+        VERSION:     '1.3.460',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="solrcloudpy 1.2.460 documentation" href="../index.html" />
+    <link rel="top" title="solrcloudpy 1.3.460 documentation" href="../index.html" />
     <link rel="prev" title="Searching a collection" href="../searching.html" />
    
   
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="../searching.html" title="Searching a collection"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">solrcloudpy 1.2.460 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">solrcloudpy 1.3.460 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -465,6 +465,109 @@ We retrieve cache stats for the document, filter, fiedvalue, fieldcache caches</
 </dd></dl>
 
 </div>
+<div class="section" id="solrschema-object">
+<h2>SolrSchema object<a class="headerlink" href="#solrschema-object" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="solrcloudpy.collection.schema.SolrSchema">
+<em class="property">class </em><tt class="descclassname">solrcloudpy.collection.schema.</tt><tt class="descname">SolrSchema</tt><big>(</big><em>connection</em>, <em>collection_name</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get and modify schema</p>
+<dl class="method">
+<dt id="solrcloudpy.collection.schema.SolrSchema.add_fields">
+<tt class="descname">add_fields</tt><big>(</big><em>json_schema</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.add_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add fields to the schema</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>json_schema</strong> &#8211; specs for the fields to add</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.schema.SolrSchema.get_copyfield">
+<tt class="descname">get_copyfield</tt><big>(</big><em>field</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_copyfield" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information about a copy field in the schema</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ftype</strong> &#8211; the name of the field type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.schema.SolrSchema.get_copyfields">
+<tt class="descname">get_copyfields</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_copyfields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information about all copy field in the schema</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.schema.SolrSchema.get_dynamic_field">
+<tt class="descname">get_dynamic_field</tt><big>(</big><em>field</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_dynamic_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information about a dynamic field in the schema</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>field</strong> &#8211; the name of the field</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.schema.SolrSchema.get_dynamic_fields">
+<tt class="descname">get_dynamic_fields</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_dynamic_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information about a dynamic field in the schema</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.schema.SolrSchema.get_field">
+<tt class="descname">get_field</tt><big>(</big><em>field</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information about a field in the schema</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>field</strong> &#8211; the name of the field</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.schema.SolrSchema.get_fields">
+<tt class="descname">get_fields</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information about all field in the schema</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.schema.SolrSchema.get_fieldtype">
+<tt class="descname">get_fieldtype</tt><big>(</big><em>ftype</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_fieldtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information about a field type in the schema</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ftype</strong> &#8211; the name of the field type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="solrcloudpy.collection.schema.SolrSchema.get_fieldtypes">
+<tt class="descname">get_fieldtypes</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_fieldtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get information about field types in the schema</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="searchoptions-object">
 <h2>SearchOptions object<a class="headerlink" href="#searchoptions-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -549,6 +652,7 @@ object whose attributes can be also accessed as dictionary keys.</p>
 <li><a class="reference internal" href="#module-solrcloudpy.connection">SolrConnection object</a></li>
 <li><a class="reference internal" href="#module-solrcloudpy.collection">SolrCollection object</a></li>
 <li><a class="reference internal" href="#solrindexstats-object">SolrIndexStats object</a></li>
+<li><a class="reference internal" href="#solrschema-object">SolrSchema object</a></li>
 <li><a class="reference internal" href="#searchoptions-object">SearchOptions object</a></li>
 <li><a class="reference internal" href="#solrresponse-object">SolrResponse object</a></li>
 <li><a class="reference internal" href="#solrresult-object">SolrResult object</a></li>
