@@ -182,7 +182,7 @@ class FacetParams(BaseParams):
         if field:
             self._q['f.%s.facet.mincount'%field].add(count)
         else:
-            self._q['facet.offset'].add(count)
+            self._q['facet.micount'].add(count)
         return self
 
     def missing(self,val,field=None):
