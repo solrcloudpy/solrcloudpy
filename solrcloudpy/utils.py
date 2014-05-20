@@ -10,10 +10,10 @@ class _Request(object):
     """
     Issues requests to the collections API
     """
-    def __init__(self,connection,timeout=10):
+    def __init__(self,connection):
         self.connection = connection
         self.client = requests.Session()
-        self.timeout = timeout
+        self.timeout = connection.timeout
         if self.connection.user:
             self.client.auth = HTTPBasicAuth(self.connection.user,self.connection.password)
 

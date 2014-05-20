@@ -37,6 +37,8 @@ class SolrConnection(object):
                  timeout=10):
         self.user = user
         self.password = password
+        self.timeout = timeout
+        
         if type(server) == type(''):
             self.url = "http://%s/solr/" % server
             servers = [self.url,self.url]
@@ -53,7 +55,7 @@ class SolrConnection(object):
             else:
                 self.servers = servers
 
-        self.client = _Request(self,timeout)
+        self.client = _Request(self)
 
     def detect_nodes(self,url):
         url = url+'zookeeper?path=/live_nodes'
