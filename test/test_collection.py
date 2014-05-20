@@ -1,6 +1,6 @@
 import unittest
 import time
-from test.solr_instance import SolrInstance
+from solr_instance import SolrInstance
 from solrcloudpy import SolrConnection as Connection
 
 class TestCollectionAdmin(unittest.TestCase):
