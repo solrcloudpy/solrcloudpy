@@ -69,7 +69,7 @@ SolrCloud Console
 Use the &#39;conn&#39; object to access a collection
 
 Type &#39;collections&#39; to see the list of available collections
-solr localhost:8983&gt; conn.collection1.search(SearchOptions.commonparameters.q(&quot;junk&quot;))
+solr localhost:8983&gt; conn.collection1.search(SearchOptions().commonparams.q(&quot;junk&quot;)).result
 {
     &quot;response&quot;: &quot;SolrResponse &lt;&lt; {&#39;start&#39;: 0, &#39;numFound&#39;: 0, &#39;docs&#39;: []} &gt;&gt;&quot;
 }

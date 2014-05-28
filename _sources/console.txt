@@ -13,7 +13,7 @@ Using the console
      Use the 'conn' object to access a collection
 
      Type 'collections' to see the list of available collections
-     solr localhost:8983> conn.collection1.search(SearchOptions.commonparameters.q("junk"))
+     solr localhost:8983> conn.collection1.search(SearchOptions().commonparams.q("junk")).result
      {   
          "response": "SolrResponse << {'start': 0, 'numFound': 0, 'docs': []} >>"
      }

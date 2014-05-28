@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>solrcloudpy.collection.stats &mdash; solrcloudpy 1.3.460 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.3.460',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="solrcloudpy 1.3.460 documentation" href="../../../index.html" />
+    <link rel="up" title="solrcloudpy" href="../../solrcloudpy.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">solrcloudpy 1.3.460 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../solrcloudpy.html" accesskey="U">solrcloudpy</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for solrcloudpy.collection.stats</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Get different statistics about the undelying index in a collection</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">solrcloudpy.utils</span> <span class="kn">import</span> <span class="n">_Request</span><span class="p">,</span> <span class="n">SolrResult</span>
+
+<div class="viewcode-block" id="SolrIndexStats"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.stats.SolrIndexStats">[docs]</a><span class="k">class</span> <span class="nc">SolrIndexStats</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get different statistics about the undelying index in a collection</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">connection</span><span class="p">,</span><span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">connection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">_Request</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="SolrIndexStats.cache_stats"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.stats.SolrIndexStats.cache_stats">[docs]</a>    <span class="k">def</span> <span class="nf">cache_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get cache statistics about the index.</span>
+<span class="sd">        We retrieve cache stats for the document, filter, fiedvalue, fieldcache caches</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;stats&#39;</span><span class="p">:</span><span class="s">&#39;true&#39;</span><span class="p">,</span><span class="s">&#39;cat&#39;</span><span class="p">:</span><span class="s">&#39;CACHE&#39;</span><span class="p">}</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/solr/</span><span class="si">%s</span><span class="s">/admin/mbeans&#39;</span><span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+        <span class="n">caches</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;solr-mbeans&#39;</span><span class="p">][</span><span class="s">&#39;CACHE&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">cache</span><span class="p">,</span><span class="n">info</span> <span class="ow">in</span> <span class="n">caches</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">cache</span> <span class="o">==</span> <span class="s">&#39;fieldCache&#39;</span><span class="p">:</span>
+                <span class="n">res</span><span class="p">[</span><span class="n">cache</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;entries_count&#39;</span><span class="p">:</span><span class="n">info</span><span class="p">[</span><span class="s">&#39;stats&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;entries_count&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)}</span>
+                <span class="k">continue</span>
+
+            <span class="n">res</span><span class="p">[</span><span class="n">cache</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s">&#39;stats&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">SolrResult</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="SolrIndexStats.queryhandler_stats"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.stats.SolrIndexStats.queryhandler_stats">[docs]</a>    <span class="k">def</span> <span class="nf">queryhandler_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get query handler statistics for all of the handlers used in this Solr node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;stats&#39;</span><span class="p">:</span><span class="s">&#39;true&#39;</span><span class="p">,</span><span class="s">&#39;cat&#39;</span><span class="p">:</span><span class="s">&#39;QUERYHANDLER&#39;</span><span class="p">}</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/solr/</span><span class="si">%s</span><span class="s">/admin/mbeans&#39;</span><span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+        <span class="n">caches</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;solr-mbeans&#39;</span><span class="p">][</span><span class="s">&#39;QUERYHANDLER&#39;</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">cache</span><span class="p">,</span><span class="n">info</span> <span class="ow">in</span> <span class="n">caches</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">cache</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s">&#39;stats&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">SolrResult</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../solrcloudpy.html">solrcloudpy</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2014, didier deshommes.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+  </body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>solrcloudpy.collection.schema &mdash; solrcloudpy 1.3.460 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.3.460',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="solrcloudpy 1.3.460 documentation" href="../../../index.html" />
+    <link rel="up" title="solrcloudpy" href="../../solrcloudpy.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">solrcloudpy 1.3.460 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../solrcloudpy.html" accesskey="U">solrcloudpy</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for solrcloudpy.collection.schema</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Get and modify schema</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">solrcloudpy.utils</span> <span class="kn">import</span> <span class="n">_Request</span>
+
+<div class="viewcode-block" id="SolrSchema"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.schema.SolrSchema">[docs]</a><span class="k">class</span> <span class="nc">SolrSchema</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get and modify schema</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">connection</span><span class="p">,</span><span class="n">collection_name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">connection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span> <span class="o">=</span> <span class="n">collection_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">_Request</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">schema</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema&#39;</span><span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/name&#39;</span><span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/version&#39;</span><span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">unique_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/uniquekey&#39;</span><span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/similarity&#39;</span><span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/solrqueryparser/defaultoperator&#39;</span><span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+
+    <span class="c">## fields</span>
+<div class="viewcode-block" id="SolrSchema.get_field"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.schema.SolrSchema.get_field">[docs]</a>    <span class="k">def</span> <span class="nf">get_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">field</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get information about a field in the schema</span>
+
+<span class="sd">        :param field: the name of the field</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/field/</span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">,</span><span class="n">field</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+</div>
+<div class="viewcode-block" id="SolrSchema.get_fields"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.schema.SolrSchema.get_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get information about all field in the schema</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/fields&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+</div>
+<div class="viewcode-block" id="SolrSchema.add_fields"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.schema.SolrSchema.add_fields">[docs]</a>    <span class="k">def</span> <span class="nf">add_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">json_schema</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add fields to the schema</span>
+
+<span class="sd">        :param json_schema: specs for the fields to add</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/fields&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">path</span><span class="p">,{},</span><span class="n">json_schema</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+
+    <span class="c">## dynamic fields</span></div>
+<div class="viewcode-block" id="SolrSchema.get_dynamic_fields"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.schema.SolrSchema.get_dynamic_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_dynamic_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get information about a dynamic field in the schema</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/dynamicfields&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+</div>
+<div class="viewcode-block" id="SolrSchema.get_dynamic_field"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.schema.SolrSchema.get_dynamic_field">[docs]</a>    <span class="k">def</span> <span class="nf">get_dynamic_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">field</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get information about a dynamic field in the schema</span>
+
+<span class="sd">        :param field: the name of the field</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/dynamicfield/</span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">,</span><span class="n">field</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+
+    <span class="c">## field types</span></div>
+<div class="viewcode-block" id="SolrSchema.get_fieldtypes"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.schema.SolrSchema.get_fieldtypes">[docs]</a>    <span class="k">def</span> <span class="nf">get_fieldtypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get information about field types in the schema</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/fieldtypes&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+</div>
+<div class="viewcode-block" id="SolrSchema.get_fieldtype"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.schema.SolrSchema.get_fieldtype">[docs]</a>    <span class="k">def</span> <span class="nf">get_fieldtype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ftype</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get information about a field type in the schema</span>
+
+<span class="sd">        :param ftype: the name of the field type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/fieldtypes/</span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">,</span><span class="n">ftype</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+
+    <span class="c">## copy fields</span></div>
+<div class="viewcode-block" id="SolrSchema.get_copyfields"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.schema.SolrSchema.get_copyfields">[docs]</a>    <span class="k">def</span> <span class="nf">get_copyfields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get information about all copy field in the schema</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/copyfields&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span>
+</div>
+<div class="viewcode-block" id="SolrSchema.get_copyfield"><a class="viewcode-back" href="../../../apidocs/solrcloudpy.html#solrcloudpy.collection.schema.SolrSchema.get_copyfield">[docs]</a>    <span class="k">def</span> <span class="nf">get_copyfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">field</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get information about a copy field in the schema</span>
+
+<span class="sd">        :param ftype: the name of the field type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/schema/copyfield/</span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">,</span><span class="n">field</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,{})</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">dict</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../solrcloudpy.html">solrcloudpy</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2014, didier deshommes.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+  </body>
+</html>
