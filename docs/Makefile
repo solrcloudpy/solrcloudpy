@@ -183,7 +183,7 @@ pseudoxml:
 gh-pages:
 	python setup.py install
 	git checkout gh-pages
-	rm -rf build _sources _static _modules apidocs solrcloudpy*
+	rm -rf build _sources _static _modules apidocs dist test solrcloudpy*
 	git checkout master $(GH_PAGES_SOURCES)
 	git reset HEAD
 	cd docs; make html
