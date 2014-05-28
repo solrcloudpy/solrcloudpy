@@ -181,8 +181,9 @@ pseudoxml:
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
 gh-pages:
+	python setup.py install
 	git checkout gh-pages
-	rm -rf build _sources _static _modules apidocs
+	rm -rf build _sources _static _modules apidocs solrcloudpy*
 	git checkout master $(GH_PAGES_SOURCES)
 	git reset HEAD
 	cd docs; make html
