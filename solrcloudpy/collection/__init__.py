@@ -6,7 +6,7 @@ Consult the `Collections API <https://cwiki.apache.org/confluence/display/solr/C
 
     >>> from solrcloudpy.connection import SolrConnection
     >>> conn = SolrConnection()
-    >>> coll = conn['test1'].create('test1')
+    >>> coll = conn['test1'].create()
     >>> coll
     SolrCollection<collection1>
 
