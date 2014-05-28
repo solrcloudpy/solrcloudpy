@@ -1,0 +1,5 @@
+requests == 2.2.1
+IPython == 1.2.0
+
+[ip]
+IPython == 1.2.0

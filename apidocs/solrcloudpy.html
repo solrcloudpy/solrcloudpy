@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &mdash; solrcloudpy 1.3.460 documentation</title>
+    <title>API &mdash; solrcloudpy 1.4.460 documentation</title>
     
     <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.3.460',
+        VERSION:     '1.4.460',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="solrcloudpy 1.3.460 documentation" href="../index.html" />
+    <link rel="top" title="solrcloudpy 1.4.460 documentation" href="../index.html" />
     <link rel="prev" title="Searching a collection" href="../searching.html" />
    
   
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="../searching.html" title="Searching a collection"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">solrcloudpy 1.3.460 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">solrcloudpy 1.4.460 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -71,7 +71,7 @@
 </div>
 <dl class="class">
 <dt id="solrcloudpy.connection.SolrConnection">
-<em class="property">class </em><tt class="descclassname">solrcloudpy.connection.</tt><tt class="descname">SolrConnection</tt><big>(</big><em>server='localhost:8983'</em>, <em>detect_live_nodes=False</em>, <em>user=None</em>, <em>password=None</em>, <em>timeout=10</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/connection.html#SolrConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.connection.SolrConnection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">solrcloudpy.connection.</tt><tt class="descname">SolrConnection</tt><big>(</big><em>server='localhost:8983'</em>, <em>detect_live_nodes=False</em>, <em>user=None</em>, <em>password=None</em>, <em>timeout=10</em><big>)</big><a class="headerlink" href="#solrcloudpy.connection.SolrConnection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connection to a solr server or several ones</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -90,20 +90,20 @@
 </table>
 <dl class="attribute">
 <dt id="solrcloudpy.connection.SolrConnection.cluster_health">
-<tt class="descname">cluster_health</tt><a class="reference internal" href="../_modules/solrcloudpy/connection.html#SolrConnection.cluster_health"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.cluster_health" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cluster_health</tt><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.cluster_health" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine the state of all nodes and collections in the cluster. Problematic nodes or
 collections are returned, along with their state, otherwise an <cite>OK</cite> message is returned</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="solrcloudpy.connection.SolrConnection.cluster_leader">
-<tt class="descname">cluster_leader</tt><a class="reference internal" href="../_modules/solrcloudpy/connection.html#SolrConnection.cluster_leader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.cluster_leader" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cluster_leader</tt><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.cluster_leader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the cluster leader</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="solrcloudpy.connection.SolrConnection.create_collection">
-<tt class="descname">create_collection</tt><big>(</big><em>collname</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/connection.html#SolrConnection.create_collection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.create_collection" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">create_collection</tt><big>(</big><em>collname</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.create_collection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a collection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -122,13 +122,13 @@ collections are returned, along with their state, otherwise an <cite>OK</cite> m
 
 <dl class="method">
 <dt id="solrcloudpy.connection.SolrConnection.list">
-<tt class="descname">list</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/connection.html#SolrConnection.list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">list</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lists out the current collections in the cluster</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="solrcloudpy.connection.SolrConnection.live_nodes">
-<tt class="descname">live_nodes</tt><a class="reference internal" href="../_modules/solrcloudpy/connection.html#SolrConnection.live_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.live_nodes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">live_nodes</tt><a class="headerlink" href="#solrcloudpy.connection.SolrConnection.live_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lists all nodes that are currently online</p>
 </dd></dl>
 
@@ -142,7 +142,7 @@ collections are returned, along with their state, otherwise an <cite>OK</cite> m
 Consult the <a class="reference external" href="https://cwiki.apache.org/confluence/display/solr/Collections+API">Collections API</a> for more details</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">solrcloudpy.connection</span> <span class="kn">import</span> <span class="n">SolrConnection</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">SolrConnection</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span> <span class="o">=</span> <span class="n">conn</span><span class="p">[</span><span class="s">&#39;test1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;test1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span> <span class="o">=</span> <span class="n">conn</span><span class="p">[</span><span class="s">&#39;test1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span>
 <span class="go">SolrCollection&lt;collection1&gt;</span>
 </pre></div>
@@ -447,18 +447,18 @@ by opening a new searcher</li>
 <h2>SolrIndexStats object<a class="headerlink" href="#solrindexstats-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="solrcloudpy.collection.stats.SolrIndexStats">
-<em class="property">class </em><tt class="descclassname">solrcloudpy.collection.stats.</tt><tt class="descname">SolrIndexStats</tt><big>(</big><em>connection</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/collection/stats.html#SolrIndexStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.stats.SolrIndexStats" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">solrcloudpy.collection.stats.</tt><tt class="descname">SolrIndexStats</tt><big>(</big><em>connection</em>, <em>name</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.stats.SolrIndexStats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get different statistics about the undelying index in a collection</p>
 <dl class="attribute">
 <dt id="solrcloudpy.collection.stats.SolrIndexStats.cache_stats">
-<tt class="descname">cache_stats</tt><a class="reference internal" href="../_modules/solrcloudpy/collection/stats.html#SolrIndexStats.cache_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.stats.SolrIndexStats.cache_stats" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cache_stats</tt><a class="headerlink" href="#solrcloudpy.collection.stats.SolrIndexStats.cache_stats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get cache statistics about the index.
 We retrieve cache stats for the document, filter, fiedvalue, fieldcache caches</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="solrcloudpy.collection.stats.SolrIndexStats.queryhandler_stats">
-<tt class="descname">queryhandler_stats</tt><a class="reference internal" href="../_modules/solrcloudpy/collection/stats.html#SolrIndexStats.queryhandler_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.stats.SolrIndexStats.queryhandler_stats" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">queryhandler_stats</tt><a class="headerlink" href="#solrcloudpy.collection.stats.SolrIndexStats.queryhandler_stats" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get query handler statistics for all of the handlers used in this Solr node</p>
 </dd></dl>
 
@@ -469,11 +469,11 @@ We retrieve cache stats for the document, filter, fiedvalue, fieldcache caches</
 <h2>SolrSchema object<a class="headerlink" href="#solrschema-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="solrcloudpy.collection.schema.SolrSchema">
-<em class="property">class </em><tt class="descclassname">solrcloudpy.collection.schema.</tt><tt class="descname">SolrSchema</tt><big>(</big><em>connection</em>, <em>collection_name</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/collection/schema.html#SolrSchema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">solrcloudpy.collection.schema.</tt><tt class="descname">SolrSchema</tt><big>(</big><em>connection</em>, <em>collection_name</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get and modify schema</p>
 <dl class="method">
 <dt id="solrcloudpy.collection.schema.SolrSchema.add_fields">
-<tt class="descname">add_fields</tt><big>(</big><em>json_schema</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/collection/schema.html#SolrSchema.add_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.add_fields" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add_fields</tt><big>(</big><em>json_schema</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.add_fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add fields to the schema</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -487,7 +487,7 @@ We retrieve cache stats for the document, filter, fiedvalue, fieldcache caches</
 
 <dl class="method">
 <dt id="solrcloudpy.collection.schema.SolrSchema.get_copyfield">
-<tt class="descname">get_copyfield</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/collection/schema.html#SolrSchema.get_copyfield"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_copyfield" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_copyfield</tt><big>(</big><em>field</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_copyfield" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get information about a copy field in the schema</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -501,13 +501,13 @@ We retrieve cache stats for the document, filter, fiedvalue, fieldcache caches</
 
 <dl class="method">
 <dt id="solrcloudpy.collection.schema.SolrSchema.get_copyfields">
-<tt class="descname">get_copyfields</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/collection/schema.html#SolrSchema.get_copyfields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_copyfields" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_copyfields</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_copyfields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get information about all copy field in the schema</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="solrcloudpy.collection.schema.SolrSchema.get_dynamic_field">
-<tt class="descname">get_dynamic_field</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/collection/schema.html#SolrSchema.get_dynamic_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_dynamic_field" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_dynamic_field</tt><big>(</big><em>field</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_dynamic_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get information about a dynamic field in the schema</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -521,13 +521,13 @@ We retrieve cache stats for the document, filter, fiedvalue, fieldcache caches</
 
 <dl class="method">
 <dt id="solrcloudpy.collection.schema.SolrSchema.get_dynamic_fields">
-<tt class="descname">get_dynamic_fields</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/collection/schema.html#SolrSchema.get_dynamic_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_dynamic_fields" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_dynamic_fields</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_dynamic_fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get information about a dynamic field in the schema</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="solrcloudpy.collection.schema.SolrSchema.get_field">
-<tt class="descname">get_field</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/collection/schema.html#SolrSchema.get_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_field" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_field</tt><big>(</big><em>field</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get information about a field in the schema</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -541,13 +541,13 @@ We retrieve cache stats for the document, filter, fiedvalue, fieldcache caches</
 
 <dl class="method">
 <dt id="solrcloudpy.collection.schema.SolrSchema.get_fields">
-<tt class="descname">get_fields</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/collection/schema.html#SolrSchema.get_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_fields" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_fields</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get information about all field in the schema</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="solrcloudpy.collection.schema.SolrSchema.get_fieldtype">
-<tt class="descname">get_fieldtype</tt><big>(</big><em>ftype</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/collection/schema.html#SolrSchema.get_fieldtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_fieldtype" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_fieldtype</tt><big>(</big><em>ftype</em><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_fieldtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get information about a field type in the schema</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -561,7 +561,7 @@ We retrieve cache stats for the document, filter, fiedvalue, fieldcache caches</
 
 <dl class="method">
 <dt id="solrcloudpy.collection.schema.SolrSchema.get_fieldtypes">
-<tt class="descname">get_fieldtypes</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/collection/schema.html#SolrSchema.get_fieldtypes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_fieldtypes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_fieldtypes</tt><big>(</big><big>)</big><a class="headerlink" href="#solrcloudpy.collection.schema.SolrSchema.get_fieldtypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get information about field types in the schema</p>
 </dd></dl>
 
@@ -572,7 +572,7 @@ We retrieve cache stats for the document, filter, fiedvalue, fieldcache caches</
 <h2>SearchOptions object<a class="headerlink" href="#searchoptions-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="solrcloudpy.parameters.SearchOptions">
-<em class="property">class </em><tt class="descclassname">solrcloudpy.parameters.</tt><tt class="descname">SearchOptions</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/parameters.html#SearchOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.parameters.SearchOptions" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">solrcloudpy.parameters.</tt><tt class="descname">SearchOptions</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#solrcloudpy.parameters.SearchOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Manage options to pass to a solr query</p>
 <p>Although one can use plain dictionaries to pass parameters to solr, this class
 makes this task more convenient. Currently, it covers all options to pass to do:</p>
@@ -600,11 +600,11 @@ makes this task more convenient. Currently, it covers all options to pass to do:
 <h2>SolrResponse object<a class="headerlink" href="#solrresponse-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="solrcloudpy.utils.SolrResponse">
-<em class="property">class </em><tt class="descclassname">solrcloudpy.utils.</tt><tt class="descname">SolrResponse</tt><big>(</big><em>response_obj</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/utils.html#SolrResponse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.utils.SolrResponse" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">solrcloudpy.utils.</tt><tt class="descname">SolrResponse</tt><big>(</big><em>response_obj</em><big>)</big><a class="headerlink" href="#solrcloudpy.utils.SolrResponse" title="Permalink to this definition">¶</a></dt>
 <dd><p>A generic representation of a solr response. This objects contains both the <cite>Response</cite> object variable from the <cite>requests</cite> package and the parsed content in a <a class="reference internal" href="#solrcloudpy.utils.SolrResult" title="solrcloudpy.utils.SolrResult"><tt class="xref py py-class docutils literal"><span class="pre">SolrResult</span></tt></a> instance.</p>
 <dl class="attribute">
 <dt id="solrcloudpy.utils.SolrResponse.code">
-<tt class="descname">code</tt><a class="reference internal" href="../_modules/solrcloudpy/utils.html#SolrResponse.code"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.utils.SolrResponse.code" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">code</tt><a class="headerlink" href="#solrcloudpy.utils.SolrResponse.code" title="Permalink to this definition">¶</a></dt>
 <dd><p>Status code of this response</p>
 </dd></dl>
 
@@ -615,7 +615,7 @@ makes this task more convenient. Currently, it covers all options to pass to do:
 <h2>SolrResult object<a class="headerlink" href="#solrresult-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="solrcloudpy.utils.SolrResult">
-<em class="property">class </em><tt class="descclassname">solrcloudpy.utils.</tt><tt class="descname">SolrResult</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="../_modules/solrcloudpy/utils.html#SolrResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.utils.SolrResult" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">solrcloudpy.utils.</tt><tt class="descname">SolrResult</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#solrcloudpy.utils.SolrResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic representation of a Solr search result. The response is a
 object whose attributes can be also accessed as dictionary keys.</p>
 <p>Example:</p>
@@ -631,7 +631,7 @@ object whose attributes can be also accessed as dictionary keys.</p>
 </div>
 <dl class="attribute">
 <dt id="solrcloudpy.utils.SolrResult.dict">
-<tt class="descname">dict</tt><a class="reference internal" href="../_modules/solrcloudpy/utils.html#SolrResult.dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solrcloudpy.utils.SolrResult.dict" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dict</tt><a class="headerlink" href="#solrcloudpy.utils.SolrResult.dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert this result into a python <cite>dict</cite> for easier manipulation</p>
 </dd></dl>
 

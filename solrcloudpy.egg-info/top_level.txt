@@ -1,0 +1,2 @@
+solrcloudpy
+scripts
