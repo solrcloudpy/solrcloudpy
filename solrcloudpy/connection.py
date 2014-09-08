@@ -53,7 +53,7 @@ class SolrConnection(object):
             else:
                 self.servers = servers
         if type(server) == type([]):
-            servers = [self.url_template % a for a in server]
+            servers = [self.url_template.format(server=a) for a in server]
             if detect_live_nodes:
                 url = servers[0]
                 self.servers = self.detect_nodes(url)
