@@ -19,12 +19,12 @@ class SolrCollectionSearch(CollectionBase):
     def __repr__(self):
         return "SolrIndex<%s>" % self.name
 
-    def _send(self, path, params, method='GET', body=None):
+    def _get_response(self, path, params, method='GET', body=None):
         return self.client.request(path, params, method=method, body=body)
 
     def _update(self, body):
         path = '%s/update/json' % self.name
-        resp = self._send(path, method='POST', params={}, body=body)
+        resp = self._get_response(path, method='POST', params={}, body=body)
         return resp
 
     def search(self, params):
@@ -35,7 +35,7 @@ class SolrCollectionSearch(CollectionBase):
 
         """
         path = "%s/select" % self.name
-        data = self._send(path, params)
+        data = self._get_response(path, params)
         return data
 
     def clustering(self, params):
@@ -46,7 +46,7 @@ class SolrCollectionSearch(CollectionBase):
 
         """
         path = "%s/clustering" % self.name
-        data = self._send(path, params)
+        data = self._get_response(path, params)
         return data
 
     def mlt(self, params):
@@ -56,7 +56,7 @@ class SolrCollectionSearch(CollectionBase):
         :param params: query parameters. Here `params` can be a :class:`~solrcloudpy.parameters.SearchOptions` instance, a dictionary or a list of tuples
         """
         path = "%s/mlt" % self.name
-        data = self._send(path, params)
+        data = self._get_response(path, params)
         return data
 
     def add(self, docs):
@@ -109,7 +109,7 @@ class SolrCollectionSearch(CollectionBase):
                   'optimize': 'true'
                   }
         path = '%s/update' % self.name
-        res = self.client.get(path, params=params).result
+        res = self._get_response(path, params=params).result
         return res
 
     def commit(self):
