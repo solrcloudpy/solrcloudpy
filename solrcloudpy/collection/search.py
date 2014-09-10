@@ -101,8 +101,8 @@ class SolrCollectionSearch(CollectionBase):
 
         :param softcommit: whether to perform a soft commit when optimizing
         """
-        waitsearcher = str(waitsearcher).lower()
-        softcommit = str(softcommit).lower()
+        waitsearcher = str(wait_searcher).lower()
+        softcommit = str(soft_commit).lower()
         params = {'softCommit': softcommit,
                   'waitSearcher': waitsearcher,
                   'maxSegments': max_segments,
