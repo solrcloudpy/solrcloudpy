@@ -9,7 +9,9 @@ import json
 
 dthandler = lambda obj: obj.isoformat() if isinstance(obj, dt.datetime) else None
 
+
 class SolrCollectionSearch(CollectionBase):
+
     """
     Performs search-related operations on a collection
     """
@@ -17,15 +19,15 @@ class SolrCollectionSearch(CollectionBase):
     def __repr__(self):
         return "SolrIndex<%s>" % self.name
 
-    def _send(self,path,params,method='GET',body=None):
-        return self.client.request(path,params,method=method,body=body)
+    def _send(self, path, params, method='GET', body=None):
+        return self.client.request(path, params, method=method, body=body)
 
-    def _update(self,body):
+    def _update(self, body):
         path = '%s/update/json' % self.name
-        resp = self._send(path,method='POST',params={},body=body)
+        resp = self._send(path, method='POST', params={}, body=body)
         return resp
 
-    def search(self,params):
+    def search(self, params):
         """
         Search this index
 
@@ -33,10 +35,10 @@ class SolrCollectionSearch(CollectionBase):
 
         """
         path = "%s/select" % self.name
-        data = self._send(path,params)
+        data = self._send(path, params)
         return data
 
-    def clustering(self,params):
+    def clustering(self, params):
         """
         Perform clustering on a query
 
@@ -44,7 +46,7 @@ class SolrCollectionSearch(CollectionBase):
 
         """
         path = "%s/clustering" % self.name
-        data = self._send(path,params)
+        data = self._send(path, params)
         return data
 
     def mlt(self, params):
@@ -54,20 +56,20 @@ class SolrCollectionSearch(CollectionBase):
         :param params: query parameters. Here `params` can be a :class:`~solrcloudpy.parameters.SearchOptions` instance, a dictionary or a list of tuples
         """
         path = "%s/mlt" % self.name
-        data = self._send(path,params)
+        data = self._send(path, params)
         return data
 
-    def add(self,docs):
+    def add(self, docs):
         """
         Add a list of document to the collection
 
         :param docs: a list of documents to add
         """
-        message = json.dumps(docs,default=dthandler)
+        message = json.dumps(docs, default=dthandler)
         response = self._update(message).result
         return response
 
-    def delete(self,id=None,q=None,commit=True):
+    def delete(self, id=None, q=None, commit=True):
         """
         Delete documents in a collection. Deletes occur either by id or by query
 
@@ -82,15 +84,15 @@ class SolrCollectionSearch(CollectionBase):
         elif id is not None and q is not None:
             raise ValueError('You many only specify "id" OR "q", not both.')
         elif id is not None:
-            m = json.dumps({"delete":{"id":"%s" % id }})
+            m = json.dumps({"delete": {"id": "%s" % id}})
         elif q is not None:
-            m = json.dumps({"delete":{"query":"%s" % q }})
+            m = json.dumps({"delete": {"query": "%s" % q}})
 
         self._update(m)
         if commit:
             self.commit()
 
-    def optimize(self,waitsearcher=False,softcommit=False):
+    def optimize(self, waitsearcher=False, softcommit=False):
         """
         Optimize a collection for searching
 
@@ -106,7 +108,7 @@ class SolrCollectionSearch(CollectionBase):
                   'optimize': 'true'
                   }
         path = '%s/update' % self.name
-        res = self.client.get(path,params=params).result
+        res = self.client.get(path, params=params).result
         return res
 
     def commit(self):
