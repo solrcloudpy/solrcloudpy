@@ -2,7 +2,7 @@
 Query and update a Solr collection
 """
 
-from solrcloudpy.utils import CollectionBase
+from solrcloudpy.utils import CollectionBase, SolrException
 
 import datetime as dt
 import json
@@ -25,6 +25,8 @@ class SolrCollectionSearch(CollectionBase):
     def _update(self, body):
         path = '%s/update/json' % self.name
         resp = self._get_response(path, method='POST', params={}, body=body)
+        if resp.code != 200:
+            raise SolrException(resp.result.error)
         return resp
 
     def search(self, params):
