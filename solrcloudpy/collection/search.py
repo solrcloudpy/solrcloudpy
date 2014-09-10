@@ -92,7 +92,7 @@ class SolrCollectionSearch(CollectionBase):
         if commit:
             self.commit()
 
-    def optimize(self, waitsearcher=False, softcommit=False):
+    def optimize(self, wait_searcher=False, soft_commit=False, max_segments=1):
         """
         Optimize a collection for searching
 
@@ -105,6 +105,7 @@ class SolrCollectionSearch(CollectionBase):
         softcommit = str(softcommit).lower()
         params = {'softCommit': softcommit,
                   'waitSearcher': waitsearcher,
+                  'maxSegments': max_segments,
                   'optimize': 'true'
                   }
         path = '%s/update' % self.name
