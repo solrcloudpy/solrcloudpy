@@ -33,6 +33,9 @@ class BaseParams(object):
         c = self._q.copy()
         return c.iteritems()
 
+    def __getitem__(self, item):
+        return self._q[item]
+
     def iterkeys(self):
         return self._q.iterkeys()
 

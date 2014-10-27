@@ -71,24 +71,26 @@ class SolrCollectionSearch(CollectionBase):
         response = self._update(message).result
         return response
 
-    def delete(self, id=None, q=None, commit=True):
+    def delete(self, query, commit=True):
         """
-        Delete documents in a collection. Deletes occur either by id or by query
+        Delete documents in a collection.
 
-        :param id: the id of the document to pass.
+        :param query: query parameters. Here `query` can be a :class:`~solrcloudpy.parameters.SearchOptions` instance, or a dictionary
 
-        :param q: the query matching the set of documents to delete
 
         :param commit: whether to commit the change or not
         """
-        if id is None and q is None:
-            raise ValueError('You must specify "id" or "q".')
-        elif id is not None and q is not None:
-            raise ValueError('You many only specify "id" OR "q", not both.')
-        elif id is not None:
-            m = json.dumps({"delete": {"id": "%s" % id}})
-        elif q is not None:
-            m = json.dumps({"delete": {"query": "%s" % q}})
+        if 'q' not in query.iterkeys():
+            raise ValueError("query should have a 'q' parameter")
+
+        q = None
+        if hasattr(query, 'commonparams'):
+            q = list(query.commonparams['q'])
+            q = q[0]
+        else:
+            q = query['q']
+
+        m = json.dumps({"delete": {"query": "%s" % q}})
 
         self._update(m)
         if commit:
@@ -99,7 +101,7 @@ class SolrCollectionSearch(CollectionBase):
         Optimize a collection for searching
 
         :param waitsearcher: whether to make the changes to the collection visible or not
-                              by opening a new searcher
+                          by opening a new searcher
 
         :param softcommit: whether to perform a soft commit when optimizing
         """
