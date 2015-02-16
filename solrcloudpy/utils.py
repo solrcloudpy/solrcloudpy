@@ -5,6 +5,7 @@ import requests
 import urlparse
 import json
 import itertools
+import random
 
 
 class _Request(object):
