@@ -44,7 +44,7 @@ class _Request(object):
         resparams = itertools.chain(params,
                                     extraparams.iteritems())
 
-        servers = random.shuffle(list(self.connection.servers))
+        random.shuffle(list(self.connection.servers))
         host = servers.pop(0)
 
         def make_request(host, path):
