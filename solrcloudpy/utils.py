@@ -1,4 +1,4 @@
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError , Timeout
 from requests.auth import HTTPBasicAuth
 
 import requests
@@ -43,7 +43,7 @@ class _Request(object):
         resparams = itertools.chain(params,
                                     extraparams.iteritems())
 
-        servers = list(self.connection.servers)
+        servers = random.shuffle(list(self.connection.servers))
         host = servers.pop(0)
 
         def make_request(host, path):
@@ -55,7 +55,7 @@ class _Request(object):
 
                 return SolrResponse(r)
 
-            except ConnectionError as e:
+            except (Timeout , ConnectionError) as e:
                 print 'exception: ', e
                 host = servers.pop(0)
                 return make_request(host, path)
