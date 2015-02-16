@@ -5,6 +5,7 @@ import requests
 import urlparse
 import json
 import itertools
+import random
 
 
 class _Request(object):
@@ -44,6 +45,7 @@ class _Request(object):
                                     extraparams.iteritems())
 
         servers = list(self.connection.servers)
+        random.shuffle(servers)
         host = servers.pop(0)
 
         def make_request(host, path):
