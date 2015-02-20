@@ -286,5 +286,5 @@ class SearchOptions(object):
         return iter(res)
 
     def __repr__(self):
-        res = {c.__class__.__name__.lower(): c for c in self._all}
+        res = dict([(c.__class__.__name__.lower(), c) for c in self._all])
         return repr(res)
