@@ -30,7 +30,7 @@ class _Request(object):
         :param method: Tje request method, e.g. `GET`
         :param body: The request body, if any
 
-        :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse` 
+        :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         """
         headers = {'content-type': 'application/json'}
         extraparams = {'wt': 'json',
@@ -41,8 +41,8 @@ class _Request(object):
         if hasattr(params, 'iteritems'):
             params = params.iteritems()
 
-        resparams = itertools.chain(params,
-                                    extraparams.iteritems())
+        resparams = dict(itertools.chain(params,
+                                    extraparams.iteritems()))
 
         servers = list(self.connection.servers)
         random.shuffle(servers)
