@@ -92,12 +92,14 @@ class DictObject(object):
             return
 
         for k, v in obj.iteritems():
+            if isinstance(k, unicode):
+                k = k.encode('utf8', 'ignore')
             if isinstance(v, dict):
                 # create a new object from this (sub)class,
                 # not necessarily from DictObject
                 setattr(self, k, self.__class__(v))
             else:
-                setattr(self, k.encode('utf8', 'ignore'), v)
+                setattr(self, k, v)
 
     def __getitem__(self, val):
         return self.__dict__[val]
