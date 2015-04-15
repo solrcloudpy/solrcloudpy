@@ -34,5 +34,5 @@ setup(
         ],
 
     install_requires = ['requests >= 2.2.1','IPython >= 1.2.0'],
-    extras_require = {"ip": ['IPython == 1.2.0'] },
+    extras_require = {"ip": ['IPython >= 1.2.0'] },
         )
