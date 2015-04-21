@@ -4,7 +4,6 @@ from requests.auth import HTTPBasicAuth
 import requests
 import urlparse
 import json
-import itertools
 import random
 
 
@@ -26,22 +25,18 @@ class _Request(object):
         Send a request to a collection
 
         :param path: The relative path of the request
-        :param params: the parameters of this request. Has to be an objects that implemetns `iteritems`. Most often this will be an instance :class:`~solrcloudpy.parameter.SearchOptions`
-        :param method: Tje request method, e.g. `GET`
+        :param params: The parameters of this request. Has to be an objects that implements `iteritems`. Most often this will be an instance :class:`~solrcloudpy.parameter.SearchOptions` or a dictionary
+        :param method: The request method, e.g. `GET`
         :param body: The request body, if any
 
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         """
-        extraparams = {'wt': 'json',
-                       'omitHeader': 'true',
-                       'json.nl': 'map'}
+        resparams = {'wt': 'json',
+                     'omitHeader': 'true',
+                     'json.nl': 'map'}
 
-        # pass either a dictionary or a tuple
         if hasattr(params, 'iteritems'):
-            params = params.iteritems()
-
-        resparams = dict(itertools.chain(params,
-                                         extraparams.iteritems()))
+            resparams.update(params.iteritems())
 
         servers = list(self.connection.servers)
         random.shuffle(servers)
