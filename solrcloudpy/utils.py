@@ -32,7 +32,6 @@ class _Request(object):
 
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         """
-        headers = {'content-type': 'application/json'}
         extraparams = {'wt': 'json',
                        'omitHeader': 'true',
                        'json.nl': 'map'}
@@ -42,7 +41,7 @@ class _Request(object):
             params = params.iteritems()
 
         resparams = dict(itertools.chain(params,
-                                    extraparams.iteritems()))
+                                         extraparams.iteritems()))
 
         servers = list(self.connection.servers)
         random.shuffle(servers)
@@ -53,7 +52,8 @@ class _Request(object):
             try:
                 r = self.client.request(method, fullpath,
                                         params=resparams,
-                                        headers=headers, data=body, timeout=self.timeout)
+                                        data=body,
+                                        timeout=self.timeout)
 
                 return SolrResponse(r)
 
