@@ -18,7 +18,8 @@ class _Request(object):
         self.client = requests.Session()
         self.timeout = connection.timeout
         if self.connection.user:
-            self.client.auth = HTTPBasicAuth(self.connection.user, self.connection.password)
+            self.client.auth = HTTPBasicAuth(
+                self.connection.user, self.connection.password)
 
     def request(self, path, params, method='GET', body=None):
         """
@@ -31,6 +32,10 @@ class _Request(object):
 
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         """
+        headers = {}
+        if method.lower() != 'get':
+            headers = {'content-type': 'application/json'}
+
         resparams = {'wt': 'json',
                      'omitHeader': 'true',
                      'json.nl': 'map'}
@@ -48,6 +53,7 @@ class _Request(object):
                 r = self.client.request(method, fullpath,
                                         params=resparams,
                                         data=body,
+                                        headers=headers,
                                         timeout=self.timeout)
 
                 return SolrResponse(r)
