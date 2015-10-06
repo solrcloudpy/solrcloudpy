@@ -1,10 +1,12 @@
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, HTTPError
 from requests.auth import HTTPBasicAuth
 
 import requests
 import urlparse
 import json
 import random
+import logging
+logger = logging.getLogger(__name__)
 
 
 class _Request(object):
@@ -45,9 +47,10 @@ class _Request(object):
 
         servers = list(self.connection.servers)
         random.shuffle(servers)
-        host = servers.pop(0)
 
-        def make_request(host, path):
+        result = None
+        while len(servers) > 0 and result is None:
+            host = servers.pop(0)
             fullpath = urlparse.urljoin(host, path)
             try:
                 r = self.client.request(method, fullpath,
@@ -55,15 +58,18 @@ class _Request(object):
                                         data=body,
                                         headers=headers,
                                         timeout=self.timeout)
+                r.raise_for_status()
 
-                return SolrResponse(r)
+                result = SolrResponse(r)
 
-            except ConnectionError as e:
-                print 'exception: ', e
-                host = servers.pop(0)
-                return make_request(host, path)
+            except (ConnectionError, HTTPError) as e:
+                logger.exception('Failed to connect to server at %s. e=%s',
+                                 host, e)
 
-        result = make_request(host, path)
+                if len(servers) <= 0:
+                    logger.error('No servers left to try')
+                    raise SolrException('No servers available')
+
         return result
 
     def update(self, path, params, body):
