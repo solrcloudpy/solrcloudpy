@@ -1,3 +1,5 @@
+**NOTE: This project needs a new maintainer. To volunteer, please send me a note at my github email address**
+
 solrcloudpy
 ===========
 
@@ -9,7 +11,8 @@ library aims to take advantage of the following features of Solr:
 * Centralized index management
 * Near-realtime search
 
-The API is mean to be close to pymongo's API, where one can access
+It is meant to be compatible with solr versions *4.6* to *5.0*.
+The API is meant to be close to pymongo's API, where one can access
 collections and databases as simple attributes 
 or dictionary keys.  
 
