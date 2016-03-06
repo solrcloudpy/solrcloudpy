@@ -1,0 +1,13 @@
+#!/bin/bash -e
+# 
+# This is best used with Solr being started and stopped separately
+# But if you really want, you can still specify SOLR_HOME and it will apply to each one
+
+python solr_instance.py start
+echo "python test_collection.py" 
+SKIP_STARTUP=1 python test_collection.py
+echo "python test_connection.py"
+SKIP_STARTUP=1 python test_connection.py
+echo "python test_search.py"
+SKIP_STARTUP=1 python test_search.py
+python solr_instance.py stop

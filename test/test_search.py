@@ -1,7 +1,11 @@
 import unittest
 import time
+import os
 from solr_instance import SolrInstance
 from solrcloudpy import SolrConnection, SearchOptions
+
+
+solrprocess = None
 
 
 class TestCollectionSearch(unittest.TestCase):
@@ -43,6 +47,8 @@ class TestCollectionSearch(unittest.TestCase):
 
 
 def setUpModule():
+    if os.getenv('SKIP_STARTUP', False):
+        return
     # start solr
     solrprocess = SolrInstance("solr2")
     solrprocess.start()
@@ -51,9 +57,11 @@ def setUpModule():
 
 
 def tearDownModule():
-    # stop solr
-    import subprocess
-    subprocess.call(args=['killall -9 java'], shell=True)
+    if os.getenv('SKIP_STARTUP', False):
+        return
+    if solrprocess:
+        solrprocess.terminate()
+
 
 if __name__ == '__main__':
     # run tests
