@@ -60,7 +60,7 @@ class _Request(object):
         if method.lower() != 'get':
             headers = {'content-type': 'application/json'}
 
-        # https://github.com/dfdeshom/solrcloudpy/issues/21
+        # https://github.com/solrcloudpy/solrcloudpy/issues/21
         # https://wiki.apache.org/solr/SolJSON
         resparams = {'wt': 'json',
                      'omitHeader': 'true',

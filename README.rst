@@ -49,8 +49,8 @@ Search documents:
 Console
 -------
 ``solrcloudpy`` comes with a console that can be run simply by typing ``solrconsole``. More information on usage is available at
-http://dfdeshom.github.io/solrcloudpy/console.html
+http://solrcloudpy.github.io/solrcloudpy/console.html
 
 Documentation and API
 ---------------------
-Documentation can be found at http://dfdeshom.github.io/solrcloudpy/
+Documentation can be found at http://solrcloudpy.github.io/solrcloudpy/
