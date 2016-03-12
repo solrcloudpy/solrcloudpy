@@ -2,27 +2,53 @@
 Query and update a Solr collection
 """
 
-from solrcloudpy.utils import CollectionBase, SolrException
+from solrcloudpy.utils import CollectionBase, SolrException, as_json_bool
 
 import datetime as dt
 import json
 
+
+# todo this seems funky -- only called once
 dthandler = lambda obj: obj.isoformat() if isinstance(obj, dt.datetime) else None
 
 
 class SolrCollectionSearch(CollectionBase):
-
     """
     Performs search-related operations on a collection
     """
-
     def __repr__(self):
+        """
+        :return: A string representation of the object
+        :rtype: str
+        """
         return "SolrIndex<%s>" % self.name
 
-    def _get_response(self, path, params, method='GET', body=None):
-        return self.client.request(path, params, method=method, body=body)
+    def _get_response(self, path, params={}, method='GET', body=None):
+        """
+        Retrieves a response from the solr client
+        
+        :param path: the URL of the solr endpoint
+        :type path: str
+        :param params: query params
+        :type params: dict
+        :param method: the request method
+        :type method: str
+        :param body: the request body
+        :type body: str
+        :return: the response
+        :rtype: SolrResponse
+        """
+        return self.client.request(path, params=params, method=method, body=body)
 
     def _update(self, body):
+        """
+        Sends and update request to the solr collection in JSON format
+        :param body: the update JSON string
+        :type: str
+        :return: the response from Solr
+        :rtype: SolrResponse
+        :raise: SolrException
+        """
         path = '%s/update/json' % self.name
         resp = self._get_response(path, method='POST', params={}, body=body)
         if resp.code != 200:
@@ -34,51 +60,64 @@ class SolrCollectionSearch(CollectionBase):
         Search this index
 
         :param params: query parameters. Here `params` can be a :class:`~solrcloudpy.parameters.SearchOptions` instance, a dictionary or a list of tuples
-
+        :type params: SearchOptions
+        :type params: dict
+        :type params: list
+        :return: the response from Solr
+        :rtype: SolrResponse
         """
-        path = "%s/select" % self.name
-        data = self._get_response(path, params)
-        return data
+        return self._get_response("%s/select" % self.name, params)
 
     def clustering(self, params):
         """
         Perform clustering on a query
 
         :param params: query parameters. Here `params` can be a :class:`~solrcloudpy.parameters.SearchOptions` instance, a dictionary or a list of tuples
-
+        :type params: SearchOptions
+        :type params: dict
+        :type params: list
+        :return: the response from Solr
+        :rtype: SolrResponse
         """
-        path = "%s/clustering" % self.name
-        data = self._get_response(path, params)
-        return data
+        return self._get_response("%s/clustering" % self.name, params)
 
     def mlt(self, params):
         """
         Perform MLT on this index
 
         :param params: query parameters. Here `params` can be a :class:`~solrcloudpy.parameters.SearchOptions` instance, a dictionary or a list of tuples
+        :type params: SearchOptions
+        :type params: dict
+        :type params: list
+        :return: the response from Solr
+        :rtype: SolrResponse
         """
-        path = "%s/mlt" % self.name
-        data = self._get_response(path, params)
-        return data
+        return self._get_response("%s/mlt" % self.name, params)
 
     def add(self, docs):
         """
         Add a list of document to the collection
 
         :param docs: a list of documents to add
+        :type docs: iterable<dict>
+        :return: the response from Solr
+        :rtype: SolrResponse
+        :raise: SolrException
         """
-        message = json.dumps(docs, default=dthandler)
-        response = self._update(message).result
-        return response
+        return self._update(json.dumps(docs, default=dthandler)).result
 
     def delete(self, query, commit=True):
         """
         Delete documents in a collection.
 
         :param query: query parameters. Here `query` can be a :class:`~solrcloudpy.parameters.SearchOptions` instance, or a dictionary
-
-
+        :type query: SearchOptions
+        :type query: dict
         :param commit: whether to commit the change or not
+        :type commit: bool
+        :return: the response
+        :rtype: SolrResponse
+        :raise: SolrException
         """
         if 'q' not in query.iterkeys():
             raise ValueError("query should have a 'q' parameter")
@@ -92,31 +131,38 @@ class SolrCollectionSearch(CollectionBase):
 
         m = json.dumps({"delete": {"query": "%s" % q}})
 
-        self._update(m)
+        response = self._update(m)
         if commit:
             self.commit()
+        return response
 
     def optimize(self, wait_searcher=False, soft_commit=False, max_segments=1):
         """
         Optimize a collection for searching
 
-        :param waitsearcher: whether to make the changes to the collection visible or not
-                          by opening a new searcher
-
-        :param softcommit: whether to perform a soft commit when optimizing
+        :param wait_searcher: whether to make the changes to the collection visible or not by opening a new searcher
+        :type wait_searcher: bool
+        :param soft_commit: whether to perform a soft commit when optimizing
+        :type soft_commit: bool
+        :param max_segments: the maximum number of segments in the index after optimization
+        :type max_segments: int
+        :return: the solr response
+        :rtype: SolrResponse
+        :raise: SolrException
         """
-        waitsearcher = str(wait_searcher).lower()
-        softcommit = str(soft_commit).lower()
-        params = {'softCommit': softcommit,
-                  'waitSearcher': waitsearcher,
+        params = {'softCommit': as_json_bool(soft_commit),
+                  'waitSearcher': as_json_bool(wait_searcher),
                   'maxSegments': max_segments,
                   'optimize': 'true'
                   }
-        path = '%s/update' % self.name
-        res = self._get_response(path, params=params).result
-        return res
+        return self._get_response('%s/update' % self.name, params=params).result
 
     def commit(self):
-        """ Commit changes to a collection """
-        response = self._update('{"commit":{}}').result
-        return response
+        """ 
+        Commit changes to a collection
+        
+        :return: the solr response
+        :rtype: SolrResponse
+        :raise: SolrException
+        """
+        return self._update('{"commit":{}}').result

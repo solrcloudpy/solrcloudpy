@@ -37,7 +37,7 @@ Installation
 install the development version:
 
 ``pip install
-git+https://github.com/dfdeshom/solrcloudpy.git#egg=solrcloudpy``
+git+https://github.com/solrcloudpy/solrcloudpy.git#egg=solrcloudpy``
 
 
 Contributing

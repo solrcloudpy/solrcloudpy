@@ -1,7 +1,7 @@
 Licensed under the terms of the Modified BSD License (also known as
 New or Revised BSD)
 
-Copyright (c) 2013, Didier Deshommes
+Copyright (c) 2013-2016, Didier Deshommes, Robert Elwell
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #-----------------------------------------------------------------------------
-# Copyright (c) 2013, Didier Deshommes.
+# Copyright (c) 2013-2016, Didier Deshommes, Robert Elwell.
 #
 # Distributed under the terms of the Modified BSD License.
 #

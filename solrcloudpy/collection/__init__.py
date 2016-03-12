@@ -25,7 +25,7 @@ Support will be coming for the following endpoints:
 
      >>> from solrcloudpy import SolrConnection
      >>> coll = SolrConnection()['collection1']
-     >>> response = coll.search({'q':'money'})
+     >>> response = coll.search({'q': 'money'})
      >>> response
      <SolrResponse [200]>
      >>> response.result
@@ -37,18 +37,20 @@ Support will be coming for the following endpoints:
 from .admin import SolrCollectionAdmin
 from .search import SolrCollectionSearch
 
-class SolrCollection(SolrCollectionAdmin,SolrCollectionSearch):
+
+class SolrCollection(SolrCollectionAdmin, SolrCollectionSearch):
     def create(self, replication_factor=1, force=False, **kwargs):
         """
         Create a collection
 
-        :param num_shards: an integer indicating the number of shards for this collection
-
         :param replication_factor: an integer indicating the number of replcas for this collection
+        :type replication_factor: int
 
         :param force: a boolean value indicating whether to force the operation
+        :type force: bool
 
         :param kwargs: additional parameters to be passed to this operation
+        
 
         :Additional Parameters:
           - `router_name`: router name that will be used. defines how documents will be distributed among the shards
@@ -62,9 +64,8 @@ class SolrCollection(SolrCollectionAdmin,SolrCollectionSearch):
         Additional parameters are further documented at https://cwiki.apache.org/confluence/display/solr/Collections+API#CollectionsAPI-CreateaCollection
         """
 
-        admin = super(SolrCollection,self).create(replication_factor,
-                                              force, **kwargs)
-        return SolrCollection(admin.connection,admin.name)
+        admin = super(SolrCollection, self).create(replication_factor, force, **kwargs)
+        return SolrCollection(admin.connection, admin.name)
 
     def __repr__(self):
         return "SolrCollection<%s>" % self.name
