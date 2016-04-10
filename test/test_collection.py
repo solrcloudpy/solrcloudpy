@@ -3,6 +3,7 @@ import time
 import os
 from solr_instance import SolrInstance
 from solrcloudpy import SolrConnection as Connection
+from requests.adapters import ReadTimeout
 
 solrprocess = None
 
@@ -12,10 +13,20 @@ class TestCollectionAdmin(unittest.TestCase):
         self.conn = Connection()
 
     def test_create_collection(self):
+        original_count = len(self.conn.list())
         coll2 = self.conn.create_collection('coll2')
+        self.assertEqual(len(self.conn.list()), original_count+1)
+        self.conn.list()
         time.sleep(3)
+        coll3 = self.conn.create_collection('coll3')
+        self.assertEqual(len(self.conn.list()), original_count+2)
+        # todo calling state here means the integration works, but what should we assert?
+        coll2.state
         coll2.drop()
+        self.assertEqual(len(self.conn.list()), original_count+1)
         time.sleep(3)
+        coll3.drop()
+        self.assertEqual(len(self.conn.list()), original_count)
 
     def test_reload(self):
         coll2 = self.conn.create_collection('coll2')
@@ -51,11 +62,16 @@ class TestCollectionAdmin(unittest.TestCase):
         coll2.drop()
 
     def test_delete_replica(self):
-        coll2 = self.conn.create_collection('coll2',
-                                            router_name='implicit',
-                                            shards='myshard1',
-                                            max_shards_per_node=6,
-                                            replication_factor=2)
+        try:
+            coll2 = self.conn.create_collection('test_delete_replica',
+                                                router_name='implicit',
+                                                shards='myshard1',
+                                                max_shards_per_node=6,
+                                                replication_factor=2)
+        except ReadTimeout:
+            print "Encountered read timeout while testing delete replicate"
+            print "This generally doesn't mean the collection wasn't created with the settings passed."
+            coll2 = self.conn['test_delete_replica']
         time.sleep(3)
         coll2.delete_replica('core_node2', 'myshard1')
         coll2.drop()
