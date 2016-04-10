@@ -114,10 +114,14 @@ class SolrConnection(object):
                     break
                 for child in branch['children']:
                     if child['data']['title'] == '/collections':
-                        data = child['children']
-                        break
-
-        colls = [node['data']['title'] for node in data]
+                        if 'children' not in child:
+                            return []
+                        else:
+                            data = child['children']
+                            break
+        colls = []
+        if data:
+            colls = [node['data']['title'] for node in data]
         return colls
 
     def _list_cores(self):
@@ -180,7 +184,7 @@ class SolrConnection(object):
             response = self.client.get(
                 ('/{webappdir}/zookeeper'.format(webappdir=self.webappdir)), params).result
             return json.loads(response['znode']['data'])
-        except:
+        except KeyError:
             # 5.4+
             # todo something smarter than exception handling
             params = {'detail': 'true', 'path': '/overseer_elect/leader'}

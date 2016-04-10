@@ -8,6 +8,7 @@ from .schema import SolrSchema
 import time
 import json
 import requests
+import logging
 
 
 class SolrCollectionAdmin(CollectionBase):
@@ -93,7 +94,7 @@ class SolrCollectionAdmin(CollectionBase):
                 # Create the index and wait until it's available
                 while True:
                     if not self._is_index_created():
-                        print "index not created yet, waiting..."
+                        logging.getLogger('solrcloud').info("index not created yet, waiting...")
                         time.sleep(1)
                     else: 
                         break
@@ -227,12 +228,22 @@ class SolrCollectionAdmin(CollectionBase):
         :rtype: dict
         """
         if self.is_alias():
-            return {"warn": "no state info avilable for aliases"}
+            return {"warn": "no state info available for aliases"}
 
-        params = {'detail': 'true', 'path': '/clusterstate.json'}
-        response = self.client.get('/solr/zookeeper', params).result
-        data = json.loads(response['znode']['data'])
-        return data[self.name]
+        try:
+            params = {'detail': 'true', 'path': '/clusterstate.json'}
+            response = self.client.get('/solr/zookeeper', params).result
+            data = json.loads(response['znode']['data'])
+            return data[self.name]
+        except KeyError:
+            response = self.client.get(
+                '/{webappdir}/admin/collections'.format(webappdir=self.connection.webappdir),
+                dict(action='clusterstatus')
+            ).result
+            try:
+                return response['cluster']['collections'][self.name]
+            except KeyError:
+                return {}
 
     @property
     def shards(self):
