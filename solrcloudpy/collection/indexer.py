@@ -73,8 +73,7 @@ class SolrBatchAdder(object):
             self.solr.add(self.batch)
         except Exception as e:
             log.exception("Exception encountered when committing batch, falling back on one-by-one commit")
-            print "Exception encountered when committing batch, falling back on one-by-one commit"
-            print e
+            log.error(e)
             # one by one fall-back
             for item in self.batch:
                 try:

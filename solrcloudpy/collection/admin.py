@@ -8,6 +8,7 @@ from .schema import SolrSchema
 import time
 import json
 import requests
+import logging
 
 
 class SolrCollectionAdmin(CollectionBase):
@@ -93,8 +94,7 @@ class SolrCollectionAdmin(CollectionBase):
                 # Create the index and wait until it's available
                 while True:
                     if not self._is_index_created():
-                        # todo: integrate a logger, don't output to stdout by default
-                        # print "index not created yet, waiting..."
+                        logging.getLogger('solrcloud').info("index not created yet, waiting...")
                         time.sleep(1)
                     else: 
                         break
