@@ -12,8 +12,10 @@ class TestConnection(unittest.TestCase):
         self.conn = SolrConnection()
 
     def test_list(self):
+        self.conn['foo'].create()
         colls = self.conn.list()
         self.assertTrue(len(colls) >= 1)
+        self.conn['foo'].drop()
 
     def test_live_nodes(self):
         nodes = self.conn.live_nodes
