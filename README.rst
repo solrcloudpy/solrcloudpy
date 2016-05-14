@@ -9,7 +9,7 @@ library aims to take advantage of the following features of Solr:
 * Centralized index management
 * Near-realtime search
 
-It is compatible with versions 4.6 up to 5.5.
+It is compatible with versions 4.6 up to 6.0.
 The API is meant to be close to pymongo's API, where one can access
 collections and databases as simple attributes 
 or dictionary keys.
@@ -22,7 +22,7 @@ Usage
 -------
 .. code-block:: python
 
-     conn = SolrConnection(["localhost:9983","localhost:8984"])
+     conn = SolrConnection(["localhost:9983","localhost:8984"], version="6.0.0")
      conn.create('test1',num_shards=1,replication_factor=2)
 
    
