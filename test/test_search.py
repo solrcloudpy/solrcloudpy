@@ -11,7 +11,7 @@ solrprocess = None
 class TestCollectionSearch(unittest.TestCase):
 
     def setUp(self):
-        self.conn = SolrConnection()
+        self.conn = SolrConnection(version=os.getenv('SOLR_VERSION', '5.3.2'))
 
     def test_add(self):
         coll2 = self.conn.create_collection('coll2')

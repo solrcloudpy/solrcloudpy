@@ -15,9 +15,13 @@ To get a :class:`~solrcloudpy.SolrCollection` instance from a :class:`SolrConnec
 """
 import urllib
 import json
+import semver
 
 import solrcloudpy.collection as collection
 from solrcloudpy.utils import _Request
+
+MIN_SUPPORTED_VERSION = '>=4.6.0'
+MAX_SUPPORTED_VERSION = '<=6.0.0'
 
 
 class SolrConnection(object):
@@ -38,6 +42,8 @@ class SolrConnection(object):
     :type timeout: int
     :param webappdir: the solr webapp directory; defaults to 'solr'
     :type webappdir: str
+    :param version: the solr version we're currently running. defaults to 5.3.0 for backwards compatibility. must be semver compliant
+    :type version: str
     """
 
     def __init__(self, server="localhost:8983",
@@ -45,11 +51,22 @@ class SolrConnection(object):
                  user=None,
                  password=None,
                  timeout=10,
-                 webappdir='solr'):
+                 webappdir='solr',
+                 version='5.3.0'):
         self.user = user
         self.password = password
         self.timeout = timeout
         self.webappdir = webappdir
+        self.version = version
+        
+        if not semver.match(version, MIN_SUPPORTED_VERSION) and semver.match(version, MAX_SUPPORTED_VERSION):
+            raise StandardError("Unsupported version %s" % version)
+        
+        if semver.match(self.version, '<5.4.0'):
+            self.zk_path = '/{webappdir}/zookeeper'.format(webappdir=self.webappdir)
+        else:
+            self.zk_path = '/{webappdir}/admin/zookeeper'.format(webappdir=self.webappdir)
+        
         self.url_template = 'http://{{server}}/{webappdir}/'.format(webappdir=self.webappdir)
 
         if type(server) == str:
@@ -70,23 +87,16 @@ class SolrConnection(object):
 
         self.client = _Request(self)
 
-    def detect_nodes(self, base_url):
+    def detect_nodes(self, _):
         """
         Queries Solr's zookeeper integration for live nodes
         
-        todo: this is pretty dense, maybe brittle?
+        DEPRECATED
         
-        :param base_url: the base url for solr
-        :type base_url: str
         :return: a list of sorl URLs corresponding to live nodes in solrcloud
         :rtype: list
         """
-        url = base_url+'zookeeper?path=/live_nodes'
-        live_nodes = urllib.urlopen(url).read()
-        data = json.loads(live_nodes)
-        children = [d['data']['title'] for d in data['tree'][0]['children']]
-        nodes = [c.replace('_solr', '') for c in children]
-        return [self.url_template.format(server=a) for a in nodes]
+        return self.live_nodes
 
     def list(self):
         """
@@ -98,7 +108,7 @@ class SolrConnection(object):
         """
         params = {'detail': 'false', 'path': '/collections'}
         response = self.client.get(
-            ('/{webappdir}/zookeeper'.format(webappdir=self.webappdir)), params).result
+            self.zk_path, params).result
         
         if 'children' not in response['tree'][0]:
             return []
@@ -178,19 +188,9 @@ class SolrConnection(object):
         :rtype: dict
         :return: a dict with the json loaded from the zookeeper response related to the cluster leader request
         """
-        try:
-            # 5.3 or less
-            params = {'detail': 'true', 'path': '/overseer_elect/leader'}
-            response = self.client.get(
-                ('/{webappdir}/zookeeper'.format(webappdir=self.webappdir)), params).result
-            return json.loads(response['znode']['data'])
-        except KeyError:
-            # 5.4+
-            # todo something smarter than exception handling
-            params = {'detail': 'true', 'path': '/overseer_elect/leader'}
-            response = self.client.get(
-                ('/{webappdir}/admin/zookeeper'.format(webappdir=self.webappdir)), params).result
-            return json.loads(response['znode']['data'])
+        params = {'detail': 'true', 'path': '/overseer_elect/leader'}
+        response = self.client.get(self.zk_path, params).result
+        return json.loads(response['znode']['data'])
 
     @property
     def live_nodes(self):
@@ -201,8 +201,7 @@ class SolrConnection(object):
         :rtype: list
         """
         params = {'detail': 'true', 'path': '/live_nodes'}
-        response = self.client.get(
-            ('/{webappdir}/zookeeper'.format(webappdir=self.webappdir)), params).result
+        response = self.client.get(self.zk_path, params).result
         children = [d['data']['title'] for d in response['tree'][0]['children']]
         nodes = [c.replace('_solr', '') for c in children]
         return [self.url_template.format(server=a) for a in nodes]

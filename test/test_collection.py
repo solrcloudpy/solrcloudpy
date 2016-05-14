@@ -2,7 +2,7 @@ import unittest
 import time
 import os
 from solr_instance import SolrInstance
-from solrcloudpy import SolrConnection as Connection
+from solrcloudpy import SolrConnection
 from requests.adapters import ReadTimeout
 
 solrprocess = None
@@ -10,7 +10,7 @@ solrprocess = None
 
 class TestCollectionAdmin(unittest.TestCase):
     def setUp(self):
-        self.conn = Connection()
+        self.conn = SolrConnection(version=os.getenv('SOLR_VERSION', '5.3.2'))
 
     def test_create_collection(self):
         original_count = len(self.conn.list())
