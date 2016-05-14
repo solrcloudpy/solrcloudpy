@@ -9,7 +9,7 @@ solrprocess = None
 
 class TestConnection(unittest.TestCase):
     def setUp(self):
-        self.conn = SolrConnection()
+        self.conn = SolrConnection(version=os.getenv('SOLR_VERSION', '5.3.2'))
 
     def test_list(self):
         self.conn['foo'].create()

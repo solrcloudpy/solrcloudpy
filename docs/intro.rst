@@ -12,7 +12,7 @@ The API is meant to be close to ``pymongo``'s API, where one can access collecti
 
 ::
 
-     >>> conn = SolrConnection(["localhost:9983","localhost:8984"])
+     >>> conn = SolrConnection(["localhost:9983","localhost:8984"], version='6.0.0')
      >>> conn.create('test1',num_shards=1,replication_factor=2)
      
      # Access an existing collection
