@@ -9,10 +9,14 @@ solrprocess = None
 
 class TestConnection(unittest.TestCase):
     def setUp(self):
-        self.conn = SolrConnection(version=os.getenv('SOLR_VERSION', '5.3.2'))
+        self.conn = SolrConnection(version=os.getenv('SOLR_VERSION', '6.1.0'))
+        self.collparams = {}
+        confname = os.getenv('SOLR_CONFNAME', '')
+        if confname != '':
+            self.collparams['collection_config_name'] = confname
 
     def test_list(self):
-        self.conn['foo'].create()
+        self.conn['foo'].create(**self.collparams)
         colls = self.conn.list()
         self.assertTrue(len(colls) >= 1)
         self.conn['foo'].drop()
@@ -27,7 +31,7 @@ class TestConnection(unittest.TestCase):
         self.assertTrue(leader is not None)
 
     def test_create_collection(self):
-        coll = self.conn.create_collection('test2')
+        coll = self.conn.create_collection('test2', **self.collparams)
         self.assertTrue(isinstance(coll, SolrCollection))
         self.conn.test2.drop()
 

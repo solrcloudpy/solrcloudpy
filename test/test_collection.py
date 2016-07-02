@@ -10,15 +10,19 @@ solrprocess = None
 
 class TestCollectionAdmin(unittest.TestCase):
     def setUp(self):
-        self.conn = SolrConnection(version=os.getenv('SOLR_VERSION', '5.3.2'))
+        self.conn = SolrConnection(version=os.getenv('SOLR_VERSION', '6.1.0'))
+        self.collparams = {}
+        confname = os.getenv('SOLR_CONFNAME', '')
+        if confname != '':
+            self.collparams['collection_config_name'] = confname
 
     def test_create_collection(self):
         original_count = len(self.conn.list())
-        coll2 = self.conn.create_collection('coll2')
+        coll2 = self.conn.create_collection('coll2', **self.collparams)
         self.assertEqual(len(self.conn.list()), original_count+1)
         self.conn.list()
         time.sleep(3)
-        coll3 = self.conn.create_collection('coll3')
+        coll3 = self.conn.create_collection('coll3', **self.collparams)
         self.assertEqual(len(self.conn.list()), original_count+2)
         # todo calling state here means the integration works, but what should we assert?
         coll2.state
@@ -29,14 +33,14 @@ class TestCollectionAdmin(unittest.TestCase):
         self.assertEqual(len(self.conn.list()), original_count)
 
     def test_reload(self):
-        coll2 = self.conn.create_collection('coll2')
+        coll2 = self.conn.create_collection('coll2', **self.collparams)
         time.sleep(3)
         res = coll2.reload()
         self.assertTrue(getattr(res, 'success') is not None)
         coll2.drop()
 
     def test_split_shard(self):
-        coll2 = self.conn.create_collection('coll2')
+        coll2 = self.conn.create_collection('coll2', **self.collparams)
         time.sleep(3)
         res = coll2.split_shard('shard1', ranges="80000000-90000000,90000001-7fffffff")
         time.sleep(3)
@@ -46,7 +50,8 @@ class TestCollectionAdmin(unittest.TestCase):
     def test_create_shard(self):
         coll2 = self.conn.create_collection('coll2',
                                             router_name='implicit',
-                                            shards='myshard1', max_shards_per_node=3)
+                                            shards='myshard1', max_shards_per_node=3,
+                                            **self.collparams)
         time.sleep(3)
         res = coll2.create_shard('shard_my')
         time.sleep(3)
@@ -54,7 +59,7 @@ class TestCollectionAdmin(unittest.TestCase):
         coll2.drop()
 
     def test_create_delete_alias(self):
-        coll2 = self.conn.create_collection('coll2')
+        coll2 = self.conn.create_collection('coll2', **self.collparams)
         coll2.create_alias('alias2')
         time.sleep(3)
         self.assertTrue(self.conn.alias2.is_alias())
@@ -67,7 +72,8 @@ class TestCollectionAdmin(unittest.TestCase):
                                                 router_name='implicit',
                                                 shards='myshard1',
                                                 max_shards_per_node=6,
-                                                replication_factor=2)
+                                                replication_factor=2,
+                                                **self.collparams)
         except ReadTimeout:
             print "Encountered read timeout while testing delete replicate"
             print "This generally doesn't mean the collection wasn't created with the settings passed."
