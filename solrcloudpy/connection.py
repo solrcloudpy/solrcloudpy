@@ -21,7 +21,7 @@ import solrcloudpy.collection as collection
 from solrcloudpy.utils import _Request
 
 MIN_SUPPORTED_VERSION = '>=4.6.0'
-MAX_SUPPORTED_VERSION = '<=6.0.0'
+MAX_SUPPORTED_VERSION = '<=6.1.0'
 
 
 class SolrConnection(object):

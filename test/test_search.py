@@ -11,10 +11,14 @@ solrprocess = None
 class TestCollectionSearch(unittest.TestCase):
 
     def setUp(self):
-        self.conn = SolrConnection(version=os.getenv('SOLR_VERSION', '5.3.2'))
+        self.conn = SolrConnection(version=os.getenv('SOLR_VERSION', '6.1.0'))
+        self.collparams = {}
+        confname = os.getenv('SOLR_CONFNAME', '')
+        if confname != '':
+            self.collparams['collection_config_name'] = confname
 
     def test_add(self):
-        coll2 = self.conn.create_collection('coll2')
+        coll2 = self.conn.create_collection('coll2', **self.collparams)
         docs = [{"id": str(_id), "includes": "silly text"} for _id in range(5)]
 
         coll2.add(docs)
@@ -24,7 +28,7 @@ class TestCollectionSearch(unittest.TestCase):
         coll2.drop()
 
     def test_delete(self):
-        coll2 = self.conn.create_collection('coll2')
+        coll2 = self.conn.create_collection('coll2', **self.collparams)
         docs = [{"id": str(_id), "includes": "silly text"} for _id in range(5)]
 
         coll2.add(docs)

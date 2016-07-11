@@ -15,3 +15,7 @@ or you could export it.
 
 Without the solr collection, we won't perform any of the buildup and tear-down, but 
 will assume there is a Solr instance running at localhost:8983.
+
+With recent versions of Solr, a configName argument is compulsory for creating
+collections, in which case, also set `SOLR_CONFNAME=myconfig` in the
+environment, assuming `myconfig` is already uploaded as a config to Solr.
