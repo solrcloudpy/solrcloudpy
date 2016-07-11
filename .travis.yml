@@ -1,0 +1,14 @@
+language: python
+python:
+  - "2.7"
+install:
+  - travis_retry pip install -r requirements.txt
+  - travis_retry python setup.py install
+deploy:
+  provider: pypi
+  user: Robert.Elwell
+  password:
+    secure: U+8+nxw5pdA6o4tRy3u9MUe8gh1GkVW3t/Le1NVWbPLbdJQYc+K66Qd5gSIU+AkK0Gr7+ICIk0q1Lam9+H078CBLJk3uypRLBvZF4ZN2Vhe54RaGmHgrDcnDyTxzMPVoDX7P9puUmqqVBLVAl70+rZH0q2FWTHHPv3h6G2ObBUs=
+  on:
+    distributions: sdist bdist_wheel
+    repo: solrcloudpy/solrcloudpy
