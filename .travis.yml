@@ -3,6 +3,8 @@ python:
   - "2.7"
 install:
   - travis_retry python setup.py install
+script:
+  - echo "TODO: Tests"
 deploy:
   provider: pypi
   user: Robert.Elwell
