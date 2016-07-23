@@ -69,19 +69,15 @@ class _Request(object):
         if hasattr(params, 'iteritems'):
             resparams.update(params.iteritems())
 
-        servers = list(self.connection.servers)
+        retry_states = dict([(server, 0) for server in self.connection.servers])
+        servers = retry_states.keys()
         
         if not servers:
             raise SolrException("No servers available")
         
-        random.shuffle(servers)
-
         result = None
-        while len(servers) > 0 and result is None:
-            try:
-                host = servers.pop(0)
-            except IndexError:
-                raise SolrException("No servers available")
+        while result is None:
+            host = random.choice(servers)
             fullpath = urlparse.urljoin(host, path)
             try:
                 r = self.client.request(method, fullpath,
@@ -96,6 +92,12 @@ class _Request(object):
             except (ConnectionError, HTTPError) as e:
                 logger.exception('Failed to connect to server at %s. e=%s',
                                  host, e)
+                
+                # Track retries, and take a server with too many retries out of the pool
+                retry_states[host] += 1
+                if retry_states[host] > self.connection.request_retries:
+                    del retry_states[host]
+                    servers = retry_states.keys()
 
                 if len(servers) <= 0:
                     logger.error('No servers left to try')
