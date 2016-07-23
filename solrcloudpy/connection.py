@@ -21,7 +21,9 @@ import solrcloudpy.collection as collection
 from solrcloudpy.utils import _Request
 
 MIN_SUPPORTED_VERSION = '>=4.6.0'
-MAX_SUPPORTED_VERSION = '<=6.1.0'
+
+# TODO: revisit this when Solr 7 comes around.
+MAX_SUPPORTED_VERSION = '<=7.0.0'
 
 
 class SolrConnection(object):
@@ -44,6 +46,8 @@ class SolrConnection(object):
     :type webappdir: str
     :param version: the solr version we're currently running. defaults to 5.3.0 for backwards compatibility. must be semver compliant
     :type version: str
+    :param request_retries: number of times to retry a request against the same server. particularly useful for load-balancing or proxy situations.
+    :type request_retries: int
     """
 
     def __init__(self, server="localhost:8983",
@@ -52,12 +56,14 @@ class SolrConnection(object):
                  password=None,
                  timeout=10,
                  webappdir='solr',
-                 version='5.3.0'):
+                 version='5.3.0',
+                 request_retries=1):
         self.user = user
         self.password = password
         self.timeout = timeout
         self.webappdir = webappdir
         self.version = version
+        self.request_retries = request_retries
         
         if not semver.match(version, MIN_SUPPORTED_VERSION) and semver.match(version, MAX_SUPPORTED_VERSION):
             raise StandardError("Unsupported version %s" % version)
