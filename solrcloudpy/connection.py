@@ -161,25 +161,39 @@ class SolrConnection(object):
         :return: a dict representing the status of the cluster
         :rtype: dict
         """
-        params = {'detail': 'true', 'path': '/clusterstate.json'}
-        response = self.client.get(
-            ('/{webappdir}/zookeeper'.format(webappdir=self.webappdir)), params).result
-        data = json.loads(response['znode']['data'])
         res = []
-        collections = self.list()
-        for coll in collections:
-            shards = data[coll]['shards']
-            for shard, shard_info in shards.iteritems():
-                replicas = shard_info['replicas']
-                for replica, info in replicas.iteritems():
-                    state = info['state']
-                    if state != 'active':
-                        item = {"collection": coll,
-                                "replica": replica,
-                                "shard": shard,
-                                "info": info,
-                                }
-                        res.append(item)
+        if semver.match(self.version, '<5.4.0'):
+            params = {'detail': 'true', 'path': '/clusterstate.json'}
+            response = self.client.get(
+                ('/{webappdir}/zookeeper'.format(webappdir=self.webappdir)), params).result
+            data = json.loads(response['znode']['data'])
+            collections = self.list()
+            for coll in collections:
+                shards = data[coll]['shards']
+                for shard, shard_info in shards.iteritems():
+                    replicas = shard_info['replicas']
+                    for replica, info in replicas.iteritems():
+                        state = info['state']
+                        if state != 'active':
+                            item = {"collection": coll,
+                                    "replica": replica,
+                                    "shard": shard,
+                                    "info": info,
+                                    }
+                            res.append(item)
+        else:
+            params = {'action': 'CLUSTERSTATUS', 'wt': 'json'}
+            response = self.client.get(
+                ('/{webappdir}/admin/collections'.format(webappdir=self.webappdir)), params).result
+            for collection_name, collection in response.dict['cluster']['collections'].items():
+                for shard_name, shard in collection['shards'].items():
+                    for replica_name, replica in shard['replicas'].items():
+                        if replica['state'] != 'active':
+                            item = {"collection": collection_name,
+                                    "replica": replica_name,
+                                    "shard": shard_name,
+                                    "info": replica}
+                            res.append(item)
 
         if not res:
             return {"status": "OK"}
