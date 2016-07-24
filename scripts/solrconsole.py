@@ -45,7 +45,7 @@ def get_config(args):
 def get_conn(args):
     return SolrConnection(["%s:%s" % (args.host, args.port), ],
                           user=args.user,
-                          password=args.password)
+                          password=args.password, version=args.version)
 
 
 def main():
@@ -54,6 +54,7 @@ def main():
     parser.add_argument('--port', default='8983', help='port')
     parser.add_argument('--user', default=None, help='user')
     parser.add_argument('--password', default=None, help='password')
+    parser.add_argument('--version', default='5.3.0', help='version')
 
     args = parser.parse_args(sys.argv[1:])
 
