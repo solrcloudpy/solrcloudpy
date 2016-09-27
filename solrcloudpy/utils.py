@@ -6,6 +6,8 @@ import urlparse
 import json
 import random
 import logging
+import uuid
+
 logger = logging.getLogger(__name__)
 
 
@@ -38,7 +40,7 @@ class _Request(object):
             self.client.auth = HTTPBasicAuth(
                 self.connection.user, self.connection.password)
 
-    def request(self, path, params={}, method='GET', body=None):
+    def request(self, path, params={}, method='GET', body=None, async=False):
         """
         Send a request to a collection
 
@@ -51,6 +53,8 @@ class _Request(object):
         :type method: str
         :param body: The request body, if any -- should be a json string
         :type body: str
+        :param async: whether to perform the action asynchronously (only for collections API)
+        :type async: bool
 
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         :rtype: SolrResponse
@@ -65,6 +69,11 @@ class _Request(object):
         resparams = {'wt': 'json',
                      'omitHeader': 'true',
                      'json.nl': 'map'}
+        
+        if async:
+            async_id = uuid.uuid4()
+            logger.info("Sending request with async_id %s" % async_id)
+            resparams['async'] = async_id
 
         if hasattr(params, 'iteritems'):
             resparams.update(params.iteritems())
@@ -87,7 +96,10 @@ class _Request(object):
                                         timeout=self.timeout)
                 r.raise_for_status()
 
-                result = SolrResponse(r)
+                if async:
+                    result = AsyncResponse(r, async_id)
+                else:
+                    result = SolrResponse(r)
 
             except (ConnectionError, HTTPError) as e:
                 logger.exception('Failed to connect to server at %s. e=%s',
@@ -105,7 +117,7 @@ class _Request(object):
 
         return result
 
-    def update(self, path, params={}, body=None):
+    def update(self, path, params={}, body=None, async=False):
         """
         Posts an update request to Solr
         
@@ -115,13 +127,15 @@ class _Request(object):
         :type params: dict
         :param body: the request body, a json string
         :type body: str
+        :param async: whether to perform the action asynchronously (only for collections API)
+        :type async: bool
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         :rtype: SolrResponse
         :raise: SolrException
         """
-        return self.request(path, params, 'POST', body)
+        return self.request(path, params, method='POST', body=body, async=async)
 
-    def get(self, path, params={}):
+    def get(self, path, params={}, async=False):
         """
         Sends a get request to Solr
 
@@ -129,11 +143,13 @@ class _Request(object):
         :type path: str
         :param params: query params
         :type params: dict
+        :param async: whether to perform the action asynchronously (only for collections API)
+        :type async: bool
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         :rtype: SolrResponse
         :raise: SolrException
         """
-        return self.request(path, params, method='GET')
+        return self.request(path, params, method='GET', async=async)
 
 
 class CollectionBase(object):
@@ -255,6 +271,29 @@ class SolrResponse(object):
         :return: representation in python
         """
         return "<SolrResponse [%s]>" % self.code
+
+
+class AsyncResponse(SolrResponse):
+
+    def __init__(self, response_obj, async_id):
+        """
+        init this object
+        :param response_obj: the `Response` object from the `requests` package
+        :type response_obj: requests.Response
+        :param async_id: the id we are using to identify the asynchronous interaction
+        :type async_id: str
+        """
+        # try to parse the content of this response as json
+        # if that fails, try to save the text
+        result = None
+        try:
+            result = response_obj.json()
+        except ValueError:
+            result = {"error": response_obj.text}
+
+        self.result = SolrResult(result)
+        self._response_obj = response_obj
+        self.async_id = async_id
 
 
 class SolrResponseJSONEncoder(json.JSONEncoder):

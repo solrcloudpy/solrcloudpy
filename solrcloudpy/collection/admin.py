@@ -297,3 +297,85 @@ class SolrCollectionAdmin(CollectionBase):
         :rtype: SolrIndexStats
         """
         return self.index_stats
+    
+    def _backup_restore_action(self, action, backup_name, location=None, repository=None):
+        """
+        Creates or restores a backup for a collection, based on the action
+        
+        :param action: the action, either BACKUP or RESTORE
+        :type action: str
+        :param backup_name: the name of the backup we will use for storage & restoration
+        :type backup_name: str
+        :param location: an optional param to define where on the shared filesystem we should store the backup
+        :type location: str
+        :param repository: an optional param to define a repository type. filesystem is the default
+        :type repository: str
+        :return: an async response
+        :rtype: AsyncResponse
+        """
+        params = {
+            'action': action,
+            'collection': self.name,
+            'name': backup_name
+        }
+
+        if location:
+            params['location'] = location
+
+        if repository:
+            params['repository'] = repository
+
+        return self.client.get('admin/collections', params, async=True)
+    
+    def backup(self, backup_name, location=None, repository=None):
+        """
+        Creates a backup for a collection
+        
+        :param backup_name: the name of the backup we will use for storage & restoration
+        :type backup_name: str
+        :param location: an optional param to define where on the shared filesystem we should store the backup
+        :type location: str
+        :param repository: an optional param to define a repository type. filesystem is the default
+        :type repository: str
+        :return: an async response
+        :rtype: AsyncResponse
+        """
+        return self._backup_restore_action('BACKUP', backup_name, location=location, repository=repository)
+
+    def restore(self, backup_name, location=None, repository=None):
+        """
+        Restores a backup for a collection
+
+        :param backup_name: the name of the backup we will use for restoration
+        :type backup_name: str
+        :param location: an optional param to define where on the shared filesystem we should access the backup
+        :type location: str
+        :param repository: an optional param to define a repository type. filesystem is the default
+        :type repository: str
+        :return: an async response
+        :rtype: AsyncResponse
+        """
+        return self._backup_restore_action('RESTORE', backup_name, location=location, repository=repository)
+
+    def request_status(self, async_response):
+        """
+        Retrieves the status of a request for a given async result
+        :param async_response: the response object that includes its async_id
+        :type async_response: AsyncResponse
+        :return:
+        """
+        return self.client.get('admin/collections',
+                               {
+                                   "action": 'REQUESTSTATUS',
+                                   "requestid": async_response.async_id,
+                                   "wt": 'json'
+                               }).result
+
+    def request_state(self, async_response):
+        """
+        Retrieves the request state of a request for a given async result
+        :param async_response: the response object that includes its async_id
+        :type async_response: AsyncResponse
+        :return:
+        """
+        return self.request_status(async_response).status.state
