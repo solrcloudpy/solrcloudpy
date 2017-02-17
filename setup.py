@@ -32,6 +32,6 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Indexing/Search'
         ],
 
-    install_requires=['requests >= 2.2.1', 'IPython >= 1.2.0', 'semver'],
-    extras_require={"ip": ['IPython >= 1.2.0']}
+    install_requires=['requests >= 2.11.1', 'IPython < 5.2.0', 'semver', 'pathlib2 == 2.1.0'],
+    extras_require={"ip": ['IPython == 5.1.0']}
 )
