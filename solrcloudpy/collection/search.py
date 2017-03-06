@@ -23,7 +23,7 @@ class SolrCollectionSearch(CollectionBase):
         """
         return "SolrIndex<%s>" % self.name
 
-    def _get_response(self, path, params={}, method='GET', body=None):
+    def _get_response(self, path, params=None, method='GET', body=None):
         """
         Retrieves a response from the solr client
         
@@ -40,7 +40,7 @@ class SolrCollectionSearch(CollectionBase):
         """
         return self.client.request(path, params=params, method=method, body=body)
 
-    def _update(self, body):
+    def _update(self, body, params=None):
         """
         Sends and update request to the solr collection in JSON format
         :param body: the update JSON string
@@ -50,7 +50,7 @@ class SolrCollectionSearch(CollectionBase):
         :raise: SolrException
         """
         path = '%s/update/json' % self.name
-        resp = self._get_response(path, method='POST', params={}, body=body)
+        resp = self._get_response(path, method='POST', params=params, body=body)
         if resp.code != 200:
             raise SolrException(resp.result.error)
         return resp
@@ -94,7 +94,7 @@ class SolrCollectionSearch(CollectionBase):
         """
         return self._get_response("%s/mlt" % self.name, params)
 
-    def add(self, docs):
+    def add(self, docs, params=None):
         """
         Add a list of document to the collection
 
@@ -104,7 +104,7 @@ class SolrCollectionSearch(CollectionBase):
         :rtype: SolrResponse
         :raise: SolrException
         """
-        return self._update(json.dumps(docs, default=dthandler)).result
+        return self._update(json.dumps(docs, default=dthandler), params).result
 
     def delete(self, query, commit=True):
         """
@@ -122,7 +122,6 @@ class SolrCollectionSearch(CollectionBase):
         if 'q' not in query.iterkeys():
             raise ValueError("query should have a 'q' parameter")
 
-        q = None
         if hasattr(query, 'commonparams'):
             q = list(query.commonparams['q'])
             q = q[0]
@@ -165,4 +164,4 @@ class SolrCollectionSearch(CollectionBase):
         :rtype: SolrResponse
         :raise: SolrException
         """
-        return self._update('{"commit":{}}').result
+        return self._update('{"commit":{}}', {}).result

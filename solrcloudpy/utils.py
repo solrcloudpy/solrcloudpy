@@ -23,7 +23,6 @@ def as_json_bool(value):
 
 
 class _Request(object):
-
     """
     Issues requests to the collections API
     """
@@ -40,7 +39,7 @@ class _Request(object):
             self.client.auth = HTTPBasicAuth(
                 self.connection.user, self.connection.password)
 
-    def request(self, path, params={}, method='GET', body=None, async=False):
+    def request(self, path, params=None, method='GET', body=None, async=False):
         """
         Send a request to a collection
 
@@ -61,6 +60,7 @@ class _Request(object):
         :raise: SolrException
         """
         headers = {}
+        params = params or {}
         if method.lower() != 'get':
             headers = {'content-type': 'application/json'}
 
@@ -69,7 +69,7 @@ class _Request(object):
         resparams = {'wt': 'json',
                      'omitHeader': 'true',
                      'json.nl': 'map'}
-        
+
         if async:
             async_id = uuid.uuid4()
             logger.info("Sending request with async_id %s" % async_id)
@@ -80,10 +80,10 @@ class _Request(object):
 
         retry_states = dict([(server, 0) for server in self.connection.servers])
         servers = retry_states.keys()
-        
+
         if not servers:
             raise SolrException("No servers available")
-        
+
         result = None
         while result is None:
             host = random.choice(servers)
@@ -104,7 +104,7 @@ class _Request(object):
             except (ConnectionError, HTTPError) as e:
                 logger.exception('Failed to connect to server at %s. e=%s',
                                  host, e)
-                
+
                 # Track retries, and take a server with too many retries out of the pool
                 retry_states[host] += 1
                 if retry_states[host] > self.connection.request_retries:
@@ -117,7 +117,7 @@ class _Request(object):
 
         return result
 
-    def update(self, path, params={}, body=None, async=False):
+    def update(self, path, params=None, body=None, async=False):
         """
         Posts an update request to Solr
         
@@ -133,9 +133,9 @@ class _Request(object):
         :rtype: SolrResponse
         :raise: SolrException
         """
-        return self.request(path, params, method='POST', body=body, async=async)
+        return self.request(path, params=params, method='POST', body=body, async=async)
 
-    def get(self, path, params={}, async=False):
+    def get(self, path, params=None, async=False):
         """
         Sends a get request to Solr
 
@@ -149,11 +149,10 @@ class _Request(object):
         :rtype: SolrResponse
         :raise: SolrException
         """
-        return self.request(path, params, method='GET', async=async)
+        return self.request(path, params=params, method='GET', async=async)
 
 
 class CollectionBase(object):
-
     """
     Base class for operations on collections
     """
@@ -192,7 +191,6 @@ class DictObject(object):
 
 
 class SolrResult(DictObject):
-
     """
     Generic representation of a Solr search result. The response is a
     object whose attributes can be also accessed as dictionary keys.
@@ -232,7 +230,6 @@ class SolrResult(DictObject):
 
 
 class SolrResponse(object):
-
     """
     A generic representation of a solr response. This objects contains both the `Response` object variable from the `requests` package and the parsed content in a :class:`~solrcloudpy.utils.SolrResult` instance.
 
@@ -247,7 +244,6 @@ class SolrResponse(object):
         """
         # try to parse the content of this response as json
         # if that fails, try to save the text
-        result = None
         try:
             result = response_obj.json()
         except ValueError:
@@ -274,7 +270,6 @@ class SolrResponse(object):
 
 
 class AsyncResponse(SolrResponse):
-
     def __init__(self, response_obj, async_id):
         """
         init this object
@@ -285,7 +280,6 @@ class AsyncResponse(SolrResponse):
         """
         # try to parse the content of this response as json
         # if that fails, try to save the text
-        result = None
         try:
             result = response_obj.json()
         except ValueError:
@@ -297,7 +291,6 @@ class AsyncResponse(SolrResponse):
 
 
 class SolrResponseJSONEncoder(json.JSONEncoder):
-
     def default(self, o):
         if type(o) == type(SolrResult({})):
             val = str(o.__dict__)

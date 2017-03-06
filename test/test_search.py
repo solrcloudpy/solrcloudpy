@@ -4,12 +4,10 @@ import os
 from solr_instance import SolrInstance
 from solrcloudpy import SolrConnection, SearchOptions
 
-
 solrprocess = None
 
 
 class TestCollectionSearch(unittest.TestCase):
-
     def setUp(self):
         self.conn = SolrConnection(version=os.getenv('SOLR_VERSION', '6.1.0'))
         self.collparams = {}
@@ -48,6 +46,17 @@ class TestCollectionSearch(unittest.TestCase):
         self.assertTrue(len(res.response.docs) == 0)
 
         coll2.drop()
+
+    def test_custom_params_search(self):
+        coll2 = self.conn.create_collection('coll2', **self.collparams)
+        docs = [{"id": str(_id), "includes": "silly text"} for _id in range(5)]
+
+        res_1 = coll2.add(docs, {'omitHeader': "false"})
+        self.assertEquals(0, res_1.responseHeader.status)
+
+        coll2.commit()
+        res_2 = coll2.search({"q": "id:1", "omitHeader": "false"}).result
+        self.assertEquals(0, res_2.responseHeader.status)
 
 
 def setUpModule():
