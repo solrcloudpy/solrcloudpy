@@ -1,3 +1,4 @@
+from __future__ import print_function
 import unittest
 import time
 import os
@@ -75,11 +76,13 @@ class TestCollectionAdmin(unittest.TestCase):
                                                 replication_factor=2,
                                                 **self.collparams)
         except ReadTimeout:
-            print "Encountered read timeout while testing delete replicate"
-            print "This generally doesn't mean the collection wasn't created with the settings passed."
+            print("Encountered read timeout while testing delete replicate")
+            print("This generally doesn't mean the collection wasn't created with the settings passed.")
             coll2 = self.conn['test_delete_replica']
         time.sleep(3)
-        coll2.delete_replica('core_node2', 'myshard1')
+        firstReplica = list(coll2.shards['shards']['myshard1']['replicas'].dict.keys())[0]
+        result = coll2.delete_replica(firstReplica, 'myshard1')
+        self.assertTrue(result.success)
         coll2.drop()
 
 
@@ -90,8 +93,8 @@ def setUpModule():
     solrprocess.start()
     solrprocess.wait_ready()
     time.sleep(1)
-    
-    
+
+
 def tearDownModule():
     if os.getenv('SKIP_STARTUP', False):
         return

@@ -52,11 +52,11 @@ class TestCollectionSearch(unittest.TestCase):
         docs = [{"id": str(_id), "includes": "silly text"} for _id in range(5)]
 
         res_1 = coll2.add(docs, {'omitHeader': "false"})
-        self.assertEquals(0, res_1.responseHeader.status)
+        self.assertEqual(0, res_1.responseHeader.status)
 
         coll2.commit()
         res_2 = coll2.search({"q": "id:1", "omitHeader": "false"}).result
-        self.assertEquals(0, res_2.responseHeader.status)
+        self.assertEqual(0, res_2.responseHeader.status)
 
 
 def setUpModule():

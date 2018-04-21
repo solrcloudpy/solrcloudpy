@@ -1,6 +1,7 @@
+from __future__ import print_function
+from future.moves.urllib.request import urlopen
 import subprocess
 import time
-import urllib
 import os
 import re
 
@@ -11,28 +12,28 @@ class SolrInstance(object):
         :param name: the name of the collection
         :type name: str
         """
-        
+
         self._process = None
         self.name = name
         # e.g. /home/dfdeshom/code/solr-4.6.0/
         self.solr_dir = os.getenv('SOLR_HOME', None)
         if not self.solr_dir:
             return
-        
+
         self.solr_jar_dir = self.solr_dir + '/server'
         self.zoo_data_2 = self.solr_dir + '/example/cloud/node1/solr/zoo_data/version-2/'
         self.collection2_data = self.solr_dir + '/example/cloud/node2'
         self.conf_dir = self.solr_jar_dir + '/solr/configsets/data_driven_schema_configs/conf'
-        
+
         if self.solr_dir:
             # find the solr version
             with open(self.solr_dir+'/CHANGES.txt', 'r') as changes_file:
                 for line in changes_file:
                     if '====' in line:
                         matches = re.match(r'.*(\d+)\.(\d+)\.(\d+).*', line)
-                        self.solr_semver = map(lambda x: int(x), matches.groups())
+                        self.solr_semver = [int(x) for x in matches.groups()]
                         break
-                        
+
             if self.solr_semver[0] == 4:
                 self.solr_jar_dir = self.solr_dir+'/example'
                 self.zoo_data_2 = self.solr_jar_dir + '/solr/zoo_data/version-2/'
@@ -67,7 +68,7 @@ class SolrInstance(object):
             sleeper = 0
             while True:
                 try:
-                    res = urllib.urlopen("http://localhost:8983").read()
+                    res = urlopen("http://localhost:8983").read()
                     if res:
                         return True
                 except:
@@ -96,13 +97,13 @@ class SolrInstance(object):
 if __name__ == '__main__':
     import sys
     if sys.argv[1] == 'start':
-        print "Starting Solr"
+        print("Starting Solr")
         instance = SolrInstance('solr2')
         instance.start()
         instance.wait_ready()
-        print "Started Solr"
+        print("Started Solr")
         sys.exit(0)
     if sys.argv[1] == 'stop':
         SolrInstance('solr2').terminate()
-        print "Terminated Solr"
+        print("Terminated Solr")
         sys.exit(0)

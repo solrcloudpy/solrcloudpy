@@ -4,6 +4,7 @@ Query and update a Solr collection
 
 from solrcloudpy.utils import CollectionBase, SolrException, as_json_bool
 
+from future.utils import iterkeys
 import datetime as dt
 import json
 
@@ -26,7 +27,7 @@ class SolrCollectionSearch(CollectionBase):
     def _get_response(self, path, params=None, method='GET', body=None):
         """
         Retrieves a response from the solr client
-        
+
         :param path: the URL of the solr endpoint
         :type path: str
         :param params: query params
@@ -119,7 +120,7 @@ class SolrCollectionSearch(CollectionBase):
         :rtype: SolrResponse
         :raise: SolrException
         """
-        if 'q' not in query.iterkeys():
+        if 'q' not in iterkeys(query):
             raise ValueError("query should have a 'q' parameter")
 
         if hasattr(query, 'commonparams'):
@@ -157,9 +158,9 @@ class SolrCollectionSearch(CollectionBase):
         return self._get_response('%s/update' % self.name, params=params).result
 
     def commit(self):
-        """ 
+        """
         Commit changes to a collection
-        
+
         :return: the solr response
         :rtype: SolrResponse
         :raise: SolrException

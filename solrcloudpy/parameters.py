@@ -1,3 +1,4 @@
+from future.utils import iterkeys, iteritems
 from collections import defaultdict
 
 
@@ -12,7 +13,7 @@ class BaseParams(object):
         if query:
             self._q['q'].add(query)
 
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             if hasattr(v, "__iter__"):
                 self._q[k].update(v)
             else:
@@ -24,7 +25,7 @@ class BaseParams(object):
         :return: self
         :rtype: BaseParams
         """
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             if hasattr(v, "__iter__"):
                 self._q[k].update(v)
             else:
@@ -51,7 +52,7 @@ class BaseParams(object):
         :rtype: iterable
         """
         c = self._q.copy()
-        return c.iteritems()
+        return iteritems(c)
 
     def __getitem__(self, item):
         """
@@ -67,7 +68,7 @@ class BaseParams(object):
         :return: an iterable
         :rtype: iterable
         """
-        return self._q.iterkeys()
+        return iterkeys(self._q)
 
     def __len__(self):
         """
@@ -204,7 +205,7 @@ class CommonParams(BaseParams):
     def debug(self):
         """
         Enables debugging for a particular query
-        
+
         :return: self for fluent interface
         :rtype: CommonParams
         """
@@ -508,7 +509,7 @@ class FacetParams(BaseParams):
         :param start: the starting offset
         :type start: int
         :param end: where the facet range ends
-        :type end: int 
+        :type end: int
         :param gap: the gap of each faceted range
         :type gap: int
         :return: self for fluent interface
@@ -580,12 +581,12 @@ class SearchOptions(object):
             res.update({'facet': 'true'})
         for p in self._all:
             res.update(iter(p))
-        return res.iteritems()
+        return iteritems(res)
 
     def iterkeys(self):
         res = []
         for p in self._all:
-            res += list(p.iterkeys())
+            res += list(iterkeys(p))
         return iter(res)
 
     def __repr__(self):

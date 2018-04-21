@@ -1,6 +1,7 @@
 """
 Get different statistics about the underlying index in a collection
 """
+from future.utils import iteritems
 from solrcloudpy.utils import _Request, SolrResult
 
 
@@ -32,7 +33,7 @@ class SolrIndexStats(object):
         result = self.client.get('/solr/%s/admin/mbeans' % self.name, params).result.dict
         caches = result['solr-mbeans']['CACHE']
         res = {}
-        for cache, info in caches.iteritems():
+        for cache, info in iteritems(caches):
             if cache == 'fieldCache':
                 res[cache] = {'entries_count': info['stats'].get('entries_count', 0)}
                 continue
@@ -45,7 +46,7 @@ class SolrIndexStats(object):
     def queryhandler_stats(self):
         """
         Get query handler statistics for all of the handlers used in this Solr node
-        
+
         :return: The result
         :rtype: SolrResult
         """
@@ -53,7 +54,7 @@ class SolrIndexStats(object):
         result = self.client.get('/solr/%s/admin/mbeans' % self.name, params).result.dict
         caches = result['solr-mbeans']['QUERYHANDLER']
         res = {}
-        for cache, info in caches.iteritems():
+        for cache, info in iteritems(caches):
             res[cache] = info['stats']
 
         return SolrResult(res)

@@ -16,6 +16,7 @@ To get a :class:`~solrcloudpy.SolrCollection` instance from a :class:`SolrConnec
 import urllib
 import json
 import semver
+from future.utils import iteritems
 
 import solrcloudpy.collection as collection
 from solrcloudpy.utils import _Request
@@ -64,15 +65,15 @@ class SolrConnection(object):
         self.webappdir = webappdir
         self.version = version
         self.request_retries = request_retries
-        
+
         if not semver.match(version, MIN_SUPPORTED_VERSION) and semver.match(version, MAX_SUPPORTED_VERSION):
-            raise StandardError("Unsupported version %s" % version)
-        
+            raise Exception("Unsupported version %s" % version)
+
         if semver.match(self.version, '<5.4.0'):
             self.zk_path = '/{webappdir}/zookeeper'.format(webappdir=self.webappdir)
         else:
             self.zk_path = '/{webappdir}/admin/zookeeper'.format(webappdir=self.webappdir)
-        
+
         self.url_template = 'http://{{server}}/{webappdir}/'.format(webappdir=self.webappdir)
 
         if type(server) == str:
@@ -96,9 +97,9 @@ class SolrConnection(object):
     def detect_nodes(self, _):
         """
         Queries Solr's zookeeper integration for live nodes
-        
+
         DEPRECATED
-        
+
         :return: a list of sorl URLs corresponding to live nodes in solrcloud
         :rtype: list
         """
@@ -108,14 +109,14 @@ class SolrConnection(object):
         """
         Lists out the current collections in the cluster
         This should probably be a recursive function but I'm not in the mood today
-        
+
         :return: a list of collection names
         :rtype: list
         """
         params = {'detail': 'false', 'path': '/collections'}
         response = self.client.get(
             self.zk_path, params).result
-        
+
         if 'children' not in response['tree'][0]:
             return []
 
@@ -149,7 +150,7 @@ class SolrConnection(object):
         params = {'wt': 'json', }
         response = self.client.get(
             ('/{webappdir}/admin/cores'.format(webappdir=self.webappdir)), params).result
-        cores = response.get('status', {}).keys()
+        cores = list(response.get('status', {}).keys())
         return cores
 
     @property
@@ -157,7 +158,7 @@ class SolrConnection(object):
         """
         Determine the state of all nodes and collections in the cluster. Problematic nodes or
         collections are returned, along with their state, otherwise an `OK` message is returned
-        
+
         :return: a dict representing the status of the cluster
         :rtype: dict
         """
@@ -170,9 +171,9 @@ class SolrConnection(object):
             collections = self.list()
             for coll in collections:
                 shards = data[coll]['shards']
-                for shard, shard_info in shards.iteritems():
+                for shard, shard_info in iteritems(shards):
                     replicas = shard_info['replicas']
-                    for replica, info in replicas.iteritems():
+                    for replica, info in iteritems(replicas):
                         state = info['state']
                         if state != 'active':
                             item = {"collection": coll,
@@ -185,9 +186,9 @@ class SolrConnection(object):
             params = {'action': 'CLUSTERSTATUS', 'wt': 'json'}
             response = self.client.get(
                 ('/{webappdir}/admin/collections'.format(webappdir=self.webappdir)), params).result
-            for collection_name, collection in response.dict['cluster']['collections'].items():
-                for shard_name, shard in collection['shards'].items():
-                    for replica_name, replica in shard['replicas'].items():
+            for collection_name, collection in list(response.dict['cluster']['collections'].items()):
+                for shard_name, shard in list(collection['shards'].items()):
+                    for replica_name, replica in list(shard['replicas'].items()):
                         if replica['state'] != 'active':
                             item = {"collection": collection_name,
                                     "replica": replica_name,
@@ -204,7 +205,7 @@ class SolrConnection(object):
     def cluster_leader(self):
         """
         Gets the cluster leader
-        
+
         :rtype: dict
         :return: a dict with the json loaded from the zookeeper response related to the cluster leader request
         """
@@ -216,7 +217,7 @@ class SolrConnection(object):
     def live_nodes(self):
         """
         Lists all nodes that are currently online
-        
+
         :return: a list of urls related to live nodes
         :rtype: list
         """
@@ -234,7 +235,7 @@ class SolrConnection(object):
         :type collname: str
         :param \*args: additional arguments
         :param \*\*kwargs: additional named parameters
-        
+
         :return: the created collection
         :rtype: SolrCollection
         """
@@ -262,7 +263,7 @@ class SolrConnection(object):
     def __dir__(self):
         """
         Convenience method for viewing servers available in this connection
-        
+
         :return: a list of servers
         :rtype: list
         """
