@@ -98,6 +98,7 @@ class _Request(object):
             raise SolrException("No servers available")
 
         result = None
+        r = None
         while result is None:
             host = random.choice(servers)
             fullpath = urljoin(host, path)
