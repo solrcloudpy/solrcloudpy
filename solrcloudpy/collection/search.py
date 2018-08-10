@@ -56,7 +56,7 @@ class SolrCollectionSearch(CollectionBase):
             raise SolrException(resp.result.error)
         return resp
 
-    def search(self, params):
+    def search(self, params, method="GET", body=None):
         """
         Search this index
 
@@ -64,10 +64,14 @@ class SolrCollectionSearch(CollectionBase):
         :type params: SearchOptions
         :type params: dict
         :type params: list
+        :param method: the request method
+        :type method: str
+        :param body: the request body
+        :type body: str
         :return: the response from Solr
         :rtype: SolrResponse
         """
-        return self._get_response("%s/select" % self.name, params)
+        return self._get_response("%s/select" % self.name, params, method, body)
 
     def clustering(self, params):
         """

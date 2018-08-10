@@ -57,6 +57,17 @@ class TestCollectionSearch(unittest.TestCase):
         coll2.commit()
         res_2 = coll2.search({"q": "id:1", "omitHeader": "false"}).result
         self.assertEqual(0, res_2.responseHeader.status)
+    
+    def test_post_body_search(self):
+        coll2 = self.conn.create_collection('coll2', **self.collparams)
+        docs = [{"id": str(_id), "includes": "silly text"} for _id in range(5)]
+
+        coll2.add(docs)
+        coll2.commit()
+        # JSON DSL Query format
+        res = coll2.search({},"POST", '{"query": "id:1"}').result
+        self.assertTrue(len(res.response.docs) == 1)
+        coll2.drop()
 
 
 def setUpModule():
