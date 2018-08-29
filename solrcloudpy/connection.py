@@ -49,6 +49,8 @@ class SolrConnection(object):
     :type version: str
     :param request_retries: number of times to retry a request against the same server. particularly useful for load-balancing or proxy situations.
     :type request_retries: int
+    :param use_https: True if https is required
+    :type use_https: bool
     """
 
     def __init__(self, server="localhost:8983",
@@ -58,7 +60,8 @@ class SolrConnection(object):
                  timeout=10,
                  webappdir='solr',
                  version='5.3.0',
-                 request_retries=1):
+                 request_retries=1,
+                 use_https=False):
         self.user = user
         self.password = password
         self.timeout = timeout
@@ -73,8 +76,10 @@ class SolrConnection(object):
             self.zk_path = '/{webappdir}/zookeeper'.format(webappdir=self.webappdir)
         else:
             self.zk_path = '/{webappdir}/admin/zookeeper'.format(webappdir=self.webappdir)
-
-        self.url_template = 'http://{{server}}/{webappdir}/'.format(webappdir=self.webappdir)
+        
+        protocol = "https" if use_https else "http"
+        
+        self.url_template = '{protocol}://{{server}}/{webappdir}/'.format(protocol=protocol, webappdir=self.webappdir)
 
         if type(server) == str:
             self.url = self.url_template.format(server=server)

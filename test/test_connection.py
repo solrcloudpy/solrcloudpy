@@ -35,6 +35,15 @@ class TestConnection(unittest.TestCase):
         self.assertTrue(isinstance(coll, SolrCollection))
         self.conn.test2.drop()
 
+    def test_create_collection_https(self):
+        test_conn = SolrConnection(server="localhost", use_https=True)
+        self.assertTrue(test_conn.url_template.startswith("https:"))
+        test_conn = SolrConnection(server="localhost", use_https=False)
+        self.assertTrue(test_conn.url_template.startswith("http:"))
+        test_conn = SolrConnection(server="localhost")
+        self.assertTrue(test_conn.url_template.startswith("http:"))
+
+
 
 def setUpModule():
     if os.getenv('SKIP_STARTUP', False):
