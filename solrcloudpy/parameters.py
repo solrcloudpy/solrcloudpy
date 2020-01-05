@@ -14,7 +14,7 @@ class BaseParams(object):
             self._q['q'].add(query)
 
         for k, v in list(kwargs.items()):
-            if hasattr(v, "__iter__"):
+            if hasattr(v, "__iter__") and not isinstance(v, str):
                 self._q[k].update(v)
             else:
                 self._q[k].update([v])
@@ -26,7 +26,7 @@ class BaseParams(object):
         :rtype: BaseParams
         """
         for k, v in list(kwargs.items()):
-            if hasattr(v, "__iter__"):
+            if hasattr(v, "__iter__") and not isinstance(v, str):
                 self._q[k].update(v)
             else:
                 self._q[k].update([v])
@@ -52,7 +52,7 @@ class BaseParams(object):
         :rtype: iterable
         """
         c = self._q.copy()
-        return iteritems(c)
+        return iter(dict(c).items())
 
     def __getitem__(self, item):
         """
