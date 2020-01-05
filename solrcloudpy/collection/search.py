@@ -2,12 +2,12 @@
 Query and update a Solr collection
 """
 
-from solrcloudpy.utils import CollectionBase, SolrException, as_json_bool
-
-from future.utils import iterkeys
 import datetime as dt
 import json
 
+from future.utils import iterkeys
+
+from solrcloudpy.utils import CollectionBase, SolrException, as_json_bool
 
 # todo this seems funky -- only called once
 dthandler = lambda obj: obj.isoformat() if isinstance(obj, dt.datetime) else None
@@ -17,6 +17,7 @@ class SolrCollectionSearch(CollectionBase):
     """
     Performs search-related operations on a collection
     """
+
     def __repr__(self):
         """
         :return: A string representation of the object
@@ -24,7 +25,7 @@ class SolrCollectionSearch(CollectionBase):
         """
         return "SolrIndex<%s>" % self.name
 
-    def _get_response(self, path, params=None, method='GET', body=None):
+    def _get_response(self, path, params=None, method="GET", body=None):
         """
         Retrieves a response from the solr client
 
@@ -50,8 +51,8 @@ class SolrCollectionSearch(CollectionBase):
         :rtype: SolrResponse
         :raise: SolrException
         """
-        path = '%s/update/json' % self.name
-        resp = self._get_response(path, method='POST', params=params, body=body)
+        path = "%s/update/json" % self.name
+        resp = self._get_response(path, method="POST", params=params, body=body)
         if resp.code != 200:
             raise SolrException(resp.result.error)
         return resp
@@ -124,14 +125,14 @@ class SolrCollectionSearch(CollectionBase):
         :rtype: SolrResponse
         :raise: SolrException
         """
-        if 'q' not in iterkeys(query):
+        if "q" not in iterkeys(query):
             raise ValueError("query should have a 'q' parameter")
 
-        if hasattr(query, 'commonparams'):
-            q = list(query.commonparams['q'])
+        if hasattr(query, "commonparams"):
+            q = list(query.commonparams["q"])
             q = q[0]
         else:
-            q = query['q']
+            q = query["q"]
 
         m = json.dumps({"delete": {"query": "%s" % q}})
 
@@ -154,12 +155,13 @@ class SolrCollectionSearch(CollectionBase):
         :rtype: SolrResponse
         :raise: SolrException
         """
-        params = {'softCommit': as_json_bool(soft_commit),
-                  'waitSearcher': as_json_bool(wait_searcher),
-                  'maxSegments': max_segments,
-                  'optimize': 'true'
-                  }
-        return self._get_response('%s/update' % self.name, params=params).result
+        params = {
+            "softCommit": as_json_bool(soft_commit),
+            "waitSearcher": as_json_bool(wait_searcher),
+            "maxSegments": max_segments,
+            "optimize": "true",
+        }
+        return self._get_response("%s/update" % self.name, params=params).result
 
     def commit(self):
         """

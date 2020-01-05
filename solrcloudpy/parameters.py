@@ -1,9 +1,9 @@
-from future.utils import iterkeys, iteritems
 from collections import defaultdict
+
+from future.utils import iteritems, iterkeys
 
 
 class BaseParams(object):
-
     def __init__(self, query=None, **kwargs):
         """
         :param query: the query to send to solr
@@ -11,7 +11,7 @@ class BaseParams(object):
         """
         self._q = defaultdict(set)
         if query:
-            self._q['q'].add(query)
+            self._q["q"].add(query)
 
         for k, v in list(kwargs.items()):
             if hasattr(v, "__iter__") and not isinstance(v, str):
@@ -52,7 +52,7 @@ class BaseParams(object):
         :rtype: iterable
         """
         c = self._q.copy()
-        return iter(dict(c).items())
+        return iter(list(dict(c).items()))
 
     def __getitem__(self, item):
         """
@@ -93,7 +93,7 @@ class CommonParams(BaseParams):
         :return: self for fluent interface
         :rtype: CommonParams
         """
-        self._q['q'].add(query)
+        self._q["q"].add(query)
         return self
 
     def sort(self, criteria):
@@ -104,7 +104,7 @@ class CommonParams(BaseParams):
         :return: self for fluent interface
         :rtype: CommonParams
         """
-        self._q['sort'].add(criteria)
+        self._q["sort"].add(criteria)
         return self
 
     def start(self, start):
@@ -115,7 +115,7 @@ class CommonParams(BaseParams):
         :return: self for fluent interface
         :rtype: CommonParams
         """
-        self._q['start'].add(start)
+        self._q["start"].add(start)
         return self
 
     def rows(self, r):
@@ -126,7 +126,7 @@ class CommonParams(BaseParams):
         :return: self for fluent interface
         :rtype: CommonParams
         """
-        self._q['rows'].add(r)
+        self._q["rows"].add(r)
         return self
 
     def fq(self, query):
@@ -137,7 +137,7 @@ class CommonParams(BaseParams):
         :return: self for fluent interface
         :rtype: CommonParams
         """
-        self._q['fq'].add(query)
+        self._q["fq"].add(query)
         return self
 
     def fl(self, fields):
@@ -148,7 +148,7 @@ class CommonParams(BaseParams):
         :return: self for fluent interface
         :rtype: CommonParams
         """
-        self._q['fl'].add(fields)
+        self._q["fl"].add(fields)
         return self
 
     def deftype(self, t):
@@ -159,7 +159,7 @@ class CommonParams(BaseParams):
         :return: self for fluent interface
         :rtype: CommonParams
         """
-        self._q['defType'].add(t)
+        self._q["defType"].add(t)
         return self
 
     def explain_other(self, val):
@@ -170,7 +170,7 @@ class CommonParams(BaseParams):
         :return: self for fluent interface
         :rtype: CommonParams
         """
-        self._q['explainOther'].add(val)
+        self._q["explainOther"].add(val)
         return self
 
     def time_allowed(self, t):
@@ -181,7 +181,7 @@ class CommonParams(BaseParams):
         :return: self for fluent interface
         :rtype: CommonParams
         """
-        self._q['timeAllowed'].add(t)
+        self._q["timeAllowed"].add(t)
         return self
 
     def cache(self, val):
@@ -192,14 +192,14 @@ class CommonParams(BaseParams):
         :return: self for fluent interface
         :rtype: CommonParams
         """
-        self._q['cache'].add(val)
+        self._q["cache"].add(val)
         return self
 
     def log_param_list(self, val):
         """
         This isn't in Solr's documentation...
         """
-        self._q['logParamList'].add(val)
+        self._q["logParamList"].add(val)
         return self
 
     def debug(self):
@@ -209,7 +209,7 @@ class CommonParams(BaseParams):
         :return: self for fluent interface
         :rtype: CommonParams
         """
-        self._q['debug'].add("true")
+        self._q["debug"].add("true")
         return self
 
 
@@ -227,7 +227,7 @@ class MLTParams(BaseParams):
         :return: self for fluent interface
         :rtype: MTLParams
         """
-        self._q['mlt.fl'].add(field)
+        self._q["mlt.fl"].add(field)
         return self
 
     def mintf(self, tf):
@@ -238,7 +238,7 @@ class MLTParams(BaseParams):
         :return: self for fluent interface
         :rtype: MTLParams
         """
-        self._q['mlt.mintf'].add(tf)
+        self._q["mlt.mintf"].add(tf)
         return self
 
     def mindf(self, df):
@@ -249,7 +249,7 @@ class MLTParams(BaseParams):
         :return: self for fluent interface
         :rtype: MTLParams
         """
-        self._q['mlt.mindf'].add(df)
+        self._q["mlt.mindf"].add(df)
         return self
 
     def minwl(self, wl):
@@ -260,7 +260,7 @@ class MLTParams(BaseParams):
         :return: self for fluent interface
         :rtype: MTLParams
         """
-        self._q['mlt.minwl'].add(wl)
+        self._q["mlt.minwl"].add(wl)
         return self
 
     def maxwl(self, wl):
@@ -271,7 +271,7 @@ class MLTParams(BaseParams):
         :return: self for fluent interface
         :rtype: MTLParams
         """
-        self._q['mlt.maxwl'].add(wl)
+        self._q["mlt.maxwl"].add(wl)
         return self
 
     def maxqt(self, qt):
@@ -282,7 +282,7 @@ class MLTParams(BaseParams):
         :return: self for fluent interface
         :rtype: MTLParams
         """
-        self._q['mlt.maxqt'].add(qt)
+        self._q["mlt.maxqt"].add(qt)
         return self
 
     def maxntp(self, ntp):
@@ -293,7 +293,7 @@ class MLTParams(BaseParams):
         :return: self for fluent interface
         :rtype: MTLParams
         """
-        self._q['mlt.maxntp'].add(ntp)
+        self._q["mlt.maxntp"].add(ntp)
         return self
 
     def boost(self, val):
@@ -304,7 +304,7 @@ class MLTParams(BaseParams):
         :return: self for fluent interface
         :rtype: MTLParams
         """
-        self._q['mlt.boost'].add(val)
+        self._q["mlt.boost"].add(val)
         return self
 
     def qf(self, fields):
@@ -315,7 +315,7 @@ class MLTParams(BaseParams):
         :return: self for fluent interface
         :rtype: MTLParams
         """
-        self._q['mlt.qf'].add(fields)
+        self._q["mlt.qf"].add(fields)
         return self
 
     def count(self, c):
@@ -326,7 +326,7 @@ class MLTParams(BaseParams):
         :return: self for fluent interface
         :rtype: MTLParams
         """
-        self._q['mlt.count'].add(c)
+        self._q["mlt.count"].add(c)
         return self
 
 
@@ -344,7 +344,7 @@ class FacetParams(BaseParams):
         :return: self for fluent interface
         :rtype: FacetParams
         """
-        self._q['facet.query'].add(query)
+        self._q["facet.query"].add(query)
         return self
 
     def field(self, field):
@@ -355,7 +355,7 @@ class FacetParams(BaseParams):
         :return: self for fluent interface
         :rtype: FacetParams
         """
-        self._q['facet.field'].add(field)
+        self._q["facet.field"].add(field)
         return self
 
     def prefix(self, criteria, field=None):
@@ -369,9 +369,9 @@ class FacetParams(BaseParams):
         :rtype: FacetParams
         """
         if field:
-            self._q['f.%s.facet.prefix' % field].add(criteria)
+            self._q["f.%s.facet.prefix" % field].add(criteria)
         else:
-            self._q['facet.prefix'].add(criteria)
+            self._q["facet.prefix"].add(criteria)
         return self
 
     def sort(self, criteria, field=None):
@@ -388,9 +388,9 @@ class FacetParams(BaseParams):
             criteria = "count"
 
         if field:
-            self._q['f.%s.facet.sort' % field].add(criteria)
+            self._q["f.%s.facet.sort" % field].add(criteria)
         else:
-            self._q['facet.sort'].add(criteria)
+            self._q["facet.sort"].add(criteria)
 
         return self
 
@@ -405,9 +405,9 @@ class FacetParams(BaseParams):
         :rtype: FacetParams
         """
         if field:
-            self._q['f.%s.facet.limit' % field].add(limit)
+            self._q["f.%s.facet.limit" % field].add(limit)
         else:
-            self._q['facet.limit'].add(limit)
+            self._q["facet.limit"].add(limit)
         return self
 
     def offset(self, offset, field=None):
@@ -421,9 +421,9 @@ class FacetParams(BaseParams):
         :rtype: FacetParams
         """
         if field:
-            self._q['f.%s.facet.offset' % field].add(offset)
+            self._q["f.%s.facet.offset" % field].add(offset)
         else:
-            self._q['facet.offset'].add(offset)
+            self._q["facet.offset"].add(offset)
         return self
 
     def mincount(self, count, field=None):
@@ -437,9 +437,9 @@ class FacetParams(BaseParams):
         :rtype: FacetParams
         """
         if field:
-            self._q['f.%s.facet.mincount' % field].add(count)
+            self._q["f.%s.facet.mincount" % field].add(count)
         else:
-            self._q['facet.mincount'].add(count)
+            self._q["facet.mincount"].add(count)
         return self
 
     def missing(self, val, field=None):
@@ -453,9 +453,9 @@ class FacetParams(BaseParams):
         :rtype: FacetParams
         """
         if field:
-            self._q['f.%s.facet.missing' % field].add(val)
+            self._q["f.%s.facet.missing" % field].add(val)
         else:
-            self._q['facet.missing'].add(val)
+            self._q["facet.missing"].add(val)
         return self
 
     def method(self, m, field=None):
@@ -469,9 +469,9 @@ class FacetParams(BaseParams):
         :rtype: FacetParams
         """
         if field:
-            self._q['f.%s.facet.method' % field].add(m)
+            self._q["f.%s.facet.method" % field].add(m)
         else:
-            self._q['facet.method'].add(m)
+            self._q["facet.method"].add(m)
         return self
 
     def mindf(self, val, field=None):
@@ -485,9 +485,9 @@ class FacetParams(BaseParams):
         :rtype: FacetParams
         """
         if field:
-            self._q['f.%s.facet.enum.cache.minDf' % field].add(val)
+            self._q["f.%s.facet.enum.cache.minDf" % field].add(val)
         else:
-            self._q['facet.enum.cache.minDf'].add(val)
+            self._q["facet.enum.cache.minDf"].add(val)
         return self
 
     def threads(self, num):
@@ -498,7 +498,7 @@ class FacetParams(BaseParams):
         :return: self for fluent interface
         :rtype: FacetParams
         """
-        self._q['facet.threads'].add(num)
+        self._q["facet.threads"].add(num)
         return self
 
     def range(self, field, start, end, gap):
@@ -515,10 +515,10 @@ class FacetParams(BaseParams):
         :return: self for fluent interface
         :rtype: FacetParams
         """
-        self._q['facet.range'].add(field)
-        self._q['f.%s.facet.range.start' % field].add(start)
-        self._q['f.%s.facet.range.end' % field].add(end)
-        self._q['f.%s.facet.range.gap' % field].add(gap)
+        self._q["facet.range"].add(field)
+        self._q["f.%s.facet.range.start" % field].add(start)
+        self._q["f.%s.facet.range.end" % field].add(end)
+        self._q["f.%s.facet.range.gap" % field].add(gap)
         return self
 
     def pivot(self, fields):
@@ -529,7 +529,7 @@ class FacetParams(BaseParams):
         :return: self for fluent interface
         :rtype: FacetParams
         """
-        self._q['facet.pivot'].add(fields)
+        self._q["facet.pivot"].add(fields)
         return self
 
     def pivot_mincount(self, count):
@@ -540,7 +540,7 @@ class FacetParams(BaseParams):
         :return: self for fluent interface
         :rtype: FacetParams
         """
-        self._q['facet.pivot.mincount'].add(count)
+        self._q["facet.pivot.mincount"].add(count)
         return self
 
 
@@ -571,14 +571,16 @@ class SearchOptions(object):
         self.commonparams = CommonParams(**kwargs)
         self.facetparams = FacetParams()
         self.mltparams = MLTParams()
-        self._all = [self.commonparams,
-                     self.facetparams,
-                     self.mltparams, ]
+        self._all = [
+            self.commonparams,
+            self.facetparams,
+            self.mltparams,
+        ]
 
     def iteritems(self):
         res = defaultdict(set)
         if len(self.facetparams) > 0:
-            res.update({'facet': 'true'})
+            res.update({"facet": "true"})
         for p in self._all:
             res.update(iter(p))
         return iteritems(res)

@@ -9,6 +9,7 @@ class SolrSchema(object):
     Get and modify schema.
     Uses the Schema API described in https://cwiki.apache.org/confluence/display/solr/Schema+API
     """
+
     def __init__(self, connection, collection_name):
         """
         :param connection: the connection to solr
@@ -27,7 +28,7 @@ class SolrSchema(object):
         :return: the schema dict
         :rtype: dict
         """
-        return self.client.get('%s/schema' % self.collection_name).result.dict
+        return self.client.get("%s/schema" % self.collection_name).result.dict
 
     @property
     def name(self):
@@ -36,7 +37,7 @@ class SolrSchema(object):
         :return: the schema name as a dict
         :rtype: dict
         """
-        return self.client.get('%s/schema/name' % self.collection_name).result.dict
+        return self.client.get("%s/schema/name" % self.collection_name).result.dict
 
     @property
     def version(self):
@@ -45,7 +46,7 @@ class SolrSchema(object):
         :return: the schema version as a dict
         :rtype: dict
         """
-        return self.client.get('%s/schema/version' % self.collection_name).result.dict
+        return self.client.get("%s/schema/version" % self.collection_name).result.dict
 
     @property
     def unique_key(self):
@@ -54,7 +55,7 @@ class SolrSchema(object):
         :return: the schema unique key as a dict
         :rtype: dict
         """
-        return self.client.get('%s/schema/uniquekey' % self.collection_name).result.dict
+        return self.client.get("%s/schema/uniquekey" % self.collection_name).result.dict
 
     @property
     def similarity(self):
@@ -63,7 +64,9 @@ class SolrSchema(object):
         :return: the schema global similarity definition as a dict
         :rtype: dict
         """
-        return self.client.get('%s/schema/similarity' % self.collection_name).result.dict
+        return self.client.get(
+            "%s/schema/similarity" % self.collection_name
+        ).result.dict
 
     @property
     def default_operator(self):
@@ -72,7 +75,9 @@ class SolrSchema(object):
         :return: the schema default operator as a dict
         :rtype: dict
         """
-        return self.client.get('%s/schema/solrqueryparser/defaultoperator' % self.collection_name).result.dict
+        return self.client.get(
+            "%s/schema/solrqueryparser/defaultoperator" % self.collection_name
+        ).result.dict
 
     def get_field(self, field):
         """
@@ -84,7 +89,9 @@ class SolrSchema(object):
         :return: a dict related to the field definition
         :rtype: dict
         """
-        return self.client.get('%s/schema/field/%s' % (self.collection_name, field)).result.dict
+        return self.client.get(
+            "%s/schema/field/%s" % (self.collection_name, field)
+        ).result.dict
 
     def get_fields(self):
         """
@@ -93,7 +100,7 @@ class SolrSchema(object):
         :return: a dict of fields to their schema definitions
         :rtype: dict
         """
-        return self.client.get('%s/schema/fields' % self.collection_name).result.dict
+        return self.client.get("%s/schema/fields" % self.collection_name).result.dict
 
     def add_fields(self, json_schema):
         """
@@ -104,7 +111,9 @@ class SolrSchema(object):
         :return: a dict representing the result of the update request
         :rtype: dict
         """
-        return self.client.update('%s/schema/fields' % self.collection_name, body=json_schema).result.dict
+        return self.client.update(
+            "%s/schema/fields" % self.collection_name, body=json_schema
+        ).result.dict
 
     def get_dynamic_fields(self):
         """
@@ -112,7 +121,9 @@ class SolrSchema(object):
         :return: a dict of dynamic fields to their schema definitions
         :rtype: dict
         """
-        return self.client.get('%s/schema/dynamicfields' % self.collection_name).result.dict
+        return self.client.get(
+            "%s/schema/dynamicfields" % self.collection_name
+        ).result.dict
 
     def get_dynamic_field(self, field):
         """
@@ -124,7 +135,9 @@ class SolrSchema(object):
         :return: a dict of dynamic fields to their schema definitions
         :rtype: dict
         """
-        return self.client.get('%s/schema/dynamicfield/%s' % (self.collection_name, field)).result.dict
+        return self.client.get(
+            "%s/schema/dynamicfield/%s" % (self.collection_name, field)
+        ).result.dict
 
     def get_fieldtypes(self):
         """
@@ -132,7 +145,9 @@ class SolrSchema(object):
         :return: a dict relating information about field types
         :rtype: dict
         """
-        return self.client.get('%s/schema/fieldtypes' % (self.collection_name)).result.dict
+        return self.client.get(
+            "%s/schema/fieldtypes" % (self.collection_name)
+        ).result.dict
 
     def get_fieldtype(self, ftype):
         """
@@ -143,7 +158,9 @@ class SolrSchema(object):
         :return: a dict relating information about a given field type
         :rtype: dict
         """
-        return self.client.get('%s/schema/fieldtypes/%s' % (self.collection_name, ftype)).result.dict
+        return self.client.get(
+            "%s/schema/fieldtypes/%s" % (self.collection_name, ftype)
+        ).result.dict
 
     def get_copyfields(self):
         """
@@ -151,7 +168,9 @@ class SolrSchema(object):
         :return: a dict describing the copyfields defined in the schema
         :rtype: dict
         """
-        return self.client.get('%s/schema/copyfields' % self.collection_name).result.dict
+        return self.client.get(
+            "%s/schema/copyfields" % self.collection_name
+        ).result.dict
 
     def get_copyfield(self, field):
         """
@@ -162,4 +181,6 @@ class SolrSchema(object):
         :return: a dict relating information about a given copyfield
         :rtype: dict
         """
-        return self.client.get('%s/schema/copyfield/%s' % (self.collection_name, field)).result.dict
+        return self.client.get(
+            "%s/schema/copyfield/%s" % (self.collection_name, field)
+        ).result.dict

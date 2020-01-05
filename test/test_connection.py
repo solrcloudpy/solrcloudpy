@@ -1,25 +1,26 @@
-import unittest
-from solr_instance import SolrInstance
-import time
 import os
-from solrcloudpy import SolrConnection, SolrCollection
+import time
+import unittest
+
+from solr_instance import SolrInstance
+from solrcloudpy import SolrCollection, SolrConnection
 
 solrprocess = None
 
 
 class TestConnection(unittest.TestCase):
     def setUp(self):
-        self.conn = SolrConnection(version=os.getenv('SOLR_VERSION', '6.1.0'))
+        self.conn = SolrConnection(version=os.getenv("SOLR_VERSION", "6.1.0"))
         self.collparams = {}
-        confname = os.getenv('SOLR_CONFNAME', '')
-        if confname != '':
-            self.collparams['collection_config_name'] = confname
+        confname = os.getenv("SOLR_CONFNAME", "")
+        if confname != "":
+            self.collparams["collection_config_name"] = confname
 
     def test_list(self):
-        self.conn['foo'].create(**self.collparams)
+        self.conn["foo"].create(**self.collparams)
         colls = self.conn.list()
         self.assertTrue(len(colls) >= 1)
-        self.conn['foo'].drop()
+        self.conn["foo"].drop()
 
     def test_live_nodes(self):
         nodes = self.conn.live_nodes
@@ -31,7 +32,7 @@ class TestConnection(unittest.TestCase):
         self.assertTrue(leader is not None)
 
     def test_create_collection(self):
-        coll = self.conn.create_collection('test2', **self.collparams)
+        coll = self.conn.create_collection("test2", **self.collparams)
         self.assertTrue(isinstance(coll, SolrCollection))
         self.conn.test2.drop()
 
@@ -44,9 +45,8 @@ class TestConnection(unittest.TestCase):
         self.assertTrue(test_conn.url_template.startswith("http:"))
 
 
-
 def setUpModule():
-    if os.getenv('SKIP_STARTUP', False):
+    if os.getenv("SKIP_STARTUP", False):
         return
     # start solr
     solrprocess = SolrInstance("solr2")
@@ -56,11 +56,11 @@ def setUpModule():
 
 
 def tearDownModule():
-    if os.getenv('SKIP_STARTUP', False):
+    if os.getenv("SKIP_STARTUP", False):
         return
     if solrprocess:
         solrprocess.terminate()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

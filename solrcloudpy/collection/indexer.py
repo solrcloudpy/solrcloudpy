@@ -1,10 +1,10 @@
 """
 Utilities to index large volumes of documents in Solr
 """
-from contextlib import contextmanager
 import logging
+from contextlib import contextmanager
 
-log = logging.getLogger('solrcloud')
+log = logging.getLogger("solrcloud")
 
 
 class SolrBatchAdder(object):
@@ -15,6 +15,7 @@ class SolrBatchAdder(object):
     Solr.  This allows for overall better performance when committing large numbers of
     documents.
     """
+
     def __init__(self, solr, batch_size=100, auto_commit=True):
         """
         `batch_size` is 100 by default; different values may yield
@@ -67,19 +68,24 @@ class SolrBatchAdder(object):
         """
         batch_len = len(self.batch)
         auto_commit = self.auto_commit
-        log.debug("SolrBatchAdder: flushing {batch_len} articles to Solr (auto_commit={auto_commit})".format(
-            batch_len=batch_len, auto_commit=auto_commit))
+        log.debug(
+            "SolrBatchAdder: flushing {batch_len} articles to Solr (auto_commit={auto_commit})".format(
+                batch_len=batch_len, auto_commit=auto_commit
+            )
+        )
         try:
             self.solr.add(self.batch)
         except Exception as e:
-            log.exception("Exception encountered when committing batch, falling back on one-by-one commit")
+            log.exception(
+                "Exception encountered when committing batch, falling back on one-by-one commit"
+            )
             log.error(e)
             # one by one fall-back
             for item in self.batch:
                 try:
                     self.solr.add([item])
                 except Exception as e:
-                    log.error(u"Could not add item to solr index")
+                    log.error("Could not add item to solr index")
                     log.exception(str(e))
             if auto_commit:
                 self.commit()
@@ -92,7 +98,9 @@ class SolrBatchAdder(object):
         try:
             self.solr.commit()
         except Exception as e:
-            log.warning("SolrBatchAdder timed out when committing, but it's safe to ignore")
+            log.warning(
+                "SolrBatchAdder timed out when committing, but it's safe to ignore"
+            )
 
     def _append_commit(self, doc):
         """

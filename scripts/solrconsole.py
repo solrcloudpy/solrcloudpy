@@ -1,9 +1,10 @@
-import sys
 import argparse
 import json
+import sys
 from pprint import pprint
-from IPython.terminal import ipapp
+
 from IPython.config.loader import Config
+from IPython.terminal import ipapp
 
 from solrcloudpy.connection import SolrConnection
 from solrcloudpy.parameters import SearchOptions
@@ -11,7 +12,7 @@ from solrcloudpy.parameters import SearchOptions
 
 def display_list(ob, pprinter, cycle):
     if len(ob) == 0:
-        pprinter.text('[]')
+        pprinter.text("[]")
         return
 
     e = ob[0]
@@ -33,9 +34,9 @@ def display_dict(ob, pprinter, cycle):
 
 def get_config(args):
     c = Config()
-    c.PromptManager.in_template = 'solr %s:%s> ' % (args.host, args.port)
-    c.PromptManager.in2_template = 'solr %s:%s>' % (args.host, args.port)
-    c.PromptManager.out_template = ''
+    c.PromptManager.in_template = "solr %s:%s> " % (args.host, args.port)
+    c.PromptManager.in2_template = "solr %s:%s>" % (args.host, args.port)
+    c.PromptManager.out_template = ""
     c.PromptManager.justify = False
     c.PlainTextFormatter.pprint = True
     c.TerminalInteractiveShell.confirm_exit = False
@@ -43,18 +44,21 @@ def get_config(args):
 
 
 def get_conn(args):
-    return SolrConnection(["%s:%s" % (args.host, args.port), ],
-                          user=args.user,
-                          password=args.password, version=args.version)
+    return SolrConnection(
+        ["%s:%s" % (args.host, args.port),],
+        user=args.user,
+        password=args.password,
+        version=args.version,
+    )
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Parser for solrcloudpy console')
-    parser.add_argument('--host', default='localhost', help='host')
-    parser.add_argument('--port', default='8983', help='port')
-    parser.add_argument('--user', default=None, help='user')
-    parser.add_argument('--password', default=None, help='password')
-    parser.add_argument('--version', default='5.3.0', help='version')
+    parser = argparse.ArgumentParser(description="Parser for solrcloudpy console")
+    parser.add_argument("--host", default="localhost", help="host")
+    parser.add_argument("--port", default="8983", help="port")
+    parser.add_argument("--user", default=None, help="user")
+    parser.add_argument("--password", default=None, help="password")
+    parser.add_argument("--version", default="5.3.0", help="version")
 
     args = parser.parse_args(sys.argv[1:])
 
@@ -69,13 +73,16 @@ def main():
         parent=app,
         profile_dir=app.profile_dir,
         ipython_dir=app.ipython_dir,
-        user_ns={"conn": conn,
-                 "collections": conn.list(),
-                 "SearchOptions": SearchOptions},
+        user_ns={
+            "conn": conn,
+            "collections": conn.list(),
+            "SearchOptions": SearchOptions,
+        },
         banner1=banner,
         banner2=banner2,
         display_banner=False,
-        config=c)
+        config=c,
+    )
 
     formatter = shell.get_ipython().display_formatter.formatters["text/plain"]
     formatter.for_type(type([]), display_list)
