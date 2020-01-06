@@ -245,22 +245,16 @@ class SolrCollectionAdmin(CollectionBase):
         if self.is_alias():
             return {"warn": "no state info available for aliases"}
 
+        response = self.client.get(
+            "/{webappdir}/admin/collections".format(
+                webappdir=self.connection.webappdir
+            ),
+            dict(action="clusterstatus"),
+        ).result
         try:
-            params = {"detail": "true", "path": "/clusterstate.json"}
-            response = self.client.get("/solr/zookeeper", params).result
-            data = json.loads(response["znode"]["data"])
-            return data[self.name]
+            return response["cluster"]["collections"][self.name]
         except KeyError:
-            response = self.client.get(
-                "/{webappdir}/admin/collections".format(
-                    webappdir=self.connection.webappdir
-                ),
-                dict(action="clusterstatus"),
-            ).result
-            try:
-                return response["cluster"]["collections"][self.name]
-            except KeyError:
-                return {}
+            return {}
 
     @property
     def shards(self):
@@ -340,7 +334,7 @@ class SolrCollectionAdmin(CollectionBase):
         if repository:
             params["repository"] = repository
 
-        return self.client.get("admin/collections", params, async=True)
+        return self.client.get("admin/collections", params, asynchronous=True)
 
     def backup(self, backup_name, location=None, repository=None):
         """

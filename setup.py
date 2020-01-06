@@ -26,7 +26,6 @@ setup(
     long_description=long_description,
     include_package_data=True,
     platforms="any",
-    entry_points={"console_scripts": ["solrconsole = scripts.solrconsole:main [ip]"]},
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
@@ -35,5 +34,5 @@ setup(
         "Programming Language :: Python",
         "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
     ],
-    install_requires=["requests >= 2.11.1", "IPython", "semver", "pathlib2", "future"],
+    install_requires=["requests >= 2.11.1", "semver", "pathlib2", "future"],
 )

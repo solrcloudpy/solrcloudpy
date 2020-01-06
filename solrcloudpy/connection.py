@@ -24,10 +24,9 @@ from future.utils import iteritems
 import solrcloudpy.collection as collection
 from solrcloudpy.utils import _Request
 
-MIN_SUPPORTED_VERSION = ">=4.6.0"
+MIN_SUPPORTED_VERSION = ">5.4.0"
 
-# TODO: revisit this when Solr 7 comes around.
-MAX_SUPPORTED_VERSION = "<=7.0.0"
+MAX_SUPPORTED_VERSION = "<=9.0.0"
 
 
 class SolrConnection(object):
@@ -64,7 +63,7 @@ class SolrConnection(object):
         password=None,
         timeout=10,
         webappdir="solr",
-        version="5.3.0",
+        version="7.7.0",
         request_retries=1,
         use_https=False,
     ):
@@ -80,12 +79,7 @@ class SolrConnection(object):
         ):
             raise Exception("Unsupported version %s" % version)
 
-        if semver.match(self.version, "<5.4.0"):
-            self.zk_path = "/{webappdir}/zookeeper".format(webappdir=self.webappdir)
-        else:
-            self.zk_path = "/{webappdir}/admin/zookeeper".format(
-                webappdir=self.webappdir
-            )
+        self.zk_path = "/{webappdir}/admin/zookeeper".format(webappdir=self.webappdir)
 
         protocol = "https" if use_https else "http"
 

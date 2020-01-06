@@ -21,17 +21,21 @@ class TestCollectionAdmin(unittest.TestCase):
     def test_create_collection(self):
         original_count = len(self.conn.list())
         coll2 = self.conn.create_collection("coll2", **self.collparams)
+        time.sleep(3)
         self.assertEqual(len(self.conn.list()), original_count + 1)
         self.conn.list()
         time.sleep(3)
         coll3 = self.conn.create_collection("coll3", **self.collparams)
+        time.sleep(3)
         self.assertEqual(len(self.conn.list()), original_count + 2)
         # todo calling state here means the integration works, but what should we assert?
         coll2.state
         coll2.drop()
+        time.sleep(3)
         self.assertEqual(len(self.conn.list()), original_count + 1)
         time.sleep(3)
         coll3.drop()
+        time.sleep(3)
         self.assertEqual(len(self.conn.list()), original_count)
 
     def test_reload(self):

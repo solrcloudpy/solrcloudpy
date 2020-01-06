@@ -15,14 +15,14 @@ except ImportError:
 try:
     str
 
-    def encodeUnicode(str):
-        if isinstance(str, str):
-            return str.encode("utf-8", "ignore")
+    def encodeUnicode(value):
+        if isinstance(value, str):
+            return value.encode("utf-8", "ignore")
 
 
 except NameError:
 
-    def encodeUnicode(str):
+    def encodeUnicode(value):
         return str
 
 
@@ -59,7 +59,7 @@ class _Request(object):
                 self.connection.user, self.connection.password
             )
 
-    def request(self, path, params=None, method="GET", body=None, async=False):
+    def request(self, path, params=None, method="GET", body=None, asynchronous=False):
         """
         Send a request to a collection
 
@@ -72,8 +72,8 @@ class _Request(object):
         :type method: str
         :param body: The request body, if any -- should be a json string
         :type body: str
-        :param async: whether to perform the action asynchronously (only for collections API)
-        :type async: bool
+        :param asynchronous: whether to perform the action asynchronously (only for collections API)
+        :type asynchronous: bool
 
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         :rtype: SolrResponse
@@ -88,7 +88,7 @@ class _Request(object):
         # https://wiki.apache.org/solr/SolJSON
         resparams = {"wt": "json", "omitHeader": "true", "json.nl": "map"}
 
-        if async:
+        if asynchronous:
             async_id = uuid.uuid4()
             logger.info("Sending request with async_id %s" % async_id)
             resparams["async"] = async_id
@@ -118,7 +118,7 @@ class _Request(object):
                 )
                 r.raise_for_status()
 
-                if async:
+                if asynchronous:
                     result = AsyncResponse(r, async_id)
                 else:
                     result = SolrResponse(r)
@@ -142,7 +142,7 @@ class _Request(object):
 
         return result
 
-    def update(self, path, params=None, body=None, async=False):
+    def update(self, path, params=None, body=None, asynchronous=False):
         """
         Posts an update request to Solr
 
@@ -152,15 +152,17 @@ class _Request(object):
         :type params: dict
         :param body: the request body, a json string
         :type body: str
-        :param async: whether to perform the action asynchronously (only for collections API)
-        :type async: bool
+        :param asynchronous: whether to perform the action asynchronously (only for collections API)
+        :type asynchronous: bool
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         :rtype: SolrResponse
         :raise: SolrException
         """
-        return self.request(path, params=params, method="POST", body=body, async=async)
+        return self.request(
+            path, params=params, method="POST", body=body, asynchronous=asynchronous
+        )
 
-    def get(self, path, params=None, async=False):
+    def get(self, path, params=None, asynchronous=False):
         """
         Sends a get request to Solr
 
@@ -168,13 +170,15 @@ class _Request(object):
         :type path: str
         :param params: query params
         :type params: dict
-        :param async: whether to perform the action asynchronously (only for collections API)
-        :type async: bool
+        :param asynchronous: whether to perform the action asynchronously (only for collections API)
+        :type asynchronous: bool
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         :rtype: SolrResponse
         :raise: SolrException
         """
-        return self.request(path, params=params, method="GET", async=async)
+        return self.request(
+            path, params=params, method="GET", asynchronous=asynchronous
+        )
 
 
 class CollectionBase(object):
@@ -203,7 +207,7 @@ class DictObject(object):
             return
 
         for k, v in iteritems(obj):
-            k = encodeUnicode(k)
+            k = encodeUnicode(k).decode("utf-8")
             if isinstance(v, dict):
                 # create a new object from this (sub)class,
                 # not necessarily from DictObject
