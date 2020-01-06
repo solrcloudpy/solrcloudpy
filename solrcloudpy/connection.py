@@ -13,18 +13,20 @@ To get a :class:`~solrcloudpy.SolrCollection` instance from a :class:`SolrConnec
 
 
 """
-import urllib
 import json
+import urllib.error
+import urllib.parse
+import urllib.request
+
 import semver
 from future.utils import iteritems
 
 import solrcloudpy.collection as collection
 from solrcloudpy.utils import _Request
 
-MIN_SUPPORTED_VERSION = '>=4.6.0'
+MIN_SUPPORTED_VERSION = ">5.4.0"
 
-# TODO: revisit this when Solr 7 comes around.
-MAX_SUPPORTED_VERSION = '<=7.0.0'
+MAX_SUPPORTED_VERSION = "<=9.0.0"
 
 
 class SolrConnection(object):
@@ -53,15 +55,18 @@ class SolrConnection(object):
     :type use_https: bool
     """
 
-    def __init__(self, server="localhost:8983",
-                 detect_live_nodes=False,
-                 user=None,
-                 password=None,
-                 timeout=10,
-                 webappdir='solr',
-                 version='5.3.0',
-                 request_retries=1,
-                 use_https=False):
+    def __init__(
+        self,
+        server="localhost:8983",
+        detect_live_nodes=False,
+        user=None,
+        password=None,
+        timeout=10,
+        webappdir="solr",
+        version="7.7.0",
+        request_retries=1,
+        use_https=False,
+    ):
         self.user = user
         self.password = password
         self.timeout = timeout
@@ -69,17 +74,18 @@ class SolrConnection(object):
         self.version = version
         self.request_retries = request_retries
 
-        if not semver.match(version, MIN_SUPPORTED_VERSION) and semver.match(version, MAX_SUPPORTED_VERSION):
+        if not semver.match(version, MIN_SUPPORTED_VERSION) and semver.match(
+            version, MAX_SUPPORTED_VERSION
+        ):
             raise Exception("Unsupported version %s" % version)
 
-        if semver.match(self.version, '<5.4.0'):
-            self.zk_path = '/{webappdir}/zookeeper'.format(webappdir=self.webappdir)
-        else:
-            self.zk_path = '/{webappdir}/admin/zookeeper'.format(webappdir=self.webappdir)
-        
+        self.zk_path = "/{webappdir}/admin/zookeeper".format(webappdir=self.webappdir)
+
         protocol = "https" if use_https else "http"
-        
-        self.url_template = '{protocol}://{{server}}/{webappdir}/'.format(protocol=protocol, webappdir=self.webappdir)
+
+        self.url_template = "{protocol}://{{server}}/{webappdir}/".format(
+            protocol=protocol, webappdir=self.webappdir
+        )
 
         if type(server) == str:
             self.url = self.url_template.format(server=server)
@@ -118,32 +124,31 @@ class SolrConnection(object):
         :return: a list of collection names
         :rtype: list
         """
-        params = {'detail': 'false', 'path': '/collections'}
-        response = self.client.get(
-            self.zk_path, params).result
+        params = {"detail": "false", "path": "/collections"}
+        response = self.client.get(self.zk_path, params).result
 
-        if 'children' not in response['tree'][0]:
+        if "children" not in response["tree"][0]:
             return []
 
-        if response['tree'][0]['data']['title'] == '/collections':
+        if response["tree"][0]["data"]["title"] == "/collections":
             # solr 5.3 and older
-            data = response['tree'][0]['children']
+            data = response["tree"][0]["children"]
         else:
             # solr 5.4+
             data = None
-            for branch in response['tree']:
+            for branch in response["tree"]:
                 if data is not None:
                     break
-                for child in branch['children']:
-                    if child['data']['title'] == '/collections':
-                        if 'children' not in child:
+                for child in branch["children"]:
+                    if child["data"]["title"] == "/collections":
+                        if "children" not in child:
                             return []
                         else:
-                            data = child['children']
+                            data = child["children"]
                             break
         colls = []
         if data:
-            colls = [node['data']['title'] for node in data]
+            colls = [node["data"]["title"] for node in data]
         return colls
 
     def _list_cores(self):
@@ -152,10 +157,13 @@ class SolrConnection(object):
         :return: a list of cores
         :rtype: list
         """
-        params = {'wt': 'json', }
+        params = {
+            "wt": "json",
+        }
         response = self.client.get(
-            ('/{webappdir}/admin/cores'.format(webappdir=self.webappdir)), params).result
-        cores = list(response.get('status', {}).keys())
+            ("/{webappdir}/admin/cores".format(webappdir=self.webappdir)), params
+        ).result
+        cores = list(response.get("status", {}).keys())
         return cores
 
     @property
@@ -168,37 +176,45 @@ class SolrConnection(object):
         :rtype: dict
         """
         res = []
-        if semver.match(self.version, '<5.4.0'):
-            params = {'detail': 'true', 'path': '/clusterstate.json'}
+        if semver.match(self.version, "<5.4.0"):
+            params = {"detail": "true", "path": "/clusterstate.json"}
             response = self.client.get(
-                ('/{webappdir}/zookeeper'.format(webappdir=self.webappdir)), params).result
-            data = json.loads(response['znode']['data'])
+                ("/{webappdir}/zookeeper".format(webappdir=self.webappdir)), params
+            ).result
+            data = json.loads(response["znode"]["data"])
             collections = self.list()
             for coll in collections:
-                shards = data[coll]['shards']
+                shards = data[coll]["shards"]
                 for shard, shard_info in iteritems(shards):
-                    replicas = shard_info['replicas']
+                    replicas = shard_info["replicas"]
                     for replica, info in iteritems(replicas):
-                        state = info['state']
-                        if state != 'active':
-                            item = {"collection": coll,
-                                    "replica": replica,
-                                    "shard": shard,
-                                    "info": info,
-                                    }
+                        state = info["state"]
+                        if state != "active":
+                            item = {
+                                "collection": coll,
+                                "replica": replica,
+                                "shard": shard,
+                                "info": info,
+                            }
                             res.append(item)
         else:
-            params = {'action': 'CLUSTERSTATUS', 'wt': 'json'}
+            params = {"action": "CLUSTERSTATUS", "wt": "json"}
             response = self.client.get(
-                ('/{webappdir}/admin/collections'.format(webappdir=self.webappdir)), params).result
-            for collection_name, collection in list(response.dict['cluster']['collections'].items()):
-                for shard_name, shard in list(collection['shards'].items()):
-                    for replica_name, replica in list(shard['replicas'].items()):
-                        if replica['state'] != 'active':
-                            item = {"collection": collection_name,
-                                    "replica": replica_name,
-                                    "shard": shard_name,
-                                    "info": replica}
+                ("/{webappdir}/admin/collections".format(webappdir=self.webappdir)),
+                params,
+            ).result
+            for collection_name, collection in list(
+                response.dict["cluster"]["collections"].items()
+            ):
+                for shard_name, shard in list(collection["shards"].items()):
+                    for replica_name, replica in list(shard["replicas"].items()):
+                        if replica["state"] != "active":
+                            item = {
+                                "collection": collection_name,
+                                "replica": replica_name,
+                                "shard": shard_name,
+                                "info": replica,
+                            }
                             res.append(item)
 
         if not res:
@@ -214,9 +230,9 @@ class SolrConnection(object):
         :rtype: dict
         :return: a dict with the json loaded from the zookeeper response related to the cluster leader request
         """
-        params = {'detail': 'true', 'path': '/overseer_elect/leader'}
+        params = {"detail": "true", "path": "/overseer_elect/leader"}
         response = self.client.get(self.zk_path, params).result
-        return json.loads(response['znode']['data'])
+        return json.loads(response["znode"]["data"])
 
     @property
     def live_nodes(self):
@@ -226,10 +242,10 @@ class SolrConnection(object):
         :return: a list of urls related to live nodes
         :rtype: list
         """
-        params = {'detail': 'true', 'path': '/live_nodes'}
+        params = {"detail": "true", "path": "/live_nodes"}
         response = self.client.get(self.zk_path, params).result
-        children = [d['data']['title'] for d in response['tree'][0]['children']]
-        nodes = [c.replace('_solr', '') for c in children]
+        children = [d["data"]["title"] for d in response["tree"][0]["children"]]
+        nodes = [c.replace("_solr", "") for c in children]
         return [self.url_template.format(server=a) for a in nodes]
 
     def create_collection(self, collname, *args, **kwargs):

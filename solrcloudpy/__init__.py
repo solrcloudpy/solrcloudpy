@@ -1,8 +1,10 @@
-from solrcloudpy.connection import SolrConnection
-from solrcloudpy.collection import SolrCollection
-from solrcloudpy.parameters import SearchOptions
 import logging
+
+from solrcloudpy.collection import SolrCollection
+from solrcloudpy.connection import SolrConnection
+from solrcloudpy.parameters import SearchOptions
+
 logging.basicConfig()
 
-__version__ = "3.0.4"
-__all__ = ['SolrCollection', 'SolrConnection', 'SearchOptions']
+__version__ = "4.0.0"
+__all__ = ["SolrCollection", "SolrConnection", "SearchOptions"]

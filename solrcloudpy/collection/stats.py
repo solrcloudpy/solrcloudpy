@@ -2,13 +2,15 @@
 Get different statistics about the underlying index in a collection
 """
 from future.utils import iteritems
-from solrcloudpy.utils import _Request, SolrResult
+
+from solrcloudpy.utils import SolrResult, _Request
 
 
 class SolrIndexStats(object):
     """
     Get different statistics about the underlying index in a collection
     """
+
     def __init__(self, connection, name):
         """
         :param connection: the connection to solr
@@ -29,16 +31,18 @@ class SolrIndexStats(object):
         :return: The result
         :rtype: SolrResult
         """
-        params = {'stats': 'true', 'cat': 'CACHE'}
-        result = self.client.get('/solr/%s/admin/mbeans' % self.name, params).result.dict
-        caches = result['solr-mbeans']['CACHE']
+        params = {"stats": "true", "cat": "CACHE"}
+        result = self.client.get(
+            "/solr/%s/admin/mbeans" % self.name, params
+        ).result.dict
+        caches = result["solr-mbeans"]["CACHE"]
         res = {}
         for cache, info in iteritems(caches):
-            if cache == 'fieldCache':
-                res[cache] = {'entries_count': info['stats'].get('entries_count', 0)}
+            if cache == "fieldCache":
+                res[cache] = {"entries_count": info["stats"].get("entries_count", 0)}
                 continue
 
-            res[cache] = info['stats']
+            res[cache] = info["stats"]
 
         return SolrResult(res)
 
@@ -50,11 +54,13 @@ class SolrIndexStats(object):
         :return: The result
         :rtype: SolrResult
         """
-        params = {'stats': 'true', 'cat': 'QUERYHANDLER'}
-        result = self.client.get('/solr/%s/admin/mbeans' % self.name, params).result.dict
-        caches = result['solr-mbeans']['QUERYHANDLER']
+        params = {"stats": "true", "cat": "QUERYHANDLER"}
+        result = self.client.get(
+            "/solr/%s/admin/mbeans" % self.name, params
+        ).result.dict
+        caches = result["solr-mbeans"]["QUERYHANDLER"]
         res = {}
         for cache, info in iteritems(caches):
-            res[cache] = info['stats']
+            res[cache] = info["stats"]
 
         return SolrResult(res)

@@ -1,24 +1,30 @@
-from future.utils import iteritems
-from requests.exceptions import ConnectionError, HTTPError
-from requests.auth import HTTPBasicAuth
+import json
+import logging
+import random
+import uuid
 
 import requests
+from future.utils import iteritems
+from requests.auth import HTTPBasicAuth
+from requests.exceptions import ConnectionError, HTTPError
+
 try:
     from urllib.parse import urljoin
 except ImportError:
-    from urlparse import urljoin
+    from urllib.parse import urljoin
 try:
-    unicode
-    def encodeUnicode(str):
-        if isinstance(str, unicode):
-            return str.encode('utf-8', 'ignore')
+    str
+
+    def encodeUnicode(value):
+        if isinstance(value, str):
+            return value.encode("utf-8", "ignore")
+
+
 except NameError:
-    def encodeUnicode(str):
+
+    def encodeUnicode(value):
         return str
-import json
-import random
-import logging
-import uuid
+
 
 logger = logging.getLogger(__name__)
 
@@ -50,9 +56,10 @@ class _Request(object):
         self.timeout = connection.timeout
         if self.connection.user:
             self.client.auth = HTTPBasicAuth(
-                self.connection.user, self.connection.password)
+                self.connection.user, self.connection.password
+            )
 
-    def request(self, path, params=None, method='GET', body=None, async=False):
+    def request(self, path, params=None, method="GET", body=None, asynchronous=False):
         """
         Send a request to a collection
 
@@ -65,8 +72,8 @@ class _Request(object):
         :type method: str
         :param body: The request body, if any -- should be a json string
         :type body: str
-        :param async: whether to perform the action asynchronously (only for collections API)
-        :type async: bool
+        :param asynchronous: whether to perform the action asynchronously (only for collections API)
+        :type asynchronous: bool
 
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         :rtype: SolrResponse
@@ -74,21 +81,19 @@ class _Request(object):
         """
         headers = {}
         params = params or {}
-        if method.lower() != 'get':
-            headers = {'content-type': 'application/json'}
+        if method.lower() != "get":
+            headers = {"content-type": "application/json"}
 
         # https://github.com/solrcloudpy/solrcloudpy/issues/21
         # https://wiki.apache.org/solr/SolJSON
-        resparams = {'wt': 'json',
-                     'omitHeader': 'true',
-                     'json.nl': 'map'}
+        resparams = {"wt": "json", "omitHeader": "true", "json.nl": "map"}
 
-        if async:
+        if asynchronous:
             async_id = uuid.uuid4()
             logger.info("Sending request with async_id %s" % async_id)
-            resparams['async'] = async_id
+            resparams["async"] = async_id
 
-        if hasattr(params, 'iteritems') or hasattr(params, 'items'):
+        if hasattr(params, "iteritems") or hasattr(params, "items"):
             resparams.update(iteritems(params))
 
         retry_states = dict([(server, 0) for server in self.connection.servers])
@@ -103,21 +108,23 @@ class _Request(object):
             host = random.choice(servers)
             fullpath = urljoin(host, path)
             try:
-                r = self.client.request(method, fullpath,
-                                        params=resparams,
-                                        data=body,
-                                        headers=headers,
-                                        timeout=self.timeout)
+                r = self.client.request(
+                    method,
+                    fullpath,
+                    params=resparams,
+                    data=body,
+                    headers=headers,
+                    timeout=self.timeout,
+                )
                 r.raise_for_status()
 
-                if async:
+                if asynchronous:
                     result = AsyncResponse(r, async_id)
                 else:
                     result = SolrResponse(r)
 
             except (ConnectionError, HTTPError) as e:
-                logger.exception('Failed to connect to server at %s. e=%s',
-                                 host, e)
+                logger.exception("Failed to connect to server at %s. e=%s", host, e)
 
                 # Track retries, and take a server with too many retries out of the pool
                 retry_states[host] += 1
@@ -126,8 +133,8 @@ class _Request(object):
                     servers = list(retry_states.keys())
 
                 if len(servers) <= 0:
-                    logger.error('No servers left to try')
-                    raise SolrException('No servers available')
+                    logger.error("No servers left to try")
+                    raise SolrException("No servers available")
             finally:
                 # avoid requests library's keep alive throw exception in python3
                 if r is not None and r.connection:
@@ -135,7 +142,7 @@ class _Request(object):
 
         return result
 
-    def update(self, path, params=None, body=None, async=False):
+    def update(self, path, params=None, body=None, asynchronous=False):
         """
         Posts an update request to Solr
 
@@ -145,15 +152,17 @@ class _Request(object):
         :type params: dict
         :param body: the request body, a json string
         :type body: str
-        :param async: whether to perform the action asynchronously (only for collections API)
-        :type async: bool
+        :param asynchronous: whether to perform the action asynchronously (only for collections API)
+        :type asynchronous: bool
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         :rtype: SolrResponse
         :raise: SolrException
         """
-        return self.request(path, params=params, method='POST', body=body, async=async)
+        return self.request(
+            path, params=params, method="POST", body=body, asynchronous=asynchronous
+        )
 
-    def get(self, path, params=None, async=False):
+    def get(self, path, params=None, asynchronous=False):
         """
         Sends a get request to Solr
 
@@ -161,13 +170,15 @@ class _Request(object):
         :type path: str
         :param params: query params
         :type params: dict
-        :param async: whether to perform the action asynchronously (only for collections API)
-        :type async: bool
+        :param asynchronous: whether to perform the action asynchronously (only for collections API)
+        :type asynchronous: bool
         :returns response: an instance of :class:`~solrcloudpy.utils.SolrResponse`
         :rtype: SolrResponse
         :raise: SolrException
         """
-        return self.request(path, params=params, method='GET', async=async)
+        return self.request(
+            path, params=params, method="GET", asynchronous=asynchronous
+        )
 
 
 class CollectionBase(object):
@@ -196,7 +207,7 @@ class DictObject(object):
             return
 
         for k, v in iteritems(obj):
-            k = encodeUnicode(k)
+            k = encodeUnicode(k).decode("utf-8")
             if isinstance(v, dict):
                 # create a new object from this (sub)class,
                 # not necessarily from DictObject
@@ -290,7 +301,6 @@ class SolrResponse(object):
 
 
 class AsyncResponse(SolrResponse):
-
     def __init__(self, response_obj, async_id):
         """
         init this object
@@ -312,12 +322,11 @@ class AsyncResponse(SolrResponse):
 
 
 class SolrResponseJSONEncoder(json.JSONEncoder):
-
     def default(self, o):
         if type(o) == type(SolrResult({})):
             val = str(o.__dict__)
             if len(val) > 200:
-                s = val[:100] + ' ... '
+                s = val[:100] + " ... "
             else:
                 s = val
             return "%s << %s >>" % (o.__class__.__name__, s)

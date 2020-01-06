@@ -70,4 +70,5 @@ class SolrCollection(SolrCollectionAdmin, SolrCollectionSearch):
     def __repr__(self):
         return "SolrCollection<%s>" % self.name
 
-__all__ = ['SolrCollection']
+
+__all__ = ["SolrCollection"]

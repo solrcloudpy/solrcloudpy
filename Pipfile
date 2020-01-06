@@ -1,0 +1,21 @@
+[dev-packages]
+python-language-server = {extras = ["all"],version = "*"}
+black = "==19.10b0"
+pylint = "==2.4.4"
+pydocstyle = "*"
+pycodestyle = "*"
+isort = "*"
+coverage = "*"
+snapshottest = "*"
+freezegun = "*"
+mypy = "==0.761"
+django-stubs = "*"
+typing-extensions = "*"
+mypyls = {extras = ["default-mypy"],file = "https://github.com/matangover/mypyls/archive/master.zip"}
+
+[packages]
+requests = "*"
+ipython = "*"
+semver = "*"
+pathlib2 = "*"
+future = "*"
