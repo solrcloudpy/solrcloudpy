@@ -96,7 +96,7 @@ class SolrSchema(object):
     def get_fields(self):
         """
         Get information about all field in the schema
-        
+
         :return: a dict of fields to their schema definitions
         :rtype: dict
         """

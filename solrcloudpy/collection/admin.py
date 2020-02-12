@@ -1,7 +1,6 @@
 """
 Manage and administer a collection
 """
-import json
 import logging
 import time
 

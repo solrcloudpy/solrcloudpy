@@ -116,7 +116,7 @@ class SolrBatchAdder(object):
     def _add_to_batch(self, doc):
         """
         Adds a document and tracks it within a batch context
-        
+
         :param doc: the document to send to solr
         :type doc: dict
         """

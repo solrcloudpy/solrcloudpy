@@ -6,5 +6,5 @@ from solrcloudpy.parameters import SearchOptions
 
 logging.basicConfig()
 
-__version__ = "4.0.0"
+__version__ = "4.0.1"
 __all__ = ["SolrCollection", "SolrConnection", "SearchOptions"]

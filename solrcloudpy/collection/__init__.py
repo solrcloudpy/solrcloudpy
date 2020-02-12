@@ -50,7 +50,7 @@ class SolrCollection(SolrCollectionAdmin, SolrCollectionSearch):
         :type force: bool
 
         :param kwargs: additional parameters to be passed to this operation
-        
+
 
         :Additional Parameters:
           - `router_name`: router name that will be used. defines how documents will be distributed among the shards
